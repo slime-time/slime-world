@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Slime Girl Slime World"
+run/main_scene="uid://dib3l6i8l61om"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 
