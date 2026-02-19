@@ -3,9 +3,16 @@ extends CharacterBody2D
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
+var screen
 
+func _ready() -> void:
+	screen = get_viewport_rect().size
 
 func _physics_process(delta: float) -> void:
+	# Check if player is OOB, and reset to origin if so
+	if position.x >= screen.x or position.y >= screen.y:
+		position = Vector2.ZERO
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
