@@ -1,4 +1,4 @@
-extends "res://PlayerMovement.gd"
+extends "res://player/PlayerMovement/PlayerMovement.gd"
 
 func _ready():
 	super()
