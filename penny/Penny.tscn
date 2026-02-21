@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c8x3lrxliw24h"]
 
-[ext_resource type="Script" uid="uid://to3qj3au11m7" path="res://penny/Penny.gd" id="1_o24qj"]
+[ext_resource type="Script" uid="uid://bbrcua7m5o5px" path="res://penny/Penny.gd" id="1_o24qj"]
 [ext_resource type="Texture2D" uid="uid://fehmcq0lwkhw" path="res://assets/penny.png" id="1_qm3ld"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qm3ld"]

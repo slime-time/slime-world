@@ -1,40 +1,19 @@
-extends CharacterBody2D
+extends "res://PlayerMovement.gd"
 
-
-var movement_speed = 300.0
-var jump_velocity = -400.0
-var screen
-
-var config = ConfigFile.new()
-func _ready() -> void:
-	screen = get_viewport_rect().size
+func _ready():
+	super()
+	read_movement_data("penny_movement")
 	
-	# Attempt to read movement settings from an external file
-	var error = config.load("res://settings.cfg")
-	if(error == OK):
-		movement_speed = config.get_value("penny_movement", "movement_speed")
-		jump_velocity = config.get_value("penny_movement", "jump_velocity")
+# For now, implement very simple versions of movement. If you have a mind for design, please feel free to play around with these :3
 
-func _physics_process(delta: float) -> void:
-	# Check if player is OOB, and reset to origin if so
-	if position.x >= screen.x or position.y >= screen.y:
-		position = Vector2.ZERO
+func jump(delta = null):
+	velocity.y = jump_velocity
+func fall(delta = null):
+	velocity += get_gravity() * delta
+
+func move(direction, delta = null):
+	velocity.x = direction * movement_speed
 	
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = jump_velocity
+func stop(delta = null):
+	velocity.x = move_toward(velocity.x, 0, movement_speed)
 	
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if direction:
-		velocity.x = direction * movement_speed
-	else:
-		velocity.x = move_toward(velocity.x, 0, movement_speed)
-
-	move_and_slide()
