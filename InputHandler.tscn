@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cic4ftfcc4veq"]
 
-[ext_resource type="Script" uid="uid://bxqq0x5x18kd8" path="res://InputManager.gd" id="1_bpo4a"]
+[ext_resource type="Script" uid="uid://bxqq0x5x18kd8" path="res://InputHandler.gd" id="1_wdj5j"]
 
 [node name="Control" type="Control" unique_id=676276337]
 layout_mode = 3
@@ -9,4 +9,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_bpo4a")
+script = ExtResource("1_wdj5j")
