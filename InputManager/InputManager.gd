@@ -74,7 +74,6 @@ func haltPlayerMovement():
 func resumePlayerMovement():
 	# Restore the movement actions one by one
 	for action_index in range(player_keybinds.size()):
-		#InputMap.add_action(PLAYER_ACTIONS[action_index], player_deadzones[action_index])
 		for keybind in player_keybinds[action_index]:
 			InputMap.action_add_event(PLAYER_ACTIONS[action_index], keybind)
 			
