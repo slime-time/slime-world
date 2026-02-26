@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://2hfdmccufaiv"]
+
+[ext_resource type="Texture2D" uid="uid://dkvf3fvhgerh1" path="res://assets/slime.png" id="1_4n8da"]
+[ext_resource type="Script" uid="uid://drxkpiyewqrnl" path="res://player/Slime/GreenSlime/GreenSlime.gd" id="1_ttqac"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ttqac"]
+size = Vector2(4.5008707, 6.4908347)
+
+[node name="GreenSlime" type="CharacterBody2D" unique_id=1631753294]
+scale = Vector2(4.9807963, 3.8802397)
+script = ExtResource("1_ttqac")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2046034733]
+position = Vector2(0, 2.5771604)
+scale = Vector2(3.5685742, -1.6675935)
+shape = SubResource("RectangleShape2D_ttqac")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=509701531]
+texture = ExtResource("1_4n8da")

@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://c8x3lrxliw24h"]
 
-[ext_resource type="Script" uid="uid://bbrcua7m5o5px" path="res://player/penny/Penny.gd" id="1_o24qj"]
+[ext_resource type="Script" uid="uid://bbrcua7m5o5px" path="res://player/Penny/Penny.gd" id="1_o24qj"]
 [ext_resource type="Texture2D" uid="uid://fehmcq0lwkhw" path="res://assets/penny.png" id="1_qm3ld"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qm3ld"]
 size = Vector2(62, 80)
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=520020568]
+[node name="Penny" type="CharacterBody2D" unique_id=520020568]
 script = ExtResource("1_o24qj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2028633091]

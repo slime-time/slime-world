@@ -1,5 +1,13 @@
 extends Control
 
+# Sent when Penny goes from human form to slime form
+signal penny_became_slime
+
+# Sent when Penny goes from slime form to human form
+signal slime_became_penny
+
+# True iff Penny is currently in human form
+var is_human = true
 # True only when input events should be sent to the player
 var player_control = false
 # True only when the player has no control but is not in a pause menu.
@@ -43,6 +51,12 @@ func _input(event):
 		elif(SceneManager.can_pause):
 			can_pause = true
 		
+	if event.is_action_pressed("transform") : 
+		if(is_human):
+			penny_became_slime.emit()
+		else:
+			slime_became_penny.emit()
+		is_human = not is_human
 
 # Stop slime from listening to player input - this can be for many reasons such as cutscenes,
 # dialogue, etc, user pausing is just one of the reasons
@@ -54,13 +68,13 @@ func haltPlayerMovement():
 		
 		player_keybinds.append(InputMap.action_get_events(action))
 		player_deadzones.append(InputMap.action_get_deadzone(action))
-		InputMap.erase_action(action)
+		InputMap.action_erase_events(action)
 
 # Do the inverse of haltPlayerMovement, return control to the player
 func resumePlayerMovement():
 	# Restore the movement actions one by one
 	for action_index in range(player_keybinds.size()):
-		InputMap.add_action(PLAYER_ACTIONS[action_index], player_deadzones[action_index])
+		#InputMap.add_action(PLAYER_ACTIONS[action_index], player_deadzones[action_index])
 		for keybind in player_keybinds[action_index]:
 			InputMap.action_add_event(PLAYER_ACTIONS[action_index], keybind)
 			
