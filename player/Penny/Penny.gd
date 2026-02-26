@@ -9,6 +9,7 @@ func _ready():
 
 func jump(_delta = null):
 	velocity.y = jump_velocity
+
 func fall(delta = null):
 	velocity += get_gravity() * delta
 

@@ -8,11 +8,14 @@ signal slime_became_penny
 
 # True iff Penny is currently in human form
 var is_human = true
+
 # True only when input events should be sent to the player
 var player_control = false
+
 # True only when the player has no control but is not in a pause menu.
 # Most often triggered on title screen or in cutscene or in dialogue
 var special_state = false
+
 # True only when the player has the ability to pause the game by pressing a pause button
 # Pause button can be physical and/or implemented with a GUI later
 # Player can pause only when not in a cutscene nor pause menu
@@ -51,12 +54,15 @@ func _input(event):
 		elif(SceneManager.can_pause):
 			can_pause = true
 		
+	# If the player didn't pause and is pressing a transform button, then send the appropriate signal
 	if event.is_action_pressed("transform") : 
 		if(is_human):
 			penny_became_slime.emit()
+			# Turning to slime always succeeds, so we can just set the is_human flag here
+			is_human = false
 		else:
 			slime_became_penny.emit()
-		is_human = not is_human
+			# If this is successful, Slime.gd will set is_human to true
 
 # Stop slime from listening to player input - this can be for many reasons such as cutscenes,
 # dialogue, etc, user pausing is just one of the reasons

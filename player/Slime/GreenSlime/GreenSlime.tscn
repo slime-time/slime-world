@@ -7,12 +7,12 @@
 size = Vector2(4.5008707, 6.4908347)
 
 [node name="GreenSlime" type="CharacterBody2D" unique_id=1631753294]
-scale = Vector2(4.9807963, 3.8802397)
+scale = Vector2(4.94, 4.94)
 script = ExtResource("1_ttqac")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2046034733]
 position = Vector2(0, 2.5771604)
-scale = Vector2(3.5685742, -1.6675935)
+scale = Vector2(3.5685744, -1.6675935)
 shape = SubResource("RectangleShape2D_ttqac")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=509701531]
