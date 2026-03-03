@@ -4,14 +4,17 @@
 [ext_resource type="Texture2D" uid="uid://fehmcq0lwkhw" path="res://assets/penny.png" id="1_qm3ld"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qm3ld"]
-size = Vector2(62, 80)
+size = Vector2(9, 15)
 
 [node name="Penny" type="CharacterBody2D" unique_id=520020568]
 script = ExtResource("1_o24qj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2028633091]
-position = Vector2(0, 1)
+texture_filter = 1
+position = Vector2(0.5, 0.5)
 shape = SubResource("RectangleShape2D_qm3ld")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=25029721]
+texture_filter = 1
 texture = ExtResource("1_qm3ld")
+offset = Vector2(0, 0.5)
