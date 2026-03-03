@@ -21,6 +21,9 @@ var movement_speed
 var jump_velocity
 var screen
 
+# Coordinates that Penny should respawn to - should be updated with each screen / level change
+var respawn_location = Vector2(-3, 56)
+
 var config = ConfigFile.new()
 func _ready() -> void:
 	screen = get_viewport_rect().size
@@ -42,7 +45,8 @@ func _physics_process(delta: float) -> void:
 	
 	# Check if player is OOB, and reset to origin if so
 	if position.x >= screen.x or position.y >= screen.y:
-		position = Vector2.ZERO
+		velocity = Vector2.ZERO
+		position = respawn_location
 	
 	# Add the gravity.
 	if not is_on_floor():

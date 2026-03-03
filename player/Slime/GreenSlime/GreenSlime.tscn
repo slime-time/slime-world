@@ -4,14 +4,13 @@
 [ext_resource type="Script" uid="uid://drxkpiyewqrnl" path="res://player/Slime/GreenSlime/GreenSlime.gd" id="1_ttqac"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ttqac"]
-size = Vector2(4.5008707, 6.4908347)
+size = Vector2(3.362687, 5.390521)
 
 [node name="GreenSlime" type="CharacterBody2D" unique_id=1631753294]
-scale = Vector2(4.94, 4.94)
 script = ExtResource("1_ttqac")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2046034733]
-position = Vector2(0, 2.5771604)
+position = Vector2(1.7881393e-07, 3.4945986)
 scale = Vector2(3.5685744, -1.6675935)
 shape = SubResource("RectangleShape2D_ttqac")
 
