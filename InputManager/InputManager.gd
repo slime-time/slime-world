@@ -1,10 +1,21 @@
 extends Control
 
+# Sent when Penny goes from human form to slime form
+signal penny_became_slime
+
+# Sent when Penny goes from slime form to human form
+signal slime_became_penny
+
+# True iff Penny is currently in human form
+var is_human = true
+
 # True only when input events should be sent to the player
 var player_control = false
+
 # True only when the player has no control but is not in a pause menu.
 # Most often triggered on title screen or in cutscene or in dialogue
 var special_state = false
+
 # True only when the player has the ability to pause the game by pressing a pause button
 # Pause button can be physical and/or implemented with a GUI later
 # Player can pause only when not in a cutscene nor pause menu
@@ -43,6 +54,15 @@ func _input(event):
 		elif(SceneManager.can_pause):
 			can_pause = true
 		
+	# If the player didn't pause and is pressing a transform button, then send the appropriate signal
+	if event.is_action_pressed("transform") : 
+		if(is_human):
+			penny_became_slime.emit()
+			# Turning to slime always succeeds, so we can just set the is_human flag here
+			is_human = false
+		else:
+			slime_became_penny.emit()
+			# If this is successful, Slime.gd will set is_human to true
 
 # Stop slime from listening to player input - this can be for many reasons such as cutscenes,
 # dialogue, etc, user pausing is just one of the reasons
@@ -54,13 +74,12 @@ func haltPlayerMovement():
 		
 		player_keybinds.append(InputMap.action_get_events(action))
 		player_deadzones.append(InputMap.action_get_deadzone(action))
-		InputMap.erase_action(action)
+		InputMap.action_erase_events(action)
 
 # Do the inverse of haltPlayerMovement, return control to the player
 func resumePlayerMovement():
 	# Restore the movement actions one by one
 	for action_index in range(player_keybinds.size()):
-		InputMap.add_action(PLAYER_ACTIONS[action_index], player_deadzones[action_index])
 		for keybind in player_keybinds[action_index]:
 			InputMap.action_add_event(PLAYER_ACTIONS[action_index], keybind)
 			
