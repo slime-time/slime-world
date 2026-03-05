@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://2hfdmccufaiv"]
 
-[ext_resource type="Texture2D" uid="uid://dkvf3fvhgerh1" path="res://assets/slime.png" id="1_4n8da"]
 [ext_resource type="Script" uid="uid://drxkpiyewqrnl" path="res://player/Slime/GreenSlime/GreenSlime.gd" id="1_ttqac"]
+[ext_resource type="Texture2D" uid="uid://8x3cbbvhvuix" path="res://assets/slime/slime-8.png" id="2_ttqac"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ttqac"]
 size = Vector2(3.362687, 5.390521)
@@ -15,4 +15,5 @@ scale = Vector2(3.5685744, -1.6675935)
 shape = SubResource("RectangleShape2D_ttqac")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=509701531]
-texture = ExtResource("1_4n8da")
+texture = ExtResource("2_ttqac")
+offset = Vector2(0, 0.5)
