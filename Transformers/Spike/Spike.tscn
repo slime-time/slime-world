@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cotcgyguj35sh"]
+
+[ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://Transformers/Spike/Spike.gd" id="1_6yh2b"]
+[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/spike.png" id="1_ie4wc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6yh2b"]
+size = Vector2(8, 8)
+
+[node name="Spike" type="Area2D" unique_id=585998066]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1522893824]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+script = ExtResource("1_6yh2b")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=768931425]
+texture = ExtResource("1_ie4wc")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1991308729]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=312434216]
+shape = SubResource("RectangleShape2D_6yh2b")
