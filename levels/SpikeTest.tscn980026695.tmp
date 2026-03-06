@@ -2,9 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_ori4l"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_xdrm5"]
-[ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://Transformers/Spike/Spike.gd" id="3_av7kl"]
-[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/spike.png" id="4_muxx5"]
-[ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://Transformers/Spike/SpikeCollider.gd" id="5_muxx5"]
+[ext_resource type="PackedScene" uid="uid://cotcgyguj35sh" path="res://Transformers/Spike/Spike.tscn" id="3_xdrm5"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_av7kl"]
 texture = ExtResource("2_xdrm5")
@@ -46,9 +44,6 @@ physics_layer_0/collision_layer = 1
 terrain_set_0/mode = 0
 sources/0 = SubResource("TileSetAtlasSource_av7kl")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6yh2b"]
-size = Vector2(8, 65)
-
 [node name="SpikeTest" type="Node2D" unique_id=816462362]
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_ori4l")]
@@ -59,19 +54,5 @@ position = Vector2(213, 88)
 tile_map_data = PackedByteArray("AAD9/wAAAAABAAAAAAD+/wAAAAABAAAAAAD//wAAAAABAAAAAAAAAAAAAAABAAAAAAABAAAAAAABAAAAAAACAAAAAAABAAAAAAABAAEAAAABAAIAAAD//wEAAAABAAIAAAAAAAEAAAABAAIAAAD+/wEAAAABAAIAAAD9/wEAAAABAAIAAAADAAEAAAACAAIAAAADAAAAAAACAAAAAAACAAEAAAABAAIAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAIAAAABAPv/AAADAAMAAAA=")
 tile_set = SubResource("TileSet_muxx5")
 
-[node name="Spike" type="RigidBody2D" parent="." unique_id=585998066]
+[node name="Spike" parent="." unique_id=585998066 instance=ExtResource("3_xdrm5")]
 position = Vector2(237, 27)
-script = ExtResource("3_av7kl")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike" unique_id=1522893824]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike" unique_id=768931425]
-texture = ExtResource("4_muxx5")
-
-[node name="Area2D" type="Area2D" parent="Spike" unique_id=1991308729]
-script = ExtResource("5_muxx5")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Spike/Area2D" unique_id=312434216]
-position = Vector2(0, 28.5)
-shape = SubResource("RectangleShape2D_6yh2b")
