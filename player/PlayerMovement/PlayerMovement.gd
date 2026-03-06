@@ -60,9 +60,6 @@ func fall(delta: float) -> void:
     # We assume gravity only affects the y component lol
     velocity.y = move_toward(velocity.y, terminal_velocity, get_gravity().y * delta)
 
-# Coordinates that Penny should respawn to - should be updated with each screen / level change
-var respawn_location = Vector2(-3, 56)
-
 var config = ConfigFile.new()
 func _ready() -> void:
     screen = get_viewport_rect().size

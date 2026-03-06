@@ -1,7 +1,7 @@
 extends Node2D
 
 # False whenever Penny is in slime form
-var am_penny = true
+var am_penny
 
 # Reference to Penny
 var penny;
@@ -12,9 +12,9 @@ var green_slime_template = preload("res://player/Slime/GreenSlime/GreenSlime.tsc
 # Reference to all slimes that exist
 var slimes = []
 
-
-	
 func _ready():
+	InputManager.is_human = true
+	am_penny = true
 	penny = get_node("Penny")
 	InputManager.penny_became_slime.connect(makePennyIntoSlime)
 	

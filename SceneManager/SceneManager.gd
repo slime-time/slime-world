@@ -11,7 +11,6 @@ var physics_applies = true
 
 # Reset the scene
 func resetScene():
-	print_debug("resetting scene in theory")
 	var tree = get_tree()
 	tree.call_deferred("reload_current_scene")
 	
