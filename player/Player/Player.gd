@@ -12,6 +12,8 @@ var green_slime_template = preload("res://player/Slime/GreenSlime/GreenSlime.tsc
 # Reference to all slimes that exist
 var slimes = []
 
+
+	
 func _ready():
 	penny = get_node("Penny")
 	InputManager.penny_became_slime.connect(makePennyIntoSlime)

@@ -1,6 +1,14 @@
 @abstract class_name PlayerMovement
 extends CharacterBody2D
 
+# Sent to Scene Manager whenever a player character dies, to reset the scene
+signal penny_died
+
+var health: int
+# While at present no character class has use for the amount of time since the past physics frame, when more interesting
+# game behavior is added later, it's likely to be useful, so I'm putting it as an optional parameter for all movement functions.
+# To make the delta mandantory, just delete the default value
+
 # Movement parameters
 var run_max_velocity: float
 var run_acceleration: float
@@ -10,6 +18,20 @@ var terminal_velocity: float
 
 # Screen bounds
 var screen: Vector2
+
+# Do whatever this character does when hit by a spike (split if slime, take damage otherwise)
+@abstract func spikeHit()
+
+# Take an arbitrary amount of damage
+func takeDamage(damage = 1):
+	health -= damage
+	if(health <= 0):
+		die()
+
+
+# This player character died, so the game needs to reset
+func die():
+	penny_died.emit()
 
 
 # Abstract method for defining fluid interactions
@@ -48,7 +70,7 @@ func _ready() -> void:
     var error = config.load("res://settings.cfg")
     # Assert that the data was read
     assert(error == OK, "Failed to read movement settings from settings.cfg")
-
+	penny_died.connect(SceneManager.resetScene)
     # Read movement defaults
     read_movement_data("movement_defaults")
 
@@ -67,10 +89,9 @@ func _physics_process(delta: float) -> void:
     if not SceneManager.physics_applies:
         return
 
-    # Check if player is OOB, and reset to origin if so
-    if position.x >= screen.x or position.y >= screen.y:
-        velocity = Vector2.ZERO
-        position = respawn_location
+	# Check if player is OOB, and reset to origin if so
+	if position.x >= screen.x or position.y >= screen.y:
+		die()
 
     # Add the gravity.
     if not is_on_floor():

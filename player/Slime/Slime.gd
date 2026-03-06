@@ -15,8 +15,15 @@ var to_transform = false
 func canBecomePenny():
 	return size >= 8
 
+func spikeHit():
+	if(size > 1):
+		split()
+	else:
+		die()
+	
 # Turn into two slimes, if possible. To be completed later
 func split():
+	print_debug("Splitting!")
 	return false 
 
 
