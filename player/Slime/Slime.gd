@@ -14,12 +14,12 @@ var to_transform = false
 # Returns a boolean value, true iff the slime can become Penny (i.e. is size 8 and not blue slime)
 func canBecomePenny():
 	return size >= 8
-	
+
 # Turn into two slimes, if possible. To be completed later
 func split():
 	return false 
-	
-	
+
+
 # Attempt to change from slime form to human form
 func becomePenny():
 	if canBecomePenny() and not to_transform:
