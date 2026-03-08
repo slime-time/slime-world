@@ -5,3 +5,6 @@
 
 # Caches
 **/.DS_Store
+
+# Other
+.vscode/
