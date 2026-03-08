@@ -1,56 +1,26 @@
 @abstract class_name PlayerMovement
 extends CharacterBody2D
 
-# While at present no character class has use for the amount of time since the past physics frame, when more interesting
-# game behavior is added later, it's likely to be useful, so I'm putting it as an optional parameter for all movement functions.
-# To make the delta mandantory, just delete the default value
-
 # Movement parameters
 var run_max_velocity: float
-var run_base_acceleration: float
-var run_base_deceleration: float
-var run_jerk: float
+var run_acceleration: float
+var run_deceleration: float
 var jump_velocity: float
-
-# Active movement acceleration
-var run_acceleration: float = 0
+var terminal_velocity: float
 
 # Screen bounds
 var screen: Vector2
 
-# TODO: movement is mathematically incorrect because we're not applying velocity
-# 		changes as they should have been before our accel updates over delta time
-# 		we'll fix it later lol
-
 # Move along the ground or in the air
 func move(direction: float, delta: float) -> void:
-	# Apply the base acceleration
-	if signf(direction) != signf(velocity.x):
-		run_acceleration = direction * run_base_acceleration
-
-	# Apply jerk
-	run_acceleration += direction * run_jerk * delta
-
-	# Update velocity and clamp it
-	velocity.x = clampf(velocity.x + run_acceleration * delta, -run_max_velocity, run_max_velocity)
+	# Move towards the target velocity
+	var target_velocity = direction * run_max_velocity
+	velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
 
 # To implement sliding later, we likely want to pass a delta to this function
 func stop(delta: float) -> void:
-	# If velocity and acceleration have the same sign, we were still accelerating
-	if signf(run_acceleration) == signf(velocity.x):
-		run_acceleration = (-signf(velocity.x)) * run_base_deceleration
-
-	# Apply jerk to deceleration
-	run_acceleration += signf(run_acceleration) * run_jerk * delta
-	
-	# If we would go past zero, just zero the velocity and acceleration
-	if abs(run_acceleration * delta) > abs(velocity.x):
-		velocity.x = 0
-		run_acceleration = 0
-		return
-
-	# Otherwise, apply acceleration to velocity
-	velocity.x = velocity.x + run_acceleration * delta
+	# Decelerate towards zero
+	velocity.x = move_toward(velocity.x, 0, run_deceleration * delta)
 
 # Make this player-controlled character jump, if it can
 func jump(delta: float) -> void:
@@ -58,7 +28,8 @@ func jump(delta: float) -> void:
 
 # Determine player-controlled character behavior in free fall
 func fall(delta: float) -> void:
-	velocity += get_gravity() * delta
+	# We assume gravity only affects the y component lol
+	velocity.y = move_toward(velocity.y, terminal_velocity, get_gravity().y * delta)
 
 
 # Coordinates that Penny should respawn to - should be updated with each screen / level change
@@ -71,15 +42,18 @@ func _ready() -> void:
 	var error = config.load("res://settings.cfg")
 	# Assert that the data was read
 	assert(error == OK, "Failed to read movement settings from settings.cfg")
+	
+	# Read movement defaults
+	read_movement_data("movement_defaults")
 
 
-# Loads movement options 
+# Loads movement options
 func read_movement_data(my_name):
-	run_max_velocity = config.get_value(my_name, "run_max_velocity")
-	run_base_acceleration = config.get_value(my_name, "run_base_acceleration")
-	run_base_deceleration = config.get_value(my_name, "run_base_deceleration")
-	run_jerk = config.get_value(my_name, "run_jerk")
-	jump_velocity = config.get_value(my_name, "jump_velocity")
+	run_max_velocity = config.get_value(my_name, "run_max_velocity", run_max_velocity)
+	run_acceleration = config.get_value(my_name, "run_acceleration", run_acceleration)
+	run_deceleration = config.get_value(my_name, "run_deceleration", run_deceleration)
+	jump_velocity = config.get_value(my_name, "jump_velocity", jump_velocity)
+	terminal_velocity = config.get_value(my_name, "terminal_velocity", terminal_velocity)
 
 
 # Modify logic here to change controls for all slimes and Penny
