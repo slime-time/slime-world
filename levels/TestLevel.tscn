@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_1mo47"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="1_hsexo"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_1mo47"]
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://levels/TestLevel.gdshader" id="3_qehkn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
 texture = ExtResource("1_hsexo")
@@ -42,6 +44,11 @@ texture = ExtResource("1_hsexo")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_1mo47")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
+shader = ExtResource("3_qehkn")
+shader_parameter/darkness = 0.730000034675
+shader_parameter/edge_softness = 3.3020001535851202
+
 [node name="Node2D" type="Node2D" unique_id=730916531]
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_1mo47")]
@@ -52,3 +59,19 @@ texture_filter = 1
 position = Vector2(250, 150)
 tile_map_data = PackedByteArray("AAD9/wEAAAABAAAAAAD+/wEAAAABAAAAAAD//wEAAAABAAAAAAAAAAEAAAABAAAAAAABAAEAAAABAAAAAAACAAEAAAABAAAAAAADAAEAAAABAAAAAAAEAAEAAAACAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAIAAAAEAAIAAAACAAIAAAADAAIAAAABAAIAAAACAAIAAAABAAIAAAAAAAIAAAABAAIAAAABAAIAAAABAAIAAAD//wIAAAABAAIAAAD+/wIAAAABAAIAAAD9/wIAAAABAAIAAAADAAQAAAABAAMAAAACAAQAAAABAAMAAAABAAQAAAABAAMAAAAAAAQAAAABAAMAAAD//wQAAAABAAMAAAD+/wQAAAABAAMAAAD9/wQAAAABAAMAAAD8/wQAAAAAAAMAAAAEAAQAAAACAAMAAAAGAAQAAAADAAMAAAAGAAIAAAADAAIAAAAGAAEAAAADAAAAAAA=")
 tile_set = SubResource("TileSet_qehkn")
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=1386845488]
+layer = -100
+
+[node name="BackgroundTexture" type="TextureRect" parent="Background" unique_id=1173638536]
+material = SubResource("ShaderMaterial_qehkn")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_1mo47")
+expand_mode = 1
+stretch_mode = 1
