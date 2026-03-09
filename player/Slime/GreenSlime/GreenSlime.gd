@@ -3,8 +3,7 @@ extends "res://player/Slime/Slime.gd"
 
 func _ready():
 	super()
-	# Temporarily make green slime and Penny identical for now
-	read_movement_data("penny_movement")
+	read_movement_data("green_slime_movement")
 	getMovementAbility()
 	health = config.get_value("slime_health", "green_slime")
 
