@@ -73,7 +73,7 @@ func _ready() -> void:
 		_ray_hits.fill(0)
 
 # Clear flow sprite instances and instantiate new ones from the current water parts
-func _reinstance_flow_sprites() -> void:
+func _reinstanceFlowParts() -> void:
 	# Free old instances
 	for child in get_children():
 		if child is FluidFlowPart:
@@ -95,7 +95,7 @@ func _reinstance_flow_sprites() -> void:
 				# Update position and size
 				node.position = rect.position
 				var size = Vector2i(rect.size.x, min(16, rect.size.y + flow_falloff))
-				node.init_flow_part(flow_type, rect.position.x + 8, size, rect.size.y, rect.size.y + flow_falloff)
+				node.initFlowPart(flow_type, rect.position.x + 8, size, rect.size.y, rect.size.y + flow_falloff)
 
 				# If the falloff is greater than (16 - this height), we need an additional sprite for the rest of the falloff
 				if flow_falloff > 16 - rect.size.y:
@@ -103,7 +103,7 @@ func _reinstance_flow_sprites() -> void:
 					var falloff_node = flow_part_scene.instantiate() as FluidFlowPart
 					add_child(falloff_node)
 					falloff_node.position = falloff_rect.position
-					falloff_node.init_flow_part(flow_type, falloff_rect.position.x + 8, falloff_rect.size,
+					falloff_node.initFlowPart(flow_type, falloff_rect.position.x + 8, falloff_rect.size,
 												falloff_rect.size.y - flow_falloff, falloff_rect.size.y)
 			else:
 				# Instantiate a node and add to the scene tree so it's readied
@@ -112,7 +112,7 @@ func _reinstance_flow_sprites() -> void:
 
 				# Update position and size
 				node.position = rect.position
-				node.init_flow_part(flow_type, rect.position.x + 8, rect.size, 16, 16)
+				node.initFlowPart(flow_type, rect.position.x + 8, rect.size, 16, 16)
 
 func _physics_process(_delta: float) -> void:
 	if !is_flow_enabled:
@@ -180,4 +180,5 @@ func _physics_process(_delta: float) -> void:
 				_flow_parts.back().is_bottom = true
 
 	# Reintance flow sprites based on the new parts
-	_reinstance_flow_sprites()
+	_reinstanceFlowParts()
+

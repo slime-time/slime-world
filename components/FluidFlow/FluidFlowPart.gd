@@ -20,7 +20,7 @@ func _ready() -> void:
 	anim_duration = anim_frames / anim_speed
 
 # Resizes the flow part to the new width
-func init_flow_part(type: FluidFlow.Type, x_offset: int, size: Vector2, clip_start: int = 16, clip_end: int = 16) -> void:
+func initFlowPart(type: FluidFlow.Type, x_offset: int, size: Vector2, clip_start: int = 16, clip_end: int = 16) -> void:
 	if clip_start < 16:
 		# We're using the gradient mask; make it unique
 		mask.texture = mask.texture.duplicate() as GradientTexture2D

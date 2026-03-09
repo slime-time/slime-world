@@ -36,8 +36,8 @@ func die():
 
 # Abstract method for defining fluid interactions
 # Triggered when a fluid emitter hits this character, with the fluid type of the emitter
-func on_fluid_hit(_fluid_type: FluidFlow.Type) -> void:
-	pass
+func onFluidHit(_fluid_type: FluidFlow.Type) -> void:
+    pass
 
 
 # Move along the ground or in the air
@@ -85,8 +85,8 @@ func read_movement_data(my_name):
 func _physics_process(delta: float) -> void:
 	if not SceneManager.physics_applies:
 		return
-		
-	
+
+
 	# Check if player is OOB, and reset to origin if so
 	if position.x >= screen.x or position.y >= screen.y:
 		die()
