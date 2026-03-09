@@ -1,5 +1,5 @@
 extends Node2D
-class_name WaterFlowPart
+class_name FluidFlowPart
 
 @onready var flow_control: Control = $FlowControl
 @onready var main_control: Control = $FlowControl/MainFlowControl

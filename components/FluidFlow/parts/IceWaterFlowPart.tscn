@@ -1,32 +1,32 @@
-[gd_scene format=3 uid="uid://bq12a81hiyohf"]
+[gd_scene format=3 uid="uid://cmk85sf0jtw4f"]
 
-[ext_resource type="Texture2D" uid="uid://dynac6jsesg4q" path="res://assets/water-parts.png" id="1_miac2"]
-[ext_resource type="Script" uid="uid://bo6dcmnv4bih0" path="res://components/WaterFlow/WaterFlowPart.gd" id="1_obwl6"]
+[ext_resource type="Script" uid="uid://bo6dcmnv4bih0" path="res://components/FluidFlow/FluidFlowPart.gd" id="1_lwj8j"]
+[ext_resource type="Texture2D" uid="uid://jwajlrkqggph" path="res://assets/fluid/ice-water.png" id="2_hfj80"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_miac2"]
-atlas = ExtResource("1_miac2")
+[sub_resource type="AtlasTexture" id="AtlasTexture_w4qo5"]
+atlas = ExtResource("2_hfj80")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_obwl6"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_miac2")
+"texture": SubResource("AtlasTexture_w4qo5")
 }],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_62tik"]
-atlas = ExtResource("1_miac2")
+[sub_resource type="AtlasTexture" id="AtlasTexture_l748i"]
+atlas = ExtResource("2_hfj80")
 region = Rect2(32, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jssnv"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_62tik")
+"texture": SubResource("AtlasTexture_l748i")
 }],
 "loop": true,
 "name": &"default",
@@ -35,15 +35,15 @@ animations = [{
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_irfbi"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_obwl6"]
-atlas = ExtResource("1_miac2")
+[sub_resource type="AtlasTexture" id="AtlasTexture_umu78"]
+atlas = ExtResource("2_hfj80")
 region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_62tik"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_obwl6")
+"texture": SubResource("AtlasTexture_umu78")
 }],
 "loop": true,
 "name": &"default",
@@ -51,7 +51,7 @@ animations = [{
 }]
 
 [node name="WaterFlowPart" type="Node2D" unique_id=1160812727]
-script = ExtResource("1_obwl6")
+script = ExtResource("1_lwj8j")
 
 [node name="FlowControl" type="Control" parent="." unique_id=1781781660]
 clip_contents = true

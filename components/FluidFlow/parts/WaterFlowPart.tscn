@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://bq12a81hiyohf"]
+
+[ext_resource type="Texture2D" uid="uid://dynac6jsesg4q" path="res://assets/fluid/water.png" id="1_miac2"]
+[ext_resource type="Script" uid="uid://bo6dcmnv4bih0" path="res://components/FluidFlow/FluidFlowPart.gd" id="1_obwl6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_miac2"]
+atlas = ExtResource("1_miac2")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_obwl6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_miac2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62tik"]
+atlas = ExtResource("1_miac2")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jssnv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_62tik")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_irfbi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obwl6"]
+atlas = ExtResource("1_miac2")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_62tik"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obwl6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="WaterFlowPart" type="Node2D" unique_id=1160812727]
+script = ExtResource("1_obwl6")
+
+[node name="FlowControl" type="Control" parent="." unique_id=1781781660]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = -2.0
+offset_right = 18.0
+offset_bottom = 16.0
+
+[node name="LeftFlowPart" type="AnimatedSprite2D" parent="FlowControl" unique_id=772980020]
+position = Vector2(2, 0)
+sprite_frames = SubResource("SpriteFrames_obwl6")
+centered = false
+offset = Vector2(-16, 0)
+
+[node name="RightFlowPart" type="AnimatedSprite2D" parent="FlowControl" unique_id=1483034303]
+position = Vector2(18, 0)
+sprite_frames = SubResource("SpriteFrames_jssnv")
+centered = false
+
+[node name="MainFlowControl" type="Control" parent="FlowControl" unique_id=2040354734]
+clip_contents = true
+anchors_preset = 0
+offset_left = 2.0
+offset_right = 18.0
+offset_bottom = 16.0
+
+[node name="MainFlowPart" type="AnimatedSprite2D" parent="FlowControl/MainFlowControl" unique_id=1228001278]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_irfbi")
+sprite_frames = SubResource("SpriteFrames_62tik")
+centered = false

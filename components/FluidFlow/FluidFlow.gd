@@ -1,5 +1,5 @@
-class_name WaterFlow
 extends Node2D
+class_name FluidFlow
 
 enum Type {
     WATER,
@@ -71,7 +71,7 @@ func _ready() -> void:
 func _reinstance_flow_sprites() -> void:
     # Free old instances
     for child in get_children():
-        if child is WaterFlowPart:
+        if child is FluidFlowPart:
             child.queue_free()
     _flow_sprites.clear()
 
@@ -83,7 +83,7 @@ func _reinstance_flow_sprites() -> void:
         for rect in part.get_rects():
             print("Instancing flow part at", rect.position, "with size", rect.size)
             # Instantiate a node and add to the scene tree so it's readied
-            var node = flow_part_scene.instantiate() as WaterFlowPart
+            var node = flow_part_scene.instantiate() as FluidFlowPart
             add_child(node)
 
             # Update position and size
