@@ -19,8 +19,18 @@ var terminal_velocity: float
 # Screen bounds
 var screen: Vector2
 
+# Target we will interact with when we press the interact button, if any
+var interaction_target: InteractionTarget = null
+
+func setInteractionTarget(target: InteractionTarget) -> void:
+	interaction_target = target
+
+func clearInteractionTarget(target: InteractionTarget) -> void:
+	if interaction_target == target:
+		interaction_target = null
 # Do whatever this character does when hit by a spike (split if slime, take damage otherwise)
 @abstract func spikeHit()
+
 
 # Take an arbitrary amount of damage
 func takeDamage(damage = 1):
@@ -37,8 +47,7 @@ func die():
 # Abstract method for defining fluid interactions
 # Triggered when a fluid emitter hits this character, with the fluid type of the emitter
 func onFluidHit(_fluid_type: FluidFlow.Type) -> void:
-    pass
-
+	pass
 
 # Move along the ground or in the air
 func move(direction: float, delta: float) -> void:
@@ -105,5 +114,9 @@ func _physics_process(delta: float) -> void:
 		move(direction, delta)
 	else:
 		stop(delta)
+
+    # Handle interaction
+	if Input.is_action_just_pressed("interact") and interaction_target:
+		interaction_target.interact(self)
 
 	move_and_slide()
