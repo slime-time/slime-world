@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://d2n5hnnnf8678"]
+
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://levels/TestLevel.gdshader" id="1_ardn0"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_q3t17"]
+[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="3_q3t17"]
+[ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://LevelSelectButton.tscn" id="4_0bmyu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
+shader = ExtResource("1_ardn0")
+shader_parameter/darkness = 0.730000034675
+shader_parameter/edge_softness = 3.30200015358512
+
+[node name="Control" type="Control" unique_id=348814563]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1747510423]
+layer = -100
+
+[node name="BackgroundTexture" type="TextureRect" parent="CanvasLayer" unique_id=1823849411]
+material = SubResource("ShaderMaterial_0bmyu")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_q3t17")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=1235894768]
+offset_right = 511.0
+offset_bottom = 289.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer" unique_id=568300695]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=640242093]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.29999998, 0.75, 0.43499994, 1)
+theme_override_colors/font_shadow_color = Color(0.38, 1, 0.566, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = -1
+theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("3_q3t17")
+theme_override_font_sizes/font_size = 24
+text = "slime girl, slime world"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=567942300]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/CenterContainer/VBoxContainer/ScrollContainer" unique_id=745705879]
+layout_mode = 2
+
+[node name="LevelSelectButton" parent="CanvasLayer/CenterContainer/VBoxContainer/ScrollContainer/GridContainer" unique_id=869992264 instance=ExtResource("4_0bmyu")]
+layout_mode = 2
+
+[node name="LevelSelectButton2" parent="CanvasLayer/CenterContainer/VBoxContainer/ScrollContainer/GridContainer" unique_id=1559661964 instance=ExtResource("4_0bmyu")]
+layout_mode = 2
