@@ -82,7 +82,6 @@ func _reinstance_flow_sprites() -> void:
 
         # Loop through flow sprite rects at this height
         for rect in part.get_rects():
-            print("Instancing flow part at", rect.position, "with size", rect.size)
             # Instantiate a node and add to the scene tree so it's readied
             var node = flow_part_scene.instantiate() as FluidFlowPart
             add_child(node)
@@ -98,12 +97,16 @@ func _physics_process(_delta: float) -> void:
     # Raycast downwards at each column to find the water flow
     var space_state = get_world_2d().direct_space_state
     var hits = _ray_hits.duplicate()
+    var hit_colliders: Dictionary[Object, Object] = {}
     for i in range(16):
         var hit = space_state.intersect_ray(_ray_queries[i])
         if hit.is_empty():
             # If we intersect nothing, push the max distance we draw water flow
             hits.set(i, max_flow_height)
             continue
+
+        # Store hit collider in a fake set to trigger callbacks if the hits have changed
+        hit_colliders[hit.collider] = null
 
         # Push the hit distance to the hits array
         hits.set(i, int(floor(hit.position.y - _ref_position.y)))
@@ -112,6 +115,11 @@ func _physics_process(_delta: float) -> void:
     # This is like 16 int equality checks but it's like fiiiiiiiiiiiiiine hashing would be more expensive probably
     if hits == _ray_hits: return
     _ray_hits = hits
+
+    # Hits changed; trigger callbacks on hit colliders
+    for collider in hit_colliders.keys():
+        if collider.has_method("on_fluid_hit"):
+            collider.on_fluid_hit(flow_type)
 
     # Update the water flow parts based on the new hits
     _flow_parts.clear()
