@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kfehjyrcrjdi"
-path="res://.godot/imported/wide-vent.png-5640f98027e66cf116359d69fa5c6bfb.ctex"
+uid="uid://cl26q86oop334"
+path="res://.godot/imported/lever.png-26a74d1d810cfb017f1488ca2ff5f639.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/wide-vent.png"
-dest_files=["res://.godot/imported/wide-vent.png-5640f98027e66cf116359d69fa5c6bfb.ctex"]
+source_file="res://assets/components/lever.png"
+dest_files=["res://.godot/imported/lever.png-26a74d1d810cfb017f1488ca2ff5f639.ctex"]
 
 [params]
 
