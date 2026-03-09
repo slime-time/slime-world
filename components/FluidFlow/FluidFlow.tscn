@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://db8y3ikhdn1r8"]
 
-[ext_resource type="Script" uid="uid://dw23x5pynkluq" path="res://components/WaterFlow/WaterFlow.gd" id="1_vophg"]
-[ext_resource type="PackedScene" uid="uid://bq12a81hiyohf" path="res://components/WaterFlow/WaterFlowPart.tscn" id="2_5bvrk"]
+[ext_resource type="Script" uid="uid://dw23x5pynkluq" path="res://components/FluidFlow/FluidFlow.gd" id="1_vophg"]
+[ext_resource type="PackedScene" uid="uid://bq12a81hiyohf" path="res://components/FluidFlow/parts/WaterFlowPart.tscn" id="2_5bvrk"]
 [ext_resource type="Texture2D" uid="uid://3e51eumu63ft" path="res://assets/icon.svg" id="3_5bvrk"]
 
 [node name="WaterFlow" type="Node2D" unique_id=21526138]
