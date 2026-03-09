@@ -88,7 +88,7 @@ func _reinstance_flow_sprites() -> void:
 
             # Update position and size
             node.position = rect.position
-            node.resize_flow_part(rect.position.x + 8, rect.size)
+            node.resize_flow_part(rect.position.x + 8, rect.size, 16, 16)
 
 func _physics_process(_delta: float) -> void:
     if !is_flow_enabled:
