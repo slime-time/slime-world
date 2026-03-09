@@ -1,12 +1,12 @@
 [gd_scene format=4 uid="uid://dib3l6i8l61om"]
 
-[ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_1mo47"]
-[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="1_hsexo"]
-[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_1mo47"]
-[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://levels/TestLevel.gdshader" id="3_qehkn"]
+[ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_cusuu"]
+[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_q35uy"]
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="3_3kjct"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="4_o0qj8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
-texture = ExtResource("1_hsexo")
+texture = ExtResource("2_q35uy")
 1:3/0 = 0
 1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
 0:3/0 = 0
@@ -45,13 +45,13 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_1mo47")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
-shader = ExtResource("3_qehkn")
+shader = ExtResource("3_3kjct")
 shader_parameter/darkness = 0.730000034675
 shader_parameter/edge_softness = 3.30200015358512
 
 [node name="Node2D" type="Node2D" unique_id=730916531]
 
-[node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_1mo47")]
+[node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_cusuu")]
 position = Vector2(253, 94)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
@@ -70,6 +70,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_1mo47")
+texture = ExtResource("4_o0qj8")
 expand_mode = 1
 stretch_mode = 1
