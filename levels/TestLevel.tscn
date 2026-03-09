@@ -47,7 +47,7 @@ sources/0 = SubResource("TileSetAtlasSource_1mo47")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
 shader = ExtResource("3_qehkn")
 shader_parameter/darkness = 0.730000034675
-shader_parameter/edge_softness = 3.3020001535851202
+shader_parameter/edge_softness = 3.30200015358512
 
 [node name="Node2D" type="Node2D" unique_id=730916531]
 
@@ -68,8 +68,6 @@ material = SubResource("ShaderMaterial_qehkn")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 64.0
-offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_1mo47")
