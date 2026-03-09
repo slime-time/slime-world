@@ -13,4 +13,4 @@ func _process(delta: float) -> void:
 
 func _on_level_select_button_pressed() -> void:
 	print("Button was clicked!")
-	get_tree().change_scene_to_file("res://levels/TestLevel/TestLevel.tscn")
+	get_tree().change_scene_to_file("res://levels/TestLevel.tscn")
