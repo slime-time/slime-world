@@ -8,8 +8,11 @@ class_name FluidFlowPart
 @onready var main_flow_part = $Mask/FlowControl/MainFlowControl/MainFlowPart
 @onready var right_flow_part = $Mask/FlowControl/RightFlowPart
 
+var fluid_type: FluidFlow.Type = FluidFlow.Type.UNSET
+
 # Resizes the flow part to the new width
-func resize_flow_part(x_offset: int, size: Vector2, clip_start: int = 16, clip_end: int = 16) -> void:
+func init_flow_part(type: FluidFlow.Type, x_offset: int, size: Vector2, clip_start: int = 16, clip_end: int = 16) -> void:
+    fluid_type = type
     flow_control.set_size(size + Vector2(4, 0))
     main_control.set_size(size)
     main_flow_part.position.x = -x_offset
