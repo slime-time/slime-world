@@ -37,13 +37,13 @@ class WaterPart:
 				cur_len = 0
 		return res
 
-
-@export var max_flow_height: int = 256    # The max height of water flow
+@export var flow_extent: int = 256  	  # The maximum distance the water can flow downwards
+@export var flow_update_speed: int = 128   # How far to extend fluid downward per second, when enabling
 @export var is_flow_enabled: bool = true  # Whether the water flow is enabled
 @export var flow_type: Type = Type.WATER  # The type of water flow
 @export var flow_part_scene: PackedScene  # The scene used for each part of the water flow
-@export var flow_offset: int = 2          # Distance below an intersection at which to cut off flow
-@export var flow_falloff: int = 6		  # Distance over which the flow fades out at the bottom
+@export var flow_offset: int = 1          # Distance below an intersection at which to cut off flow
+@export var flow_falloff: int = 8		  # Distance over which the flow fades out at the bottom
 
 var _flow_parts: Array[WaterPart] = []   # Parts of water determined by raycast results
 var _flow_sprites: Array[Sprite2D] = []  # The active flow sprite instances
@@ -52,6 +52,11 @@ var _ref_position: Vector2i                                # The absolute positi
 var _ray_queries: Array[PhysicsRayQueryParameters2D] = []  # Raycast queries for each column
 var _ray_hits: PackedInt32Array = PackedInt32Array()       # Previous raycast hit distances
 
+var _min_flow_height_f: float = 0
+var _max_flow_height_f: float = 256
+
+var _min_flow_height: int = 0    # The starting position of water flow
+var _max_flow_height: int = 256  # The max height of water flow currently
 
 func _ready() -> void:
 	# Get reference position for raycasts and sprite rects
@@ -61,16 +66,20 @@ func _ready() -> void:
 	# Precompute raycast queries for each column, since they won't change
 	for i in range(16):
 		var from = Vector2(_ref_position) + Vector2(i + 0.5, 0)
-		var to = from + Vector2(0, max_flow_height)
+		var to = from + Vector2(0, _max_flow_height)
 		var query = PhysicsRayQueryParameters2D.create(from, to)
 		_ray_queries.append(query)
 
 	# Initialize last hits
 	_ray_hits.resize(16)
 	if is_flow_enabled:
-		_ray_hits.fill(max_flow_height)
+		_ray_hits.fill(_max_flow_height)
+		_min_flow_height_f = 0
+		_max_flow_height_f = flow_extent
 	else:
 		_ray_hits.fill(0)
+		_min_flow_height_f = 0
+		_max_flow_height_f = 0
 
 # Clear flow sprite instances and instantiate new ones from the current water parts
 func _reinstanceFlowParts() -> void:
@@ -114,9 +123,14 @@ func _reinstanceFlowParts() -> void:
 				node.position = rect.position
 				node.initFlowPart(flow_type, rect.position.x + 8, rect.size, 16, 16)
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if !is_flow_enabled:
+		_min_flow_height_f = move_toward(_min_flow_height_f, flow_extent, flow_update_speed * delta)
+		_min_flow_height = min(flow_extent, int(_min_flow_height_f))
 		return
+
+	_max_flow_height_f = move_toward(_max_flow_height_f, flow_extent, flow_update_speed * delta)
+	_max_flow_height = min(flow_extent, int(_max_flow_height_f))
 
 	# Raycast downwards at each column to find the water flow
 	var space_state = get_world_2d().direct_space_state
@@ -126,14 +140,14 @@ func _physics_process(_delta: float) -> void:
 		var hit = space_state.intersect_ray(_ray_queries[i])
 		if hit.is_empty():
 			# If we intersect nothing, push the max distance we draw water flow
-			hits.set(i, max_flow_height)
+			hits.set(i, _max_flow_height)
 			continue
 
 		# Store hit collider in a fake set to trigger callbacks if the hits have changed
 		hit_colliders[hit.collider] = null
 
 		# Push the hit distance to the hits array
-		hits.set(i, min(max_flow_height, int(floor(hit.position.y - _ref_position.y)) + flow_offset))
+		hits.set(i, min(_max_flow_height, int(floor(hit.position.y - _ref_position.y)) + flow_offset))
 
 	# If the hits didn't change, we don't need to update the water flow
 	# This is like 16 int equality checks but it's like fiiiiiiiiiiiiiine hashing would be more expensive probably
@@ -172,13 +186,37 @@ func _physics_process(_delta: float) -> void:
 		prev_y = y
 
 	# Add a final part if needed
-	if prev_y < max_flow_height:
-		for i in range(prev_y, max_flow_height, 16):
-			_flow_parts.append(WaterPart.new(i, min(i + 16, max_flow_height), mask))
-			if prev_y + 16 >= max_flow_height:
+	if prev_y < _max_flow_height:
+		for i in range(prev_y, _max_flow_height, 16):
+			_flow_parts.append(WaterPart.new(i, min(i + 16, _max_flow_height), mask))
+			if prev_y + 16 >= _max_flow_height:
 				# This is the bottom part, mark it as such for falloff handling
 				_flow_parts.back().is_bottom = true
 
 	# Reintance flow sprites based on the new parts
 	_reinstanceFlowParts()
 
+func enableFlow() -> void:
+	if is_flow_enabled: return
+	is_flow_enabled = true
+
+	_min_flow_height_f = 0
+	_max_flow_height_f = 0
+	_min_flow_height = 0
+	_max_flow_height = 0
+
+func disableFlow() -> void:
+	if !is_flow_enabled: return
+	is_flow_enabled = false
+
+	_min_flow_height_f = 0
+	_max_flow_height_f = flow_extent
+	_min_flow_height = 0
+	_max_flow_height = flow_extent
+
+	_ray_hits.fill(0)
+	_flow_parts.clear()
+	_reinstanceFlowParts()
+
+func _on_lever_flip_on() -> void:
+	pass # Replace with function body.
