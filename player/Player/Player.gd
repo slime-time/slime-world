@@ -16,6 +16,12 @@ var slime_templates: Dictionary[Slime.Type, Resource] = {
 # Reference to all slimes that exist
 var slimes = []
 
+# Merge slimes iff the slime requesting the merge is the slime at slimes[0], to prevent multiple
+# Merge requests happening at the same time
+func mergeSlimes(requester_id: int):
+	if(len(slimes) > 0 and slimes[0].get_instance_id() == requester_id):
+		print_debug("merge logic here")
+
 func _ready():
 	InputManager.is_human = true
 	am_penny = true
