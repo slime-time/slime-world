@@ -115,7 +115,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		stop(delta)
 
-    # Handle interaction
+	# Handle interaction
 	if Input.is_action_just_pressed("interact") and interaction_target:
 		interaction_target.interact(self)
 

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cuvwsherd1opx"]
+
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="1_ge6t7"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_epgm0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
+shader = ExtResource("1_ge6t7")
+shader_parameter/darkness = 0.730000034675
+shader_parameter/edge_softness = 3.30200015358512
+
+[node name="Background" type="CanvasLayer" unique_id=2080776597]
+layer = -100
+
+[node name="BackgroundTexture" type="TextureRect" parent="." unique_id=1455008072]
+material = SubResource("ShaderMaterial_qehkn")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_epgm0")
+expand_mode = 1
+stretch_mode = 1
