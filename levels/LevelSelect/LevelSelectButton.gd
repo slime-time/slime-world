@@ -1,5 +1,5 @@
 extends TextureButton
 
 func setLabel(label: String):
-	pass
-	
+	$ButtonLabel.text = label
+
