@@ -15,12 +15,15 @@ var run_acceleration: float
 var run_deceleration: float
 var jump_velocity: float
 var terminal_velocity: float
+var coyote_time: float
 
 # Screen bounds
 var screen: Vector2
 
 # Target we will interact with when we press the interact button, if any
 var interaction_target: InteractionTarget = null
+
+var coyote_timer: Timer = null
 
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
@@ -80,6 +83,11 @@ func _ready() -> void:
 	# Read movement defaults
 	read_movement_data("movement_defaults")
 
+	coyote_timer = Timer.new()
+	coyote_timer.wait_time = coyote_time
+	coyote_timer.one_shot = true
+	add_child(coyote_timer)
+
 
 # Loads movement options
 func read_movement_data(my_name):
@@ -88,6 +96,7 @@ func read_movement_data(my_name):
 	run_deceleration = config.get_value(my_name, "run_deceleration", run_deceleration)
 	jump_velocity = config.get_value(my_name, "jump_velocity", jump_velocity)
 	terminal_velocity = config.get_value(my_name, "terminal_velocity", terminal_velocity)
+	coyote_time = config.get_value(my_name, "coyote_time", terminal_velocity)
 
 
 # Modify logic here to change controls for all slimes and Penny
@@ -103,9 +112,11 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		fall(delta)
+	else:
+		coyote_timer.start()
 
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and !coyote_timer.is_stopped():
 		jump(delta)
 
 	# Get the input direction and handle the movement/deceleration.
