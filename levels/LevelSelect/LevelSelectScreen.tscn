@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://d2n5hnnnf8678"]
 
-[ext_resource type="Script" uid="uid://dbhvxu4avvfcg" path="res://levels/LevelSelect/LevelSelectScreen.gd" id="1_whr1j"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="2_kyhc2"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_jl0ce"]
 [ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="4_wrpfa"]
-[ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://levels/LevelSelect/LevelSelectButton.tscn" id="5_fj1fs"]
 [ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/LevelSelect/LevelSelect.gd" id="6_kyhc2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
@@ -12,34 +10,10 @@ shader = ExtResource("2_kyhc2")
 shader_parameter/darkness = 0.730000034675
 shader_parameter/edge_softness = 3.30200015358512
 
-[sub_resource type="GDScript" id="GDScript_j12p5"]
-script/source = "extends TextureButton
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
-
-[node name="Control" type="Control" unique_id=348814563]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("1_whr1j")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1747510423]
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1747510423]
 layer = -100
 
-[node name="BackgroundTexture" type="TextureRect" parent="CanvasLayer" unique_id=1823849411]
+[node name="BackgroundTexture" type="TextureRect" parent="." unique_id=1823849411]
 material = SubResource("ShaderMaterial_0bmyu")
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,16 +25,19 @@ texture = ExtResource("3_jl0ce")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer" unique_id=1235894768]
-offset_right = 511.0
-offset_bottom = 289.0
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1235894768]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/CenterContainer" unique_id=568300695]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=568300695]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Title" type="Label" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=640242093]
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=640242093]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.29999998, 0.75, 0.43499994, 1)
 theme_override_colors/font_shadow_color = Color(0.38, 1, 0.566, 1)
@@ -72,18 +49,13 @@ theme_override_font_sizes/font_size = 24
 text = "slime girl, slime world"
 horizontal_alignment = 1
 
-[node name="LevelSelectButton" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=869992264 instance=ExtResource("5_fj1fs")]
-layout_mode = 2
-toggle_mode = true
-script = SubResource("GDScript_j12p5")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=1122486307]
-custom_minimum_size = Vector2(10, 100)
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/VBoxContainer" unique_id=1122486307]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="LevelSelect" type="GridContainer" parent="CanvasLayer/CenterContainer/VBoxContainer/ScrollContainer" unique_id=1412943189]
+[node name="LevelSelect" type="GridContainer" parent="CenterContainer/VBoxContainer/ScrollContainer" unique_id=1412943189]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("6_kyhc2")
-
-[connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/LevelSelectButton" to="." method="_on_level_select_button_pressed"]

@@ -1,14 +1,14 @@
 extends Control
 
+const LevelSelectButton = preload("res://levels/LevelSelect/LevelSelectButton.tscn")
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	# Add level buttons
 	for level_idx in range(1, GameManager.levels.size()):
-		var button = Button.new()
+		var button = LevelSelectButton.instantiate()
 		
-		button.custom_minimum_size = Vector2(100, 50)
-		button.text = "Level " + str(level_idx)
+		button.setLabel("Level " + str(level_idx))
 
 		# Disable button if level hasn't been unlocked yet
 		if (level_idx > GameManager.highest_level_unlocked):
@@ -16,7 +16,3 @@ func _ready() -> void:
 
 		button.pressed.connect(func(): GameManager.load_level(level_idx))
 		add_child(button)	
-		
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
