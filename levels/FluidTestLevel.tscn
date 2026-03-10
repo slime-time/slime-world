@@ -59,7 +59,7 @@ tile_set = SubResource("TileSet_qehkn")
 
 [node name="WaterFlow" parent="." unique_id=21526138 instance=ExtResource("3_xks8a")]
 z_index = -5
-position = Vector2(170, 88)
+position = Vector2(201, 70)
 is_flow_enabled = false
 
 [node name="WaterFlow2" parent="." unique_id=2090323164 instance=ExtResource("3_xks8a")]
