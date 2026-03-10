@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="Slime Girl Slime World"
-run/main_scene="uid://dib3l6i8l61om"
+run/main_scene="uid://d2n5hnnnf8678"
 config/features=PackedStringArray("4.6", "Mobile")
-config/icon="res://icon.svg"
+config/icon="uid://3e51eumu63ft"
 
 [autoload]
 
@@ -67,5 +67,6 @@ jump={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
