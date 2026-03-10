@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cic4ftfcc4veq"]
 
-[ext_resource type="Script" uid="uid://bxqq0x5x18kd8" path="res://InputManager.gd" id="1_bpo4a"]
+[ext_resource type="Script" uid="uid://bxqq0x5x18kd8" path="res://InputManager/InputManager.gd" id="1_bpo4a"]
 
 [node name="Control" type="Control" unique_id=676276337]
 layout_mode = 3

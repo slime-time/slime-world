@@ -85,7 +85,8 @@ func read_movement_data(my_name):
 func _physics_process(delta: float) -> void:
 	if not SceneManager.physics_applies:
 		return
-
+		
+	
 	# Check if player is OOB, and reset to origin if so
 	if position.x >= screen.x or position.y >= screen.y:
 		die()

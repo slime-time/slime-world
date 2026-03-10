@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_1mo47"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="1_hsexo"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_1mo47"]
-[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://levels/TestLevel.gdshader" id="3_qehkn"]
+[ext_resource type="Shader" path="res://levels/TestLevel.gdshader" id="3_qehkn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
 texture = ExtResource("1_hsexo")
@@ -47,7 +47,7 @@ sources/0 = SubResource("TileSetAtlasSource_1mo47")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
 shader = ExtResource("3_qehkn")
 shader_parameter/darkness = 0.730000034675
-shader_parameter/edge_softness = 3.3020001535851202
+shader_parameter/edge_softness = 3.30200015358512
 
 [node name="Node2D" type="Node2D" unique_id=730916531]
 
