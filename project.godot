@@ -19,6 +19,7 @@ config/icon="uid://3e51eumu63ft"
 
 SceneManager="*uid://clwcou0lvoqt0"
 InputManager="*uid://bxqq0x5x18kd8"
+GameManager="*uid://dms3mbn4e8xh7"
 
 [display]
 
