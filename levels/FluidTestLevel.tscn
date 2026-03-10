@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="3_xks8a"]
 [ext_resource type="PackedScene" uid="uid://cmk85sf0jtw4f" path="res://components/FluidFlow/parts/IceWaterFlowPart.tscn" id="4_hfg54"]
 [ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="5_l4i6y"]
+[ext_resource type="PackedScene" uid="uid://cuvwsherd1opx" path="res://components/Background/Background.tscn" id="6_hfg54"]
+[ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="7_y40yl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
 texture = ExtResource("2_l4i6y")
@@ -74,6 +76,12 @@ flow_part_scene = ExtResource("4_hfg54")
 
 [node name="Lever" parent="." unique_id=1864762079 instance=ExtResource("5_l4i6y")]
 position = Vector2(210, 167)
+
+[node name="Background" parent="." unique_id=2080776597 instance=ExtResource("6_hfg54")]
+
+[node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("7_y40yl")]
+position = Vector2(65, 28)
+scale = Vector2(0.7, 1)
 
 [connection signal="flip_off" from="Lever" to="WaterFlow" method="disableFlow"]
 [connection signal="flip_on" from="Lever" to="WaterFlow" method="enableFlow"]

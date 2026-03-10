@@ -1,10 +1,12 @@
 [gd_scene format=4 uid="uid://dg8nd0bnjky43"]
 
+[ext_resource type="PackedScene" uid="uid://cuvwsherd1opx" path="res://components/Background/Background.tscn" id="1_28kxt"]
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_ori4l"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_xdrm5"]
 [ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="3_av7kl"]
 [ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/spike.png" id="4_muxx5"]
 [ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="5_muxx5"]
+[ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="7_hlr8m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_av7kl"]
 texture = ExtResource("2_xdrm5")
@@ -51,27 +53,32 @@ size = Vector2(8, 65)
 
 [node name="SpikeTest" type="Node2D" unique_id=816462362]
 
-[node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_ori4l")]
-position = Vector2(213, 57)
+[node name="Background" parent="." unique_id=2080776597 instance=ExtResource("1_28kxt")]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1016908615]
-position = Vector2(213, 88)
+position = Vector2(225, 160)
 tile_map_data = PackedByteArray("AAD9/wAAAAABAAAAAAD+/wAAAAABAAAAAAD//wAAAAABAAAAAAAAAAAAAAABAAAAAAABAAAAAAABAAAAAAACAAAAAAABAAAAAAABAAEAAAABAAIAAAD//wEAAAABAAIAAAAAAAEAAAABAAIAAAD+/wEAAAABAAIAAAD9/wEAAAABAAIAAAADAAEAAAACAAIAAAADAAAAAAACAAAAAAACAAEAAAABAAIAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAIAAAABAPv/AAADAAMAAAA=")
 tile_set = SubResource("TileSet_muxx5")
 
-[node name="Spike" type="RigidBody2D" parent="." unique_id=585998066]
-position = Vector2(237, 27)
+[node name="Player" parent="TileMapLayer" unique_id=1162088554 instance=ExtResource("1_ori4l")]
+position = Vector2(0, -31)
+
+[node name="Spike" type="RigidBody2D" parent="TileMapLayer" unique_id=585998066]
+position = Vector2(24, -61)
 script = ExtResource("3_av7kl")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike" unique_id=1522893824]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike" unique_id=1522893824]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike" unique_id=768931425]
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike" unique_id=768931425]
 texture = ExtResource("4_muxx5")
 
-[node name="Area2D" type="Area2D" parent="Spike" unique_id=1991308729]
+[node name="Area2D" type="Area2D" parent="TileMapLayer/Spike" unique_id=1991308729]
 script = ExtResource("5_muxx5")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Spike/Area2D" unique_id=312434216]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TileMapLayer/Spike/Area2D" unique_id=312434216]
 position = Vector2(0, 28.5)
 shape = SubResource("RectangleShape2D_6yh2b")
+
+[node name="ExitZone" parent="TileMapLayer" unique_id=1439884645 instance=ExtResource("7_hlr8m")]
+position = Vector2(-53, -10)

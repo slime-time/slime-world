@@ -1,3 +1,4 @@
+class_name Penny
 extends "res://player/PlayerMovement/PlayerMovement.gd"
 
 	

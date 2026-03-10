@@ -1,6 +1,9 @@
 
 extends "res://player/Slime/Slime.gd"
 
+func canBecomePenny():
+	return size >= 8
+
 func _ready():
 	hitbox_name = "GreenSlime"
 	sprite_name = "slime"
