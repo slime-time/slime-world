@@ -1,7 +1,7 @@
 extends Node
 
-var cur_level: int = 0 # Level 0 is LevelSelect
-var highest_level_unlocked: int = 3
+var cur_level: int = 0 # Level 0 is the level select screen
+var highest_level_unlocked: int = 1
 
 const levels: Array[String] = [
 	"res://levels/LevelSelect/LevelSelectScreen.tscn",
