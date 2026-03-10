@@ -1,34 +1,21 @@
 
-extends "res://player/Slime/Slime.gd"
+extends Slime
 
-# The movement speed of a size 1 green slime
-var baseline_movement_speed
-# The jump velocity of a size 1 green slime
-var baseline_jump_velocity
+func canBecomePenny():
+	return size >= 8
+
 func _ready():
+	hitbox_name = "GreenSlime"
+	sprite_name = "slime"
+	movement_name = "green_slime_movement"
+	slime_type = Slime.Type.GREEN_SLIME
 	super()
-	read_movement_data("green_slime_movement")
-	baseline_movement_speed = movement_speed
-	baseline_jump_velocity = jump_velocity
-	getMovementAbility()
-	
+	health = config.get_value("slime_health", "green_slime")
+
 # Get the movement ability of this specific slime (including size in calculation)
 func getMovementAbility():
-	movement_speed = baseline_movement_speed * size
-	jump_velocity = baseline_jump_velocity * size
-	
-	
-# Standard platformer controls: green slime should control similarly to human form, but slightly
-# faster and with much higher jump (at maximum size)
-func move(direction, _delta = null):
-	velocity.x = direction * movement_speed
-	
-func jump(_delta = null):
-	velocity.y = jump_velocity
-	
-func stop(_delta = null):
-	velocity.x = 0
-	
-func fall(delta = null):
-	velocity += get_gravity() * delta
-	
+	var mul = (size / 2.0 + 4) / 8.0
+	run_max_velocity *= mul
+	run_acceleration *= mul
+	run_deceleration *= mul
+	jump_velocity *= mul
