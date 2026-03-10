@@ -10,8 +10,11 @@
 
 [node name="LevelSelectButton" type="TextureButton" unique_id=869992264]
 custom_minimum_size = Vector2(160, 20)
-offset_right = 160.0
-offset_bottom = 20.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture_normal = ExtResource("1_8hco3")
 texture_pressed = ExtResource("2_sm8es")
 texture_hover = ExtResource("3_556dw")
