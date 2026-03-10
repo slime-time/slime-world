@@ -9,6 +9,11 @@ var can_pause = true
 # When false, _physics_process and _process will do nothing
 var physics_applies = true
 
+# Reset the scene
+func resetScene():
+	var tree = get_tree()
+	tree.call_deferred("reload_current_scene")
+	
 # Pause the game, and stop the player from moving. The player can unpause from this position
 func pauseGame():
 	# ToDo: show settings / pause menu UI
