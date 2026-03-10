@@ -219,4 +219,9 @@ func disableFlow() -> void:
 	_reinstanceFlowParts()
 
 func _on_lever_flip_on() -> void:
-	pass # Replace with function body.
+	disableFlow()
+	
+
+
+func _on_lever_flip_off() -> void:
+	enableFlow() # Replace with function body.
