@@ -1,3 +1,4 @@
+class_name Player
 extends Node2D
 
 # False whenever Penny is in slime form
@@ -12,7 +13,6 @@ var slime_templates: Dictionary[Slime.Type, Resource] = {
 	Slime.Type.ICE_SLIME: preload("res://player/Slime/IceSlime/IceSlime.tscn"),
 }
 
-
 # Reference to all slimes that exist
 var slimes = []
 
@@ -21,6 +21,11 @@ func _ready():
 	am_penny = true
 	penny = get_node("Penny")
 	InputManager.penny_became_slime.connect(makePennyIntoSlime)
+
+func changeSlimeType(slime: Slime, new_type: Slime.Type):
+	slimes.erase(slime)
+	slime.queue_free()
+	makeSlime(slime.position, slime.velocity, slime.size, new_type)
 
 func makeSlime(starting_location: Vector2, starting_velocity: Vector2, size: int, type: Slime.Type):
 	var node = slime_templates[type].instantiate()
@@ -31,6 +36,7 @@ func makeSlime(starting_location: Vector2, starting_velocity: Vector2, size: int
 	InputManager.slime_became_penny.connect(node.becomePenny)
 	node.became_penny.connect(makeSlimeIntoPenny)
 	node.has_split.connect(makeSlime)
+	node.slime_type_changed.connect(changeSlimeType)
 
 	slimes.append(node)
 	self.call_deferred("add_child", node, false, InternalMode.INTERNAL_MODE_BACK)

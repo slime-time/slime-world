@@ -27,6 +27,9 @@ signal became_penny
 # Signal sent when this slime splits into 2 different slimes
 signal has_split
 
+# Signal sent when this slime is replaced
+signal slime_type_changed
+
 # Size of this slime in 1/8ths of the largest slime
 var size
 
@@ -54,6 +57,14 @@ func split():
 	updateHitbox()
 	updateSprite()
 
+func onFluidHit(fluid_type: FluidFlow.Type) -> void:
+	match fluid_type:
+		FluidFlow.Type.WATER:
+			if slime_type == Type.GREEN_SLIME: return
+			slime_type_changed.emit(self, Type.GREEN_SLIME)
+		FluidFlow.Type.ICE_WATER:
+			if slime_type == Type.ICE_SLIME: return
+			slime_type_changed.emit(self, Type.ICE_SLIME)
 
 # Attempt to change from slime form to human form
 func becomePenny():
@@ -73,6 +84,7 @@ func _ready():
 	updateHitbox()
 	updateSprite()
 	getMovementAbility()
+
 # Should be implemented differently for each slime - gives movement_speed and jump_velocity
 # As a function of the size of the slime
 @abstract func getMovementAbility()
@@ -108,7 +120,7 @@ func updateSprite():
 	my_sprite.texture = load("res://assets/" + sprite_name + "/" + sprite_name + "-" + str(size) + ".png")
 
 	# Temporary fix until all sprites have animations
-	if(size == 8):
+	if(size == 8 && slime_type == Type.GREEN_SLIME):
 		my_sprite.hframes = 4
 	else:
 		my_sprite.hframes = 1
