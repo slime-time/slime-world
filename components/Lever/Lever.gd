@@ -8,6 +8,7 @@ signal flip_off
 @onready var active_sprite: AnimatedSprite2D = $ActiveLeverSprite
 @onready var timer: Timer = $InteractionTimer
 
+@export var starts_on: bool = false
 @export var can_slimes_interact: bool = false
 var _is_on: bool = false
 var _players_in_area: Dictionary[PlayerMovement, Object] = {}  # Fake hash set
@@ -15,6 +16,19 @@ var _players_in_area: Dictionary[PlayerMovement, Object] = {}  # Fake hash set
 func _ready() -> void:
 	area.body_entered.connect(onBodyEntered)
 	area.body_exited.connect(onBodyExited)
+
+	if starts_on:
+		sprite.play("flip_off")
+		sprite.stop()
+		active_sprite.play("flip_off_active")
+		active_sprite.stop()
+		_is_on = true
+	else:
+		sprite.play("flip_on")
+		sprite.stop()
+		active_sprite.play("flip_on_active")
+		active_sprite.stop()
+		_is_on = false
 
 func onBodyEntered(_body: Node) -> void:
 	if _body is PlayerMovement:
