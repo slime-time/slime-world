@@ -23,12 +23,14 @@ func _ready() -> void:
 		active_sprite.play("flip_off_active")
 		active_sprite.stop()
 		_is_on = true
+		emit_signal("flip_on")
 	else:
 		sprite.play("flip_on")
 		sprite.stop()
 		active_sprite.play("flip_on_active")
 		active_sprite.stop()
 		_is_on = false
+		emit_signal("flip_off")
 
 func onBodyEntered(_body: Node) -> void:
 	if _body is PlayerMovement:
