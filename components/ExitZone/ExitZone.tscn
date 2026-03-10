@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c1ef0aj0ah215"]
 
 [ext_resource type="Script" uid="uid://b4kmvc7x0v6h5" path="res://components/ExitZone/ExitZone.gd" id="1_j03g8"]
-[ext_resource type="Texture2D" uid="uid://3e51eumu63ft" path="res://assets/icon.svg" id="2_ay74d"]
+[ext_resource type="Texture2D" uid="uid://d0n3kcwjo16i1" path="res://assets/components/exit-glow.png" id="2_ay74d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ay74d"]
 
