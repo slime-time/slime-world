@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://d2n5hnnnf8678"]
 
-[ext_resource type="Script" uid="uid://dbhvxu4avvfcg" path="res://levels/LevelSelect/LevelSelect.gd" id="1_8vtko"]
-[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="1_dleve"]
-[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_8vtko"]
-[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="3_j12p5"]
-[ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://levels/LevelSelect/LevelSelectButton.tscn" id="4_vx5hu"]
+[ext_resource type="Script" uid="uid://dbhvxu4avvfcg" path="res://levels/LevelSelect/LevelSelectScreen.gd" id="1_whr1j"]
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="2_kyhc2"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_jl0ce"]
+[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="4_wrpfa"]
+[ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://levels/LevelSelect/LevelSelectButton.tscn" id="5_fj1fs"]
+[ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/LevelSelect/LevelSelect.gd" id="6_kyhc2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
-shader = ExtResource("1_dleve")
+shader = ExtResource("2_kyhc2")
 shader_parameter/darkness = 0.730000034675
 shader_parameter/edge_softness = 3.30200015358512
 
@@ -33,7 +34,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_8vtko")
+script = ExtResource("1_whr1j")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1747510423]
 layer = -100
@@ -46,7 +47,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_8vtko")
+texture = ExtResource("3_jl0ce")
 expand_mode = 1
 stretch_mode = 1
 
@@ -66,14 +67,23 @@ theme_override_colors/font_shadow_color = Color(0.38, 1, 0.566, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = -1
 theme_override_constants/shadow_outline_size = 4
-theme_override_fonts/font = ExtResource("3_j12p5")
+theme_override_fonts/font = ExtResource("4_wrpfa")
 theme_override_font_sizes/font_size = 24
 text = "slime girl, slime world"
 horizontal_alignment = 1
 
-[node name="LevelSelectButton" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=869992264 instance=ExtResource("4_vx5hu")]
+[node name="LevelSelectButton" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=869992264 instance=ExtResource("5_fj1fs")]
 layout_mode = 2
 toggle_mode = true
 script = SubResource("GDScript_j12p5")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=1122486307]
+custom_minimum_size = Vector2(10, 100)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LevelSelect" type="GridContainer" parent="CanvasLayer/CenterContainer/VBoxContainer/ScrollContainer" unique_id=1412943189]
+layout_mode = 2
+script = ExtResource("6_kyhc2")
 
 [connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/LevelSelectButton" to="." method="_on_level_select_button_pressed"]
