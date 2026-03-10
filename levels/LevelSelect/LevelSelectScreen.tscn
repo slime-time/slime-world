@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://d2n5hnnnf8678"]
+[gd_scene format=3 uid="uid://ob27y2if7ueg"]
 
 [ext_resource type="Script" uid="uid://dbhvxu4avvfcg" path="res://levels/LevelSelect/LevelSelectScreen.gd" id="1_whr1j"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="2_kyhc2"]
