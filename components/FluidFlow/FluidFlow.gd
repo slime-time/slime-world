@@ -156,8 +156,8 @@ func _physics_process(delta: float) -> void:
 
 	# Hits changed; trigger callbacks on hit colliders
 	for collider in hit_colliders.keys():
-		if collider.has_method("on_fluid_hit"):
-			collider.on_fluid_hit(flow_type)
+		if collider.has_method("onFluidHit"):
+			collider.onFluidHit(flow_type)
 
 	# Update the water flow parts based on the new hits
 	_flow_parts.clear()
