@@ -37,6 +37,8 @@ var size
 # From this slime
 var to_transform = false
 
+
+
 # Returns a boolean value, true iff the slime can become Penny (i.e. is size 8 and not blue slime)
 func canBecomePenny():
 	return false
