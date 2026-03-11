@@ -27,6 +27,8 @@ signal became_penny
 # Signal sent when this slime splits into 2 different slimes
 signal has_split
 
+# Signal sent when slimes should merge together
+signal slimes_merged
 # Signal sent when this slime is replaced
 signal slime_type_changed
 
@@ -36,8 +38,6 @@ var size
 # True only when the signal to tranform into Penny has already been sent, as to avoid sending a second
 # From this slime
 var to_transform = false
-
-
 
 # Returns a boolean value, true iff the slime can become Penny (i.e. is size 8 and not blue slime)
 func canBecomePenny():
@@ -58,6 +58,13 @@ func split():
 	getMovementAbility()
 	updateHitbox()
 	updateSprite()
+	
+# I was merged with another slime, increase my size
+func merge(merged_size: int):
+	size = merged_size
+	getMovementAbility()
+	updateHitbox()
+	updateSprite()
 
 func onFluidHit(fluid_type: FluidFlow.Type) -> void:
 	match fluid_type:
@@ -70,6 +77,7 @@ func onFluidHit(fluid_type: FluidFlow.Type) -> void:
 
 # Attempt to change from slime form to human form
 func becomePenny():
+	print_debug(to_transform)
 	if canBecomePenny() and not to_transform:
 		# Disable this node, it will be deleted later but first its data must be used to setup human form properties
 		set_process_mode(Node.PROCESS_MODE_DISABLED)
@@ -79,6 +87,8 @@ func becomePenny():
 		# Tell InputManager that the transformation attempt was successful, so our next transformation will be from
 		# human to slime
 		InputManager.is_human = true
+	else:
+		slimes_merged.emit(self.get_instance_id())
 
 func _ready():
 	super()
