@@ -82,7 +82,6 @@ func onFluidHit(fluid_type: FluidFlow.Type) -> void:
 
 # Attempt to change from slime form to human form
 func becomePenny():
-	print_debug(to_transform)
 	if canBecomePenny() and not to_transform:
 		# Disable this node, it will be deleted later but first its data must be used to setup human form properties
 		set_process_mode(Node.PROCESS_MODE_DISABLED)
