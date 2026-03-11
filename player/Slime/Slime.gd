@@ -13,6 +13,11 @@ var hitbox_name: String
 # The name used to load the movement data for this slime
 var movement_name: String
 
+var base_run_max_velocity
+var base_run_acceleration
+var base_run_deceleration
+var base_jump_velocity
+
 enum Type {
 	UNSET = 0,
 	GREEN_SLIME = 1,
@@ -93,6 +98,10 @@ func becomePenny():
 func _ready():
 	super()
 	read_movement_data(movement_name)
+	base_run_max_velocity = run_max_velocity
+	base_run_acceleration = run_acceleration
+	base_run_deceleration = run_deceleration
+	base_jump_velocity = jump_velocity
 	updateHitbox()
 	updateSprite()
 	getMovementAbility()

@@ -63,12 +63,8 @@ func _ready() -> void:
 	var pos = global_position.floor()
 	_ref_position = Vector2i(pos.x - 8, pos.y)
 
-	# Precompute raycast queries for each column, since they won't change
-	for i in range(16):
-		var from = Vector2(_ref_position) + Vector2(i + 0.5, 0)
-		var to = from + Vector2(0, _max_flow_height)
-		var query = PhysicsRayQueryParameters2D.create(from, to)
-		_ray_queries.append(query)
+	# Precompute raycast queries for each columns
+	_ray_queries = _getRaycastQueries()
 
 	# Initialize last hits
 	_ray_hits.resize(16)
@@ -80,6 +76,15 @@ func _ready() -> void:
 		_ray_hits.fill(0)
 		_min_flow_height_f = 0
 		_max_flow_height_f = 0
+
+func _getRaycastQueries() -> Array[PhysicsRayQueryParameters2D]:
+	var res: Array[PhysicsRayQueryParameters2D] = []
+	for i in range(16):
+		var from = Vector2(_ref_position) + Vector2(i + 0.5, 0)
+		var to = from + Vector2(0, _max_flow_height)
+		var query = PhysicsRayQueryParameters2D.create(from, to)
+		res.append(query)
+	return res
 
 # Clear flow sprite instances and instantiate new ones from the current water parts
 func _reinstanceFlowParts() -> void:
@@ -131,6 +136,10 @@ func _physics_process(delta: float) -> void:
 
 	_max_flow_height_f = move_toward(_max_flow_height_f, flow_extent, flow_update_speed * delta)
 	_max_flow_height = min(flow_extent, int(_max_flow_height_f))
+
+	# If max flow height is done changing, we don't need to recompute raycast queries
+	if _max_flow_height < flow_extent:
+		_ray_queries = _getRaycastQueries()
 
 	# Raycast downwards at each column to find the water flow
 	var space_state = get_world_2d().direct_space_state
@@ -220,8 +229,7 @@ func disableFlow() -> void:
 
 func _on_lever_flip_on() -> void:
 	disableFlow()
-	
 
 
-func _on_lever_flip_off() -> void:
-	enableFlow() # Replace with function body.
+func _on_lever_2_flip_off() -> void:
+	pass # Replace with function body.
