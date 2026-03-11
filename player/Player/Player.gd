@@ -27,7 +27,6 @@ func mergeSlimes(requester_id: int):
 	
 	if(len(slimes) > 0 and merge_frame != get_tree().get_frame() and slimes[0].get_instance_id() == requester_id):
 		merge_frame = get_tree().get_frame()
-		print("got in")
 		var local_slimes = slimes.duplicate()
 		local_slimes.sort_custom(func(a, b): 
 			if(a.size == b.size):
