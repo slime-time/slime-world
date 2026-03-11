@@ -45,8 +45,9 @@ class WaterPart:
 @export var flow_offset: int = 1          # Distance below an intersection at which to cut off flow
 @export var flow_falloff: int = 8		  # Distance over which the flow fades out at the bottom
 
-var _flow_parts: Array[WaterPart] = []   # Parts of water determined by raycast results
-var _flow_sprites: Array[Sprite2D] = []  # The active flow sprite instances
+var _need_reinstance: bool = false				# Whether flow parts need to be reinstanced
+var _flow_parts: Array[WaterPart] = []  		# Parts of water determined by raycast results
+var _flow_part_pool: Array[FluidFlowPart] = []  # Flow part object pool
 
 var _ref_position: Vector2i                                # The absolute position of the emitter
 var _ray_queries: Array[PhysicsRayQueryParameters2D] = []  # Raycast queries for each column
@@ -58,7 +59,6 @@ var _max_flow_height_f: float = 256
 var _min_flow_height: int = 0    # The starting position of water flow
 var _max_flow_height: int = 256  # The max height of water flow currently
 
-var _need_reinstance: bool = false
 
 func _ready() -> void:
 	# Get reference position for raycasts and sprite rects
@@ -93,13 +93,24 @@ func _getRaycastQueries() -> Array[PhysicsRayQueryParameters2D]:
 		res.append(query)
 	return res
 
+func _getFlowPart() -> FluidFlowPart:
+	if _flow_part_pool.is_empty():
+		var node = flow_part_scene.instantiate() as FluidFlowPart
+		add_child(node)
+		return node
+	else:
+		var node = _flow_part_pool.pop_back()
+		node.visible = true
+		move_child(node, -1)  # Move to front as if we just added it
+		return node
+
 # Clear flow sprite instances and instantiate new ones from the current water parts
 func _reinstanceFlowParts() -> void:
 	# Free old instances
-	for child in get_children():
-		if child is FluidFlowPart:
-			child.queue_free()
-	_flow_sprites.clear()
+	for node in get_children():
+		if node is FluidFlowPart and node.visible:
+			node.visible = false
+			_flow_part_pool.append(node)
 
 	# Loop in reverse vertical order so lower parts render behind higher parts
 	for i in range(_flow_parts.size() - 1, -1, -1):
@@ -110,8 +121,7 @@ func _reinstanceFlowParts() -> void:
 			# Slightly different handling if we have a falloff
 			if part.is_bottom and flow_falloff > 0:
 				# Draw the node with falloff
-				var node = flow_part_scene.instantiate() as FluidFlowPart
-				add_child(node)
+				var node = _getFlowPart()
 
 				# Update position and size
 				node.position = rect.position
@@ -121,15 +131,13 @@ func _reinstanceFlowParts() -> void:
 				# If the falloff is greater than (16 - this height), we need an additional sprite for the rest of the falloff
 				if flow_falloff > 16 - rect.size.y:
 					var falloff_rect = Rect2i(rect.position.x, rect.position.y + 16, rect.size.x, flow_falloff - (16 - rect.size.y))
-					var falloff_node = flow_part_scene.instantiate() as FluidFlowPart
-					add_child(falloff_node)
+					var falloff_node = _getFlowPart()
 					falloff_node.position = falloff_rect.position
 					falloff_node.initFlowPart(flow_type, falloff_rect.position.x + 8, falloff_rect.size,
 												falloff_rect.size.y - flow_falloff, falloff_rect.size.y)
 			else:
 				# Instantiate a node and add to the scene tree so it's readied
-				var node = flow_part_scene.instantiate() as FluidFlowPart
-				add_child(node)
+				var node = _getFlowPart()
 
 				# Update position and size
 				node.position = rect.position
@@ -232,4 +240,4 @@ func disableFlow() -> void:
 
 	_ray_hits.fill(0)
 	_flow_parts.clear()
-	_need_reinstance = true
+	_reinstanceFlowParts()
