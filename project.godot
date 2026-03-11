@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Slime Girl Slime World"
-run/main_scene="uid://b2dqfuiyn88c2"
+run/main_scene="uid://ob27y2if7ueg"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="uid://3e51eumu63ft"
 
@@ -82,3 +82,4 @@ reset={
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
