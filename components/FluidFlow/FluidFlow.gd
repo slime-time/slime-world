@@ -58,6 +58,8 @@ var _max_flow_height_f: float = 256
 var _min_flow_height: int = 0    # The starting position of water flow
 var _max_flow_height: int = 256  # The max height of water flow currently
 
+var _need_reinstance: bool = false
+
 func _ready() -> void:
 	# Get reference position for raycasts and sprite rects
 	var pos = global_position.floor()
@@ -76,6 +78,11 @@ func _ready() -> void:
 		_ray_hits.fill(0)
 		_min_flow_height_f = 0
 		_max_flow_height_f = 0
+
+func _process(_delta: float) -> void:
+	if _need_reinstance:
+		_reinstanceFlowParts()
+		_need_reinstance = false
 
 func _getRaycastQueries() -> Array[PhysicsRayQueryParameters2D]:
 	var res: Array[PhysicsRayQueryParameters2D] = []
@@ -203,7 +210,7 @@ func _physics_process(delta: float) -> void:
 				_flow_parts.back().is_bottom = true
 
 	# Reintance flow sprites based on the new parts
-	_reinstanceFlowParts()
+	_need_reinstance = true
 
 func enableFlow() -> void:
 	if is_flow_enabled: return
@@ -225,11 +232,4 @@ func disableFlow() -> void:
 
 	_ray_hits.fill(0)
 	_flow_parts.clear()
-	_reinstanceFlowParts()
-
-func _on_lever_flip_on() -> void:
-	disableFlow()
-
-
-func _on_lever_2_flip_off() -> void:
-	pass # Replace with function body.
+	_need_reinstance = true

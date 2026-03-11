@@ -18,12 +18,10 @@ func _ready() -> void:
 	anim_frames = frames.get_frame_count("default")
 	anim_speed = frames.get_animation_speed("default")
 	anim_duration = anim_frames / anim_speed
+	mask.texture = mask.texture.duplicate() as GradientTexture2D
 
 # Resizes the flow part to the new width
 func initFlowPart(type: FluidFlow.Type, x_offset: int, size: Vector2, clip_start: int = 16, clip_end: int = 16) -> void:
-	if clip_start < 16:
-		# We're using the gradient mask; make it unique
-		mask.texture = mask.texture.duplicate() as GradientTexture2D
 
 	fluid_type = type
 	flow_control.set_size(size + Vector2(4, 0))
