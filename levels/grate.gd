@@ -10,5 +10,5 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 	
-func on_fluid_hit(flow_type : Type) -> void:
+func on_fluid_hit(flow_type : FluidFlow.Type) -> void:
 	pass
