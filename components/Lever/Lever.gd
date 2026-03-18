@@ -30,12 +30,12 @@ func _ready() -> void:
 		active_sprite.stop()
 		flipOff.call_deferred()
 
-func onBodyEntered(_body: Node) -> void:
-	if _body is PlayerMovement:
-		if _body is Slime and !can_slimes_interact:
+func onBodyEntered(body: Node) -> void:
+	if body is PlayerMovement:
+		if body is Slime and !can_slimes_interact:
 			return
 
-		var player = _body as PlayerMovement
+		var player = body as PlayerMovement
 		player.setInteractionTarget(self)
 		_players_in_area[player] = null
 
@@ -52,8 +52,8 @@ func onBodyExited(_body: Node) -> void:
 		if _players_in_area.is_empty():
 			active_sprite.visible = false
 
-func interact(_interactor: PlayerMovement) -> void:
-	if !timer.is_stopped():
+func interact(interactor: PlayerMovement) -> void:
+	if !timer.is_stopped() or (interactor is Slime and interactor.slime_type == Slime.Type.ICE_SLIME):
 		# Already in the middle of an interaction, ignore
 		return
 

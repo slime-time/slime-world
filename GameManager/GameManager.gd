@@ -5,6 +5,7 @@ var highest_level_unlocked: int = 1
 
 const levels: Array[String] = [
 	"res://levels/LevelSelect/LevelSelectScreen.tscn",
+	"res://levels/Tutorial1.tscn",
 	"res://levels/Level1.tscn",
 	"res://levels/Level2.tscn"
 ]
