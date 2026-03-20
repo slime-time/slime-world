@@ -95,7 +95,7 @@ flow_part_scene = ExtResource("7_wwytw")
 position = Vector2(278, 118)
 
 [node name="WaterFlow3" parent="." unique_id=1845942874 instance=ExtResource("6_e0ai5")]
-position = Vector2(403, 72)
+position = Vector2(403, 70)
 flow_type = 2
 flow_part_scene = ExtResource("7_wwytw")
 

@@ -15,7 +15,9 @@ func _ready():
 # Get the movement ability of this specific slime (including size in calculation)
 func getMovementAbility():
 	var mul = (size / 2.0 + 4) / 8.0
-	mass *= mul
+	# Do not multiply attributes by size multiplier directly, or else slimes that have merged and unmerged multiple times
+	# will have different attributes since one of them is technically the same entity, just with a different hitbox and texture
+	mass = base_mass * mul
 	run_max_velocity = base_run_max_velocity * mul
 	run_acceleration = base_run_acceleration * mul
 	run_deceleration = base_run_deceleration * mul
