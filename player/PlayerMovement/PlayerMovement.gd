@@ -10,6 +10,7 @@ var health: int
 # To make the delta mandantory, just delete the default value
 
 # Movement parameters
+var mass: float
 var run_max_velocity: float
 var run_acceleration: float
 var run_deceleration: float
@@ -34,6 +35,9 @@ func clearInteractionTarget(target: InteractionTarget) -> void:
 # Do whatever this character does when hit by a spike (split if slime, take damage otherwise)
 @abstract func spikeHit()
 
+# Defined so that PlayerMovement instances can be pushed by eachother
+func getMass() -> float:
+	return mass
 
 # Take an arbitrary amount of damage
 func takeDamage(damage = 1):
@@ -91,6 +95,7 @@ func _ready() -> void:
 
 # Loads movement options
 func read_movement_data(my_name):
+	mass = config.get_value(my_name, "mass", mass)
 	run_max_velocity = config.get_value(my_name, "run_max_velocity", run_max_velocity)
 	run_acceleration = config.get_value(my_name, "run_acceleration", run_acceleration)
 	run_deceleration = config.get_value(my_name, "run_deceleration", run_deceleration)
@@ -118,6 +123,7 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and !coyote_timer.is_stopped():
 		jump(delta)
+		coyote_timer.stop()
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
@@ -130,4 +136,34 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact") and interaction_target:
 		interaction_target.interact(self)
 
+	var pre_slide_velocity = velocity
 	move_and_slide()
+
+	# Push things
+	for i in range(get_slide_collision_count()):
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider:
+			var normal = collision.get_normal()
+
+			# Ignore downward force
+			if normal.y < -.1: continue
+
+			var impact_velocity = pre_slide_velocity.project(-normal)
+
+			if collider is CharacterBody2D and collider.has_method('getMass'):
+				# Fix losing jump below another slime: if we jumped and were blocked by a slime in move_and_slide, reapply our vertical velocity
+				if normal.y > .1 and pre_slide_velocity.y < 0:
+					# Transfer our velocity and reset to what it was
+					collider.velocity.y = min(collider.velocity.y, pre_slide_velocity.y)
+					velocity.y = pre_slide_velocity.y
+					continue
+
+				# Convert to Δvel
+				var push_velocity = impact_velocity * (mass / collider.getMass())
+				collider.velocity.x = move_toward(collider.velocity.x, push_velocity.x, run_acceleration * delta)
+
+			elif collider is RigidBody2D:
+				# Impulse is F*time
+				var impulse = impact_velocity * mass
+				collider.apply_central_impulse(impulse)

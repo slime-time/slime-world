@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://du00u234ws8ie" path="res://player/Slime/IceSlime/IceSlime.gd" id="1_k7rvt"]
 [ext_resource type="Shape2D" uid="uid://dn3wb4tshmdya" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Base-8.tres" id="2_bcqe4"]
 [ext_resource type="Shape2D" uid="uid://c1grtdr31u6qe" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Body-8.tres" id="3_2o3kk"]
-[ext_resource type="Texture2D" uid="uid://b7nv78xy18bfk" path="res://assets/ice-slime/ice-slime-8.png" id="4_k7rvt"]
+[ext_resource type="Texture2D" uid="uid://ck1oxaalhbdgu" path="res://assets/ice-slime/ice-slime-8.png" id="4_k7rvt"]
 
 [sub_resource type="Animation" id="Animation_ui4vm"]
 length = 0.001
@@ -44,6 +44,7 @@ _data = {
 }
 
 [node name="IceSlime" type="CharacterBody2D" unique_id=1631753294]
+platform_floor_layers = 2
 script = ExtResource("1_k7rvt")
 
 [node name="SlimeBase" type="CollisionShape2D" parent="." unique_id=2046034733]

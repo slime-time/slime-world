@@ -17,6 +17,7 @@ var base_run_max_velocity
 var base_run_acceleration
 var base_run_deceleration
 var base_jump_velocity
+var base_mass
 
 enum Type {
 	UNSET = 0,
@@ -101,6 +102,7 @@ func _ready():
 	base_run_acceleration = run_acceleration
 	base_run_deceleration = run_deceleration
 	base_jump_velocity = jump_velocity
+	base_mass = mass
 	updateHitbox()
 	updateSprite()
 	getMovementAbility()
