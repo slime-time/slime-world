@@ -136,3 +136,24 @@ func _physics_process(delta: float) -> void:
 		interaction_target.interact(self)
 
 	move_and_slide()
+
+	# Push things
+	for i in range(get_slide_collision_count()):
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		print("collision with ", collider)
+		if collider and collider.has_method('getMass'):
+			print("collider mass: ", collider.getMass())
+			var normal = collision.get_normal()
+
+			if collider is CharacterBody2D:
+				# Calculate acceleration on the other body
+				var collider_accel = (mass * run_acceleration) / collider.getMass()
+				# Convert to Δvel
+				var push_velocity = normal * -collider_accel * delta
+				collider.velocity += push_velocity
+
+			elif collider is RigidBody2D:
+				# Impulse is F*time
+				var impulse = normal * -(mass * run_acceleration) * delta
+				collider.apply_central_impulse(impulse)
