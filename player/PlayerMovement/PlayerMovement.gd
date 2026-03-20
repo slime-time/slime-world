@@ -123,6 +123,7 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and !coyote_timer.is_stopped():
 		jump(delta)
+		coyote_timer.stop()
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
