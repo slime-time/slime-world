@@ -152,10 +152,10 @@ func _physics_process(delta: float) -> void:
 			var impact_velocity = pre_slide_velocity.project(-normal)
 
 			if collider is CharacterBody2D and collider.has_method('getMass'):
-				# Fix losing jump below another slime
+				# Fix losing jump below another slime: if we jumped and were blocked by a slime in move_and_slide, reapply our vertical velocity
 				if normal.y > .1 and pre_slide_velocity.y < 0:
 					# Transfer our velocity and reset to what it was
-					collider.velocity.y = pre_slide_velocity.y
+					collider.velocity.y = min(collider.velocity.y, pre_slide_velocity.y)
 					velocity.y = pre_slide_velocity.y
 					continue
 
