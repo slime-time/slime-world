@@ -10,6 +10,7 @@ var health: int
 # To make the delta mandantory, just delete the default value
 
 # Movement parameters
+var mass: float
 var run_max_velocity: float
 var run_acceleration: float
 var run_deceleration: float
@@ -34,6 +35,9 @@ func clearInteractionTarget(target: InteractionTarget) -> void:
 # Do whatever this character does when hit by a spike (split if slime, take damage otherwise)
 @abstract func spikeHit()
 
+# Defined so that PlayerMovement instances can be pushed by eachother
+func getMass() -> float:
+	return mass
 
 # Take an arbitrary amount of damage
 func takeDamage(damage = 1):
@@ -91,6 +95,7 @@ func _ready() -> void:
 
 # Loads movement options
 func read_movement_data(my_name):
+	mass = config.get_value(my_name, "mass", mass)
 	run_max_velocity = config.get_value(my_name, "run_max_velocity", run_max_velocity)
 	run_acceleration = config.get_value(my_name, "run_acceleration", run_acceleration)
 	run_deceleration = config.get_value(my_name, "run_deceleration", run_deceleration)

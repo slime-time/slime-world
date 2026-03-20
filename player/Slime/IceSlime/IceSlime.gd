@@ -12,6 +12,7 @@ func _ready():
 # Get the movement ability of this specific slime (including size in calculation)
 func getMovementAbility():
 	var mul = 0
+	mass *= size / 8.0
 	run_max_velocity *= mul
 	run_acceleration *= mul
 	run_deceleration *= mul
