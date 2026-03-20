@@ -44,6 +44,7 @@ _data = {
 }
 
 [node name="GreenSlime" type="CharacterBody2D" unique_id=1631753294]
+platform_floor_layers = 2
 script = ExtResource("1_ttqac")
 
 [node name="SlimeBase" type="CollisionShape2D" parent="." unique_id=2046034733]
