@@ -135,23 +135,34 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact") and interaction_target:
 		interaction_target.interact(self)
 
+	var pre_slide_velocity = velocity
 	move_and_slide()
 
 	# Push things
 	for i in range(get_slide_collision_count()):
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
-		if collider and collider.has_method('getMass'):
+		if collider:
 			var normal = collision.get_normal()
 
-			if collider is CharacterBody2D:
-				# Calculate acceleration on the other body
-				var collider_accel = (mass * run_acceleration) / collider.getMass()
+			# Ignore downward force
+			if normal.y < -.1: continue
+
+			var impact_velocity = pre_slide_velocity.project(-normal)
+
+			if collider is CharacterBody2D and collider.has_method('getMass'):
+				# Fix losing jump below another slime
+				if normal.y > .1 and pre_slide_velocity.y < 0:
+					# Transfer our velocity and reset to what it was
+					collider.velocity.y = pre_slide_velocity.y
+					velocity.y = pre_slide_velocity.y
+					continue
+
 				# Convert to Δvel
-				var push_velocity = normal * -collider_accel * delta
-				collider.velocity += push_velocity
+				var push_velocity = impact_velocity * (mass / collider.getMass())
+				collider.velocity.x = move_toward(collider.velocity.x, push_velocity.x, run_acceleration * delta)
 
 			elif collider is RigidBody2D:
 				# Impulse is F*time
-				var impulse = normal * -(mass * run_acceleration) * delta
+				var impulse = impact_velocity * mass
 				collider.apply_central_impulse(impulse)
