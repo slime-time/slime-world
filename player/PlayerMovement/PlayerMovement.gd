@@ -141,9 +141,7 @@ func _physics_process(delta: float) -> void:
 	for i in range(get_slide_collision_count()):
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
-		print("collision with ", collider)
 		if collider and collider.has_method('getMass'):
-			print("collider mass: ", collider.getMass())
 			var normal = collision.get_normal()
 
 			if collider is CharacterBody2D:
