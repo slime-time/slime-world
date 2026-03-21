@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c1ef0aj0ah215"]
+
+[ext_resource type="Script" uid="uid://b4kmvc7x0v6h5" path="res://components/ExitZone/ExitZone.gd" id="1_j03g8"]
+[ext_resource type="Texture2D" uid="uid://d0n3kcwjo16i1" path="res://assets/components/exit-glow.png" id="2_ay74d"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ay74d"]
+
+[node name="ExitZone" type="Area2D" unique_id=1439884645]
+script = ExtResource("1_j03g8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1701656013]
+shape = SubResource("RectangleShape2D_ay74d")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1636270780]
+texture = ExtResource("2_ay74d")

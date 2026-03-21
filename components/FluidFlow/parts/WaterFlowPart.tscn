@@ -374,6 +374,7 @@ animations = [{
 }]
 
 [node name="WaterFlowPart" type="Node2D" unique_id=1160812727]
+z_index = -5
 script = ExtResource("1_obwl6")
 
 [node name="Mask" type="TextureRect" parent="." unique_id=510837036]

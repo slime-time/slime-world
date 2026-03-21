@@ -9,6 +9,7 @@ size = Vector2(9, 15)
 load_path = "res://.godot/imported/penny.png-4ce839b4e2ee4333b648ed97a2dfa336.ctex"
 
 [node name="Penny" type="CharacterBody2D" unique_id=520020568]
+platform_floor_layers = 2
 script = ExtResource("1_o24qj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2028633091]

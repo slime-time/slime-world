@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhhoby7mahn6l"
-path="res://.godot/imported/ice-slime-4.png-cca7608ac155795680a7559abcd7830f.ctex"
+uid="uid://d0n3kcwjo16i1"
+path="res://.godot/imported/exit-glow.png-342baccc22a41daa18f1a086c751285e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ice-slime/ice-slime-4.png"
-dest_files=["res://.godot/imported/ice-slime-4.png-cca7608ac155795680a7559abcd7830f.ctex"]
+source_file="res://assets/components/exit-glow.png"
+dest_files=["res://.godot/imported/exit-glow.png-342baccc22a41daa18f1a086c751285e.ctex"]
 
 [params]
 

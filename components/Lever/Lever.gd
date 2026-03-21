@@ -8,6 +8,7 @@ signal flip_off
 @onready var active_sprite: AnimatedSprite2D = $ActiveLeverSprite
 @onready var timer: Timer = $InteractionTimer
 
+@export var starts_on: bool = false
 @export var can_slimes_interact: bool = false
 var _is_on: bool = false
 var _players_in_area: Dictionary[PlayerMovement, Object] = {}  # Fake hash set
@@ -16,12 +17,25 @@ func _ready() -> void:
 	area.body_entered.connect(onBodyEntered)
 	area.body_exited.connect(onBodyExited)
 
-func onBodyEntered(_body: Node) -> void:
-	if _body is PlayerMovement:
-		if _body is Slime and !can_slimes_interact:
+	if starts_on:
+		sprite.play("flip_off")
+		sprite.stop()
+		active_sprite.play("flip_off_active")
+		active_sprite.stop()
+		flipOn.call_deferred()
+	else:
+		sprite.play("flip_on")
+		sprite.stop()
+		active_sprite.play("flip_on_active")
+		active_sprite.stop()
+		flipOff.call_deferred()
+
+func onBodyEntered(body: Node) -> void:
+	if body is PlayerMovement:
+		if body is Slime and !can_slimes_interact:
 			return
 
-		var player = _body as PlayerMovement
+		var player = body as PlayerMovement
 		player.setInteractionTarget(self)
 		_players_in_area[player] = null
 
@@ -38,8 +52,8 @@ func onBodyExited(_body: Node) -> void:
 		if _players_in_area.is_empty():
 			active_sprite.visible = false
 
-func interact(_interactor: PlayerMovement) -> void:
-	if !timer.is_stopped():
+func interact(interactor: PlayerMovement) -> void:
+	if !timer.is_stopped() or (interactor is Slime and interactor.slime_type == Slime.Type.ICE_SLIME):
 		# Already in the middle of an interaction, ignore
 		return
 

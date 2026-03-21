@@ -1,0 +1,176 @@
+[gd_scene format=4 uid="uid://dbvxgin2ijxda"]
+
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="1_p5th2"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_v0cbu"]
+[ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="3_xcmrh"]
+[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="4_28og2"]
+[ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="5_605o7"]
+[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="6_g6u6r"]
+[ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="7_pb71r"]
+[ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="8_behg1"]
+[ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="9_gwanj"]
+[ext_resource type="PackedScene" uid="uid://cmk85sf0jtw4f" path="res://components/FluidFlow/parts/IceWaterFlowPart.tscn" id="10_nn1ti"]
+[ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="11_vfe3a"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vry63"]
+shader = ExtResource("1_p5th2")
+shader_parameter/darkness = 0.730000034675
+shader_parameter/edge_softness = 3.30200015358512
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
+texture = ExtResource("4_28og2")
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+
+[sub_resource type="TileSet" id="TileSet_qehkn"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_1mo47")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6yh2b"]
+size = Vector2(8, 57)
+
+[node name="Node2D" type="Node2D" unique_id=730916531]
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=1571610407]
+layer = -100
+
+[node name="BackgroundTexture" type="TextureRect" parent="Background" unique_id=1875718040]
+material = SubResource("ShaderMaterial_vry63")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_v0cbu")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Player" parent="." unique_id=1162088554 instance=ExtResource("3_xcmrh")]
+position = Vector2(32, 45)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
+z_index = 2
+texture_filter = 1
+position = Vector2(249, 150)
+tile_map_data = PackedByteArray("AADw//r/AAABAAAAAADx//r/AAABAAAAAADy//r/AAABAAAAAADz//r/AAABAAAAAAD0//r/AAABAAAAAAD1//r/AAABAAAAAAD2//r/AAACAAAAAAD4//r/AAAAAAAAAAD5//r/AAACAAAAAAD7//r/AAAAAAEAAAD7//n/AAAAAAEAAAD7//j/AAAAAAEAAAD7//b/AAABAAEAAAD6//7/AAABAAAAAAD7//7/AAABAAAAAAD8//7/AAABAAAAAAD9//7/AAABAAAAAAD4//v/AAAAAAEAAAD4//z/AAAAAAEAAAD4//3/AAAAAAEAAAD5//v/AAACAAEAAAD5//z/AAACAAEAAAD5//3/AAACAAEAAAD4////AAAAAAEAAAD4//7/AAAAAAEAAAD5////AAABAAEAAAD6////AAABAAEAAAD7////AAABAAEAAAD8////AAABAAEAAAD9////AAABAAEAAAD5//7/AAABAAEAAAD2//v/AAACAAEAAAD2//z/AAACAAEAAAD2//3/AAACAAEAAAD2//7/AAACAAEAAAD2////AAACAAEAAAD2/wAAAAACAAEAAAD2/wEAAAACAAEAAAD2/wIAAAACAAEAAAD2/wMAAAACAAEAAAD2/wQAAAACAAEAAAD3/wUAAAABAAAAAAD4/wUAAAABAAAAAAD5/wUAAAABAAAAAAD6/wUAAAABAAAAAAD7/wUAAAABAAAAAAD8/wUAAAABAAAAAAD9/wUAAAABAAAAAAD+/wUAAAABAAEAAAD//wUAAAABAAAAAAD2/wUAAAABAAEAAAD1/wUAAAABAAEAAAD1/wQAAAABAAEAAAD1/wMAAAABAAEAAAD1/wIAAAABAAEAAAD1/wEAAAABAAEAAAD1/wAAAAABAAEAAAD1////AAABAAEAAAD1//7/AAABAAEAAAD1//3/AAABAAEAAAD1//z/AAABAAEAAAD1//v/AAABAAEAAAD0//v/AAABAAEAAADz//v/AAABAAEAAADy//v/AAABAAEAAADx//v/AAABAAEAAADw//v/AAABAAEAAAD1/wYAAAABAAEAAAD2/wYAAAABAAEAAAD3/wYAAAABAAEAAAD4/wYAAAABAAEAAAD5/wYAAAABAAEAAAD6/wYAAAABAAEAAAD7/wYAAAABAAEAAAD8/wYAAAABAAEAAAD9/wYAAAABAAEAAAD+/wYAAAABAAEAAAD//wYAAAABAAEAAAD+//7/AAABAAEAAAD///7/AAABAAAAAAAAAP7/AAABAAAAAAABAP7/AAABAAAAAAD+////AAABAAEAAAD/////AAABAAEAAAAAAP//AAABAAEAAAABAP//AAABAAEAAAACAP//AAABAAEAAAADAP//AAABAAEAAAAEAP//AAACAAIAAAACAP7/AAABAAAAAAADAP7/AAABAAAAAAAEAP7/AAABAAAAAAAFAP7/AAABAAIAAAAHAP7/AAABAAIAAAAIAP7/AAABAAIAAAAJAP7/AAABAAIAAAAGAP7/AAABAAIAAAAAAAUAAAABAAAAAAABAAUAAAABAAAAAAACAAUAAAABAAAAAAADAAUAAAABAAAAAAAEAAUAAAABAAEAAAAFAAUAAAABAAAAAAAGAAUAAAABAAAAAAAHAAUAAAABAAAAAAAIAAUAAAABAAAAAAD7//v/AAAAAAEAAAD8//v/AAACAAIAAAD8//j/AAABAAEAAAD3//b/AAABAAIAAAD2//b/AAABAAIAAAD1//b/AAABAAIAAAD0//b/AAABAAIAAADz//b/AAABAAIAAADy//b/AAABAAIAAADx//b/AAABAAIAAADw//b/AAABAAEAAAD8//b/AAABAAEAAAD8//f/AAABAAEAAAD9//b/AAABAAEAAAD+//b/AAABAAEAAAD///b/AAABAAEAAAAAAPb/AAABAAEAAAABAPb/AAABAAEAAAACAPb/AAABAAEAAAADAPb/AAABAAEAAAAEAPb/AAABAAEAAAAFAPb/AAABAAEAAAAGAPb/AAABAAEAAAAHAPb/AAABAAEAAAAIAPb/AAABAAEAAAAJAPb/AAABAAEAAAAKAPb/AAABAAIAAAALAPb/AAABAAIAAAAMAPb/AAABAAIAAAANAPb/AAABAAIAAAAOAPb/AAABAAEAAAAPAPb/AAABAAEAAAAQAPb/AAABAAEAAAAAAPj/AAABAAEAAAABAPj/AAABAAEAAAACAPj/AAABAAEAAAADAPj/AAABAAEAAAAEAPj/AAABAAEAAAAEAPf/AAABAAEAAAAAAPf/AAABAAEAAAADAPf/AAABAAEAAAACAPf/AAABAAEAAAABAPf/AAABAAEAAAD+//3/AAADAAAAAAAAAAYAAAABAAEAAAABAAYAAAABAAEAAAACAAYAAAABAAEAAAADAAYAAAABAAEAAAAEAAYAAAABAAEAAAAFAAYAAAABAAEAAAAGAAYAAAABAAEAAAAIAAYAAAABAAEAAAAHAAYAAAABAAEAAAAJAAUAAAABAAAAAAAJAAYAAAABAAEAAAAAAPr/AAAAAAIAAAAEAPr/AAACAAIAAAABAPr/AAABAAIAAAACAPr/AAABAAIAAAADAPr/AAABAAIAAAAAAPn/AAABAAEAAAAEAPn/AAABAAEAAAABAPn/AAABAAEAAAACAPn/AAABAAEAAAADAPn/AAABAAEAAAD+//n/AAABAAIAAAD9//n/AAABAAEAAAD///n/AAABAAIAAAD8//n/AAABAAEAAAD///j/AAABAAEAAAD+//j/AAABAAEAAAD9//j/AAABAAEAAAD9//f/AAABAAEAAAD+//f/AAABAAEAAAD///f/AAABAAEAAAD9//r/AAACAAIAAAD8//r/AAABAAEAAAD+/wQAAAADAAAAAADw//z/AAABAAEAAADx//z/AAABAAEAAADy//z/AAABAAEAAADz//z/AAABAAEAAAD0//z/AAABAAEAAADz//3/AAABAAEAAADy//3/AAABAAEAAADx//3/AAABAAEAAADw//3/AAABAAEAAAD0//3/AAABAAEAAAD0//7/AAABAAEAAADz//7/AAABAAEAAADy//7/AAABAAEAAADx//7/AAABAAEAAADw//7/AAABAAEAAADw////AAABAAEAAADx////AAABAAEAAADy////AAABAAEAAADz////AAABAAEAAAD0////AAABAAEAAAD0/wAAAAABAAEAAADz/wAAAAABAAEAAADy/wAAAAABAAEAAADx/wAAAAABAAEAAADw/wAAAAABAAEAAADw/wEAAAABAAEAAADx/wEAAAABAAEAAADy/wEAAAABAAEAAADz/wEAAAABAAEAAAD0/wEAAAABAAEAAAD0/wIAAAABAAEAAADz/wIAAAABAAEAAADy/wIAAAABAAEAAADx/wIAAAABAAEAAADw/wIAAAABAAEAAADw/wMAAAABAAEAAADx/wMAAAABAAEAAADy/wMAAAABAAEAAADz/wMAAAABAAEAAAD0/wMAAAABAAEAAAD0/wQAAAABAAEAAADz/wQAAAABAAEAAADy/wQAAAABAAEAAADx/wQAAAABAAEAAADw/wQAAAABAAEAAADw/wUAAAABAAEAAADx/wUAAAABAAEAAADy/wUAAAABAAEAAADz/wUAAAABAAEAAAD0/wUAAAABAAEAAAD0/wYAAAABAAEAAADz/wYAAAABAAEAAADy/wYAAAABAAEAAADx/wYAAAABAAEAAADw/wYAAAABAAEAAADw/wcAAAABAAEAAADx/wcAAAABAAEAAADw/wgAAAABAAEAAADx/wgAAAABAAEAAADy/wgAAAABAAEAAADy/wcAAAABAAEAAADz/wcAAAABAAEAAADz/wgAAAABAAEAAAD0/wgAAAABAAEAAAD1/wgAAAABAAEAAAD2/wgAAAABAAEAAAD3/wgAAAABAAEAAAD4/wgAAAABAAEAAAD5/wgAAAABAAEAAAD6/wgAAAABAAEAAAD7/wgAAAABAAEAAAD7/wcAAAABAAEAAAD6/wcAAAABAAEAAAD5/wcAAAABAAEAAAD4/wcAAAABAAEAAAD3/wcAAAABAAEAAAD2/wcAAAABAAEAAAD1/wcAAAABAAEAAAD0/wcAAAABAAEAAAD8/wcAAAABAAEAAAD9/wcAAAABAAEAAAD+/wcAAAABAAEAAAD9/wgAAAABAAEAAAD8/wgAAAABAAEAAAD+/wgAAAABAAEAAAD//wgAAAABAAEAAAAAAAgAAAABAAEAAAABAAgAAAABAAEAAAACAAgAAAABAAEAAAADAAgAAAABAAEAAAAEAAgAAAABAAEAAAAFAAgAAAABAAEAAAAGAAgAAAABAAEAAAAHAAgAAAABAAEAAAAIAAgAAAABAAEAAAAJAAgAAAABAAEAAAAJAAcAAAABAAEAAAAIAAcAAAABAAEAAAAHAAcAAAABAAEAAAAGAAcAAAABAAEAAAAFAAcAAAABAAEAAAAEAAcAAAABAAEAAAADAAcAAAABAAEAAAACAAcAAAABAAEAAAABAAcAAAABAAEAAAAAAAcAAAABAAEAAAD//wcAAAABAAEAAAD4/wEAAAAAAAIAAAD5/wIAAAAAAAIAAAD6/wIAAAABAAEAAAD7/wIAAAACAAIAAAD8/wEAAAACAAIAAAD9/wAAAAABAAIAAAD+/wAAAAABAAIAAAD//wAAAAABAAIAAAAAAAEAAAAAAAIAAAABAAEAAAABAAIAAAD4/wAAAAAAAAEAAAD8/wAAAAABAAEAAAD7/wAAAAABAAEAAAD6/wAAAAABAAEAAAD5/wAAAAABAAEAAAD5/wEAAAABAAEAAAD6/wEAAAABAAEAAAD7/wEAAAABAAEAAAACAAAAAAABAAEAAAABAAAAAAABAAEAAAAAAAAAAAABAAEAAAACAAEAAAACAAIAAAADAAAAAAACAAIAAAAEAAQAAAADAAAAAAAGAAMAAAAAAAMAAAAKAAMAAAAAAAAAAAAKAAUAAAABAAEAAAALAAUAAAABAAEAAAAMAAUAAAABAAEAAAANAAUAAAABAAEAAAAOAAUAAAABAAEAAAAPAAUAAAABAAEAAAAQAAUAAAABAAEAAAAKAAYAAAABAAEAAAALAAYAAAABAAEAAAAMAAYAAAABAAEAAAANAAYAAAABAAEAAAAOAAYAAAABAAEAAAAPAAYAAAABAAEAAAAQAAYAAAABAAEAAAAQAAcAAAABAAEAAAAPAAcAAAABAAEAAAAOAAcAAAABAAEAAAANAAcAAAABAAEAAAANAAgAAAABAAEAAAAMAAgAAAABAAEAAAAMAAcAAAABAAEAAAALAAcAAAABAAEAAAAKAAcAAAABAAEAAAAKAAgAAAABAAEAAAALAAgAAAABAAEAAAAOAAgAAAABAAEAAAAPAAgAAAABAAEAAAAQAAgAAAABAAEAAAAKAAQAAAAAAAEAAAAHAAMAAAACAAMAAAALAAMAAAABAAAAAAAOAAIAAAAAAAAAAAAPAAIAAAABAAEAAAAQAAIAAAABAAEAAAALAAQAAAABAAEAAAAQAAMAAAABAAEAAAAQAAQAAAABAAEAAAAPAAQAAAABAAEAAAAOAAQAAAABAAEAAAANAAQAAAABAAEAAAAMAAQAAAABAAEAAAAMAAMAAAABAAAAAAANAAMAAAABAAAAAAAOAAMAAAABAAEAAAAPAAMAAAABAAEAAAAGAP3/AAABAAAAAAAIAPz/AAABAAAAAAAJAPz/AAABAAEAAAAKAPv/AAABAAEAAAALAPv/AAABAAEAAAAMAPz/AAABAAEAAAAMAP3/AAABAAEAAAALAP7/AAABAAIAAAAKAP7/AAABAAIAAAAHAP3/AAABAAEAAAAIAP3/AAABAAEAAAAJAP3/AAABAAEAAAAKAP3/AAABAAEAAAALAP3/AAABAAEAAAALAPz/AAABAAEAAAAKAPz/AAABAAEAAAAGAPn/AAACAAIAAAAFAPn/AAABAAIAAAAHAPj/AAABAAIAAAAJAPf/AAACAAIAAAAIAPj/AAACAAIAAAAIAPf/AAABAAEAAAAHAPf/AAABAAEAAAAGAPf/AAABAAEAAAAFAPf/AAABAAEAAAAGAPj/AAABAAEAAAAFAPj/AAABAAEAAAAOAPf/AAAAAAIAAAAPAPj/AAAAAAIAAAAQAPj/AAABAAEAAAAQAPf/AAABAAEAAAAPAPf/AAABAAEAAAAPAAEAAAAAAAAAAAAQAAEAAAABAAAAAAAHAPz/AAAAAAAAAAAFAP3/AAAAAAAAAAAJAPv/AAAAAAAAAAAMAP7/AAABAAIAAAAKAPr/AAAAAAAAAAALAPr/AAACAAAAAAAMAPv/AAACAAAAAAANAPz/AAACAAAAAAANAP3/AAACAAEAAAD7//z/AAADAAEAAAD6/wMAAAADAAEAAAD4//f/AAAAAAIAAAD5//f/AAABAAIAAAD6//f/AAABAAIAAAD7//f/AAABAAEAAAD4//b/AAABAAEAAAD5//b/AAABAAEAAAD6//b/AAABAAEAAADw//f/AAACAAIAAAAQAPn/AAAAAAEAAAAQAPr/AAAAAAIAAAANAP7/AAACAAIAAAA=")
+tile_set = SubResource("TileSet_qehkn")
+
+[node name="Spike" type="RigidBody2D" parent="TileMapLayer" unique_id=598144181]
+position = Vector2(-194, -141)
+script = ExtResource("5_605o7")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike" unique_id=1522893824]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike" unique_id=768931425]
+texture = ExtResource("6_g6u6r")
+
+[node name="Area2D" type="Area2D" parent="TileMapLayer/Spike" unique_id=1991308729]
+script = ExtResource("7_pb71r")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TileMapLayer/Spike/Area2D" unique_id=312434216]
+position = Vector2(0, 24.5)
+shape = SubResource("RectangleShape2D_6yh2b")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=2095664207]
+z_index = 2
+texture_filter = 1
+position = Vector2(249, 155)
+tile_map_data = PackedByteArray("AAD6/wMAAAADAAIAAAD7//z/AAADAAIAAAA=")
+tile_set = SubResource("TileSet_qehkn")
+
+[node name="Lever1" parent="." unique_id=1864762079 instance=ExtResource("8_behg1")]
+position = Vector2(209, 231)
+starts_on = true
+can_slimes_interact = true
+
+[node name="Lever2" parent="." unique_id=1027180994 instance=ExtResource("8_behg1")]
+position = Vector2(386, 87)
+starts_on = true
+can_slimes_interact = true
+
+[node name="WaterFlow1" parent="." unique_id=21526138 instance=ExtResource("9_gwanj")]
+position = Vector2(259, 70)
+flow_type = 2
+flow_part_scene = ExtResource("10_nn1ti")
+
+[node name="WaterFlow2" parent="." unique_id=730305254 instance=ExtResource("9_gwanj")]
+position = Vector2(279, 70)
+is_flow_enabled = false
+flow_type = 2
+flow_part_scene = ExtResource("10_nn1ti")
+
+[node name="WaterFlow3" parent="." unique_id=1645183018 instance=ExtResource("9_gwanj")]
+position = Vector2(299, 70)
+flow_type = 2
+flow_part_scene = ExtResource("10_nn1ti")
+
+[node name="WaterFlow4" parent="." unique_id=1400762230 instance=ExtResource("9_gwanj")]
+position = Vector2(319, 70)
+is_flow_enabled = false
+flow_type = 2
+flow_part_scene = ExtResource("10_nn1ti")
+
+[node name="WaterFlow5" parent="." unique_id=1623692096 instance=ExtResource("9_gwanj")]
+position = Vector2(367, 134)
+flow_type = 2
+flow_part_scene = ExtResource("10_nn1ti")
+
+[node name="WaterFlow6" parent="." unique_id=178986444 instance=ExtResource("9_gwanj")]
+position = Vector2(419, 134)
+is_flow_enabled = false
+flow_type = 2
+flow_part_scene = ExtResource("10_nn1ti")
+
+[node name="WaterFlow7" parent="." unique_id=1067358380 instance=ExtResource("9_gwanj")]
+position = Vector2(463, 134)
+flow_type = 2
+flow_part_scene = ExtResource("10_nn1ti")
+
+[node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("11_vfe3a")]
+position = Vector2(501, 156)
+
+[connection signal="flip_off" from="Lever1" to="WaterFlow1" method="disableFlow"]
+[connection signal="flip_off" from="Lever1" to="WaterFlow2" method="enableFlow"]
+[connection signal="flip_off" from="Lever1" to="WaterFlow3" method="disableFlow"]
+[connection signal="flip_off" from="Lever1" to="WaterFlow4" method="enableFlow"]
+[connection signal="flip_on" from="Lever1" to="WaterFlow1" method="enableFlow"]
+[connection signal="flip_on" from="Lever1" to="WaterFlow2" method="disableFlow"]
+[connection signal="flip_on" from="Lever1" to="WaterFlow3" method="enableFlow"]
+[connection signal="flip_on" from="Lever1" to="WaterFlow4" method="disableFlow"]
+[connection signal="flip_off" from="Lever2" to="WaterFlow5" method="disableFlow"]
+[connection signal="flip_off" from="Lever2" to="WaterFlow6" method="enableFlow"]
+[connection signal="flip_off" from="Lever2" to="WaterFlow7" method="disableFlow"]
+[connection signal="flip_on" from="Lever2" to="WaterFlow5" method="enableFlow"]
+[connection signal="flip_on" from="Lever2" to="WaterFlow6" method="disableFlow"]
+[connection signal="flip_on" from="Lever2" to="WaterFlow7" method="enableFlow"]

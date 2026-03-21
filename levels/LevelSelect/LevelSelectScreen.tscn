@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://d2n5hnnnf8678"]
+[gd_scene format=3 uid="uid://ob27y2if7ueg"]
 
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="2_kyhc2"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_jl0ce"]

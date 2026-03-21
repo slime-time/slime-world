@@ -63,6 +63,9 @@ func _input(event):
 		else:
 			slime_became_penny.emit()
 			# If this is successful, Slime.gd will set is_human to true
+	
+	if event.is_action_pressed("reset"):
+		SceneManager.resetScene()
 
 # Stop slime from listening to player input - this can be for many reasons such as cutscenes,
 # dialogue, etc, user pausing is just one of the reasons

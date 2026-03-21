@@ -10,17 +10,21 @@ var health: int
 # To make the delta mandantory, just delete the default value
 
 # Movement parameters
+var mass: float
 var run_max_velocity: float
 var run_acceleration: float
 var run_deceleration: float
 var jump_velocity: float
 var terminal_velocity: float
+var coyote_time: float
 
 # Screen bounds
 var screen: Vector2
 
 # Target we will interact with when we press the interact button, if any
 var interaction_target: InteractionTarget = null
+
+var coyote_timer: Timer = null
 
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
@@ -31,6 +35,9 @@ func clearInteractionTarget(target: InteractionTarget) -> void:
 # Do whatever this character does when hit by a spike (split if slime, take damage otherwise)
 @abstract func spikeHit()
 
+# Defined so that PlayerMovement instances can be pushed by eachother
+func getMass() -> float:
+	return mass
 
 # Take an arbitrary amount of damage
 func takeDamage(damage = 1):
@@ -80,14 +87,21 @@ func _ready() -> void:
 	# Read movement defaults
 	read_movement_data("movement_defaults")
 
+	coyote_timer = Timer.new()
+	coyote_timer.wait_time = coyote_time
+	coyote_timer.one_shot = true
+	add_child(coyote_timer)
+
 
 # Loads movement options
 func read_movement_data(my_name):
+	mass = config.get_value(my_name, "mass", mass)
 	run_max_velocity = config.get_value(my_name, "run_max_velocity", run_max_velocity)
 	run_acceleration = config.get_value(my_name, "run_acceleration", run_acceleration)
 	run_deceleration = config.get_value(my_name, "run_deceleration", run_deceleration)
 	jump_velocity = config.get_value(my_name, "jump_velocity", jump_velocity)
 	terminal_velocity = config.get_value(my_name, "terminal_velocity", terminal_velocity)
+	coyote_time = config.get_value(my_name, "coyote_time", terminal_velocity)
 
 
 # Modify logic here to change controls for all slimes and Penny
@@ -103,10 +117,13 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		fall(delta)
+	else:
+		coyote_timer.start()
 
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and !coyote_timer.is_stopped():
 		jump(delta)
+		coyote_timer.stop()
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("move_left", "move_right")
@@ -115,8 +132,38 @@ func _physics_process(delta: float) -> void:
 	else:
 		stop(delta)
 
-    # Handle interaction
+	# Handle interaction
 	if Input.is_action_just_pressed("interact") and interaction_target:
 		interaction_target.interact(self)
 
+	var pre_slide_velocity = velocity
 	move_and_slide()
+
+	# Push things
+	for i in range(get_slide_collision_count()):
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider:
+			var normal = collision.get_normal()
+
+			# Ignore downward force
+			if normal.y < -.1: continue
+
+			var impact_velocity = pre_slide_velocity.project(-normal)
+
+			if collider is CharacterBody2D and collider.has_method('getMass'):
+				# Fix losing jump below another slime: if we jumped and were blocked by a slime in move_and_slide, reapply our vertical velocity
+				if normal.y > .1 and pre_slide_velocity.y < 0:
+					# Transfer our velocity and reset to what it was
+					collider.velocity.y = min(collider.velocity.y, pre_slide_velocity.y)
+					velocity.y = pre_slide_velocity.y
+					continue
+
+				# Convert to Δvel
+				var push_velocity = impact_velocity * (mass / collider.getMass())
+				collider.velocity.x = move_toward(collider.velocity.x, push_velocity.x, run_acceleration * delta)
+
+			elif collider is RigidBody2D:
+				# Impulse is F*time
+				var impulse = impact_velocity * mass
+				collider.apply_central_impulse(impulse)
