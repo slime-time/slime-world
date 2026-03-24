@@ -15,6 +15,6 @@ texture = ExtResource("3_jmkeb")
 [node name="FlowRect" type="ColorRect" parent="." unique_id=321912715]
 material = ExtResource("3_k0oyp")
 instance_shader_parameters/flow_distances_0 = Vector4i(0, 0, 0, 0)
-offset_left = -8.0
-offset_right = 8.0
+offset_left = -10.0
+offset_right = 10.0
 offset_bottom = 256.0

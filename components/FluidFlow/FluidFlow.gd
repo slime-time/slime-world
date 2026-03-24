@@ -7,10 +7,16 @@ enum Type {
 	ICE_WATER,
 }
 
+# The flow materials for each fluid type
+const FLOW_MATERIALS: Dictionary[Type, ShaderMaterial] = {
+	Type.WATER: preload("res://assets/materials/water_flow.tres"),
+	Type.ICE_WATER: preload("res://assets/materials/ice_water_flow.tres"),
+}
+
 @onready var flow_rect: ColorRect = $FlowRect	# The color rect with the fluid flow shader
 
-@export var flow_animation_framerate: int = 8  		# The framerate of the fluid flow animation
 @export var flow_type: Type = Type.WATER  			# The type of water flow
+@export var flow_animation_framerate: int = 8  		# The framerate of the fluid flow animation
 @export var flow_extent: int = 256  	  			# The maximum distance the water can flow downwards
 @export var is_flow_enabled: bool = true  			# Whether the water flow is enabled
 @export var flow_update_speed: int = 128  			# How far to extend fluid downward per second, when enabling
@@ -48,6 +54,9 @@ func _ready() -> void:
 		_ray_hits.fill(0)
 		_min_flow_height_f = 0
 		_max_flow_height_f = 0
+
+	# Set the shader material based on the flow type
+	flow_rect.material = FLOW_MATERIALS.get(flow_type, null)
 
 
 func _getRaycastQueries() -> Array[PhysicsRayQueryParameters2D]:
