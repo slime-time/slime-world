@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://d2rxla01f7bnr"]
+
+[ext_resource type="Shader" uid="uid://bxlv0tdefxyhg" path="res://assets/shaders/FluidShader.gdshader" id="1_l6mhd"]
+[ext_resource type="Texture2D" uid="uid://dynac6jsesg4q" path="res://assets/fluids/water.png" id="2_n5j1n"]
+
+[resource]
+shader = ExtResource("1_l6mhd")
+shader_parameter/fluid_tex = ExtResource("2_n5j1n")
+shader_parameter/base_opacity = 0.9
+shader_parameter/flow_extent = 256
+shader_parameter/frame_count = 16
