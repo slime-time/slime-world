@@ -1,12 +1,21 @@
 shader_type canvas_item;
 
+#include "res://assets/shaders/includes/noise.gdshaderinc"
+#include "res://assets/shaders/includes/blending.gdshaderinc"
 
+// Basic settings
 uniform sampler2D fluid_tex : filter_nearest, repeat_enable;  // The fluid texture to sample
-uniform float base_opacity = 1.0;                             // The base opacity of the fluid, before applying flow distance falloff
+uniform float base_opacity = 0.8;                             // The base opacity of the fluid, before applying flow distance falloff
 uniform int flow_extent = 256;                                // The extent of the flow texture in pixels, for calculating pixel UVs
 uniform int frame_count = 16;                                 // The total number of frames in the texture
-instance uniform int frame_index = 0;                         // The current animation frame index (0 to 16)
 
+// Extra VFX settings
+uniform vec3 highlight_color = vec3(1.0, 1.0, 1.0);  // The color to use for the highlight noise effect
+uniform float highlight_noise_scale = 20.0;          // Noise sampling scale for highlight noise
+uniform float highlight_timescale = 0.6;             // Highlight noise timescale
+uniform float highlight_intensity = 0.4;             // Intensity of the highlight noise effect, from 0 to 1
+
+instance uniform int frame_index = 0;               // The current animation frame index (0 to 16)
 instance uniform float flow_start = 0.0;            // How far down flow starts, in pixels from the top of the texture
 instance uniform float flow_end = 256.0;            // How far down flow can go, in pixels from the top of the texture
 instance uniform float flow_falloff_top = 16.0;     // How many pixels from the top to start fading out
@@ -18,6 +27,7 @@ instance uniform ivec4 flow_distances_4;
 instance uniform ivec4 flow_distances_8;
 instance uniform ivec4 flow_distances_12;
 
+// Gets the flow distance for a given column index (0 to 15), or 0 if out of bounds
 int get_flow_distance(int col) {
     if (col < 0 || col > 15) return 0;
 
@@ -27,9 +37,19 @@ int get_flow_distance(int col) {
     return flow_distances_12[col - 12];
 }
 
+float get_flow_distance_offset(int col, float offset) {
+    if (col < 0 || col > 15) return 0.0;
+    return float(get_flow_distance(col)) + offset;
+}
+
 // Gets the UV coordinates for sampling a certain pixel column and y coordinate
 // col is 0-16 if a regular flow part, or -1/-2/16/17 for border parts
 vec4 get_part_color(int col, float pixel_y, float dist) {
+    if (pixel_y > dist + flow_falloff_bottom) {
+        // This pixel is outside the flow area, so draw nothing
+        return vec4(0.0);
+    }
+
     float frame_v = float(frame_index) / float(frame_count);
     float local_v = fract(pixel_y / 16.0) / float(frame_count);
     vec2 tex_uv = vec2(float(16 + col) / 48.0, frame_v + local_v);
@@ -42,8 +62,9 @@ vec4 get_part_color(int col, float pixel_y, float dist) {
     }
 
     // Handle fade out at the bottom
-    if (pixel_y >= dist - flow_falloff_bottom) {
-        tex_color.a *= (dist - pixel_y) / float(flow_falloff_bottom);
+    // We count dist as the start of falloff and dist+falloff as the end
+    if (pixel_y >= dist) {
+        tex_color.a *= (dist + flow_falloff_bottom - pixel_y) / float(flow_falloff_bottom);
     }
 
     return tex_color;
@@ -58,19 +79,19 @@ void fragment() {
     float pixel_y = UV.y * float(flow_extent);
 
     // If this pixel is not in the flow area, draw nothing
-    if (col < 0 || col > 15 || pixel_y < flow_start || pixel_y > dist) {
+    if (col < 0 || col > 15 || pixel_y < flow_start || pixel_y > dist + flow_falloff_bottom) {
         // ...unless we are a border part for neighboring flow
         // I am just hardcoding the four cases here because it's easier honestly I know it sucks don't @ me
-        if (pixel_y <= float(get_flow_distance(col - 1))) {
+        if (pixel_y <= get_flow_distance_offset(col - 1, flow_falloff_bottom)) {
             // We are part of the right border of the left neighbor's flow
             COLOR = get_part_color(16, pixel_y, float(get_flow_distance(col - 1)));
-        } else if (pixel_y <= float(get_flow_distance(col - 2 ))) {
+        } else if (pixel_y <= get_flow_distance_offset(col - 2, flow_falloff_bottom)) {
             // We are a further right border part of the left neighbor's flow
             COLOR = get_part_color(17, pixel_y, float(get_flow_distance(col - 2)));
-        } else if (pixel_y <= float(get_flow_distance(col + 1))) {
+        } else if (pixel_y <= get_flow_distance_offset(col + 1, flow_falloff_bottom)) {
             // We are part of the left border of the right neighbor's flow
             COLOR = get_part_color(-1, pixel_y, float(get_flow_distance(col + 1)));
-        } else if (pixel_y <= float(get_flow_distance(col + 2))) {
+        } else if (pixel_y <= get_flow_distance_offset(col + 2, flow_falloff_bottom)) {
             // We are a further left border part of the right neighbor's flow
             COLOR = get_part_color(-2, pixel_y, float(get_flow_distance(col + 2)));
         } else {
@@ -80,5 +101,14 @@ void fragment() {
     } else {
         // We're in the flow area for this column, so draw the regular flow part
         COLOR = get_part_color(col, pixel_y, dist);
+    }
+
+    // Apply the highlight noise effect on top of the base color
+    if (highlight_intensity > 0.0) {
+        float highlight_noise_raw = snoise(vec3(SCREEN_UV * highlight_noise_scale, TIME * highlight_timescale));
+        float highlight_noise = pow(highlight_noise_raw, 0.5);
+        // COLOR = vec4(1.0, 1.0, 1.0, highlight_noise);
+        vec4 blend = soft_light(COLOR, vec4(highlight_color, COLOR.a));
+        COLOR = mix(COLOR, blend, highlight_noise * highlight_intensity);
     }
 }
