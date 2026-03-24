@@ -7,47 +7,17 @@ enum Type {
 	ICE_WATER,
 }
 
-# Defines a contiguous range of the water flow defined by collisions above it, if any
-class WaterPart:
-	var y1: int
-	var y2: int
-	var mask: int
-	var is_bottom: bool
+@onready var flow_rect: ColorRect = $FlowRect	# The color rect with the fluid flow shader
 
-	func _init(_y1: int, _y2: int, _mask: int, _is_bottom: bool = false) -> void:
-		y1 = _y1
-		y2 = _y2
-		mask = _mask
-		is_bottom = _is_bottom
-
-	# Gets the sprite rects (relative to the emitter) for this vertical region
-	func get_rects() -> Array[Rect2i]:
-		var res: Array[Rect2i] = []
-		var cur_len = 0
-		# Include 16 since it'll handle a guy ending at the last pixel
-		for i in range(17):
-			# Continue the previous rect
-			if (1 << i) & mask:
-				cur_len += 1
-				continue
-
-			# The previous rect ended here
-			if cur_len:
-				res.append(Rect2i(i - cur_len - 8, y1, cur_len, y2 - y1))
-				cur_len = 0
-		return res
-
-@export var flow_extent: int = 256  	  # The maximum distance the water can flow downwards
-@export var flow_update_speed: int = 128   # How far to extend fluid downward per second, when enabling
-@export var is_flow_enabled: bool = true  # Whether the water flow is enabled
-@export var flow_type: Type = Type.WATER  # The type of water flow
-@export var flow_part_scene: PackedScene  # The scene used for each part of the water flow
-@export var flow_offset: int = 1          # Distance below an intersection at which to cut off flow
-@export var flow_falloff: int = 8		  # Distance over which the flow fades out at the bottom
-
-var _need_reinstance: bool = false				# Whether flow parts need to be reinstanced
-var _flow_parts: Array[WaterPart] = []  		# Parts of water determined by raycast results
-var _flow_part_pool: Array[FluidFlowPart] = []  # Flow part object pool
+@export var flow_animation_framerate: int = 8  		# The framerate of the fluid flow animation
+@export var flow_type: Type = Type.WATER  			# The type of water flow
+@export var flow_extent: int = 256  	  			# The maximum distance the water can flow downwards
+@export var is_flow_enabled: bool = true  			# Whether the water flow is enabled
+@export var flow_update_speed: int = 128  			# How far to extend fluid downward per second, when enabling
+@export var flow_update_speed_disable: int = 128	# Speed of updating flow start height when disabling
+@export var flow_falloff_top: int = 8	  			# Distance over which the flow fades out at the top
+@export var flow_falloff: int = 8		  			# Distance over which the flow fades out at the bottom
+@export var flow_offset: int = 2					# How many pixels to extend the flow past the hit point
 
 var _ref_position: Vector2i                                # The absolute position of the emitter
 var _ray_queries: Array[PhysicsRayQueryParameters2D] = []  # Raycast queries for each column
@@ -79,74 +49,52 @@ func _ready() -> void:
 		_min_flow_height_f = 0
 		_max_flow_height_f = 0
 
-func _process(_delta: float) -> void:
-	if _need_reinstance:
-		_reinstanceFlowParts()
-		_need_reinstance = false
 
 func _getRaycastQueries() -> Array[PhysicsRayQueryParameters2D]:
 	var res: Array[PhysicsRayQueryParameters2D] = []
 	for i in range(16):
 		var from = Vector2(_ref_position) + Vector2(i + 0.5, 0)
-		var to = from + Vector2(0, _max_flow_height)
+		var to = Vector2(_ref_position) + Vector2(i + 0.5, _max_flow_height_f)
 		var query = PhysicsRayQueryParameters2D.create(from, to)
 		res.append(query)
 	return res
 
-func _getFlowPart() -> FluidFlowPart:
-	if _flow_part_pool.is_empty():
-		var node = flow_part_scene.instantiate() as FluidFlowPart
-		add_child(node)
-		return node
-	else:
-		var node = _flow_part_pool.pop_back()
-		node.visible = true
-		move_child(node, -1)  # Move to front as if we just added it
-		return node
 
-# Clear flow sprite instances and instantiate new ones from the current water parts
-func _reinstanceFlowParts() -> void:
-	# Free old instances
-	for node in get_children():
-		if node is FluidFlowPart and node.visible:
-			node.visible = false
-			_flow_part_pool.append(node)
+# Update the shader parameters based on the current flow heights and falloff settings
+func _updateShaderParams() -> void:
+	# Pass in values that might vary for animation and falloff handling
+	flow_rect.set_instance_shader_parameter("flow_extent", flow_extent)
+	flow_rect.set_instance_shader_parameter("flow_start", _min_flow_height_f)
+	flow_rect.set_instance_shader_parameter("flow_end", _max_flow_height_f)
+	flow_rect.set_instance_shader_parameter("flow_falloff_top", flow_falloff_top)
+	flow_rect.set_instance_shader_parameter("flow_falloff_bottom", flow_falloff)
 
-	# Loop in reverse vertical order so lower parts render behind higher parts
-	for i in range(_flow_parts.size() - 1, -1, -1):
-		var part = _flow_parts[i]
+	# Pass in the flow distance for each column
+	# Instance parameters don't support arrays, so we batch four columns into each ivec4 parameter
+	flow_rect.set_instance_shader_parameter("flow_distances_0", Vector4i(_ray_hits[0], _ray_hits[1], _ray_hits[2], _ray_hits[3]))
+	flow_rect.set_instance_shader_parameter("flow_distances_4", Vector4i(_ray_hits[4], _ray_hits[5], _ray_hits[6], _ray_hits[7]))
+	flow_rect.set_instance_shader_parameter("flow_distances_8", Vector4i(_ray_hits[8], _ray_hits[9], _ray_hits[10], _ray_hits[11]))
+	flow_rect.set_instance_shader_parameter("flow_distances_12", Vector4i(_ray_hits[12], _ray_hits[13], _ray_hits[14], _ray_hits[15]))
 
-		# Loop through flow sprite rects at this height
-		for rect in part.get_rects():
-			# Slightly different handling if we have a falloff
-			if part.is_bottom and flow_falloff > 0:
-				# Draw the node with falloff
-				var node = _getFlowPart()
+	# Compute the current animation frame
+	var time = Time.get_ticks_usec() / 1000000.0
+	var frame = int(time * flow_animation_framerate) % 16
+	flow_rect.set_instance_shader_parameter("frame_index", frame)
 
-				# Update position and size
-				node.position = rect.position
-				var size = Vector2i(rect.size.x, min(16, rect.size.y + flow_falloff))
-				node.initFlowPart(flow_type, rect.position.x + 8, size, rect.size.y, rect.size.y + flow_falloff)
 
-				# If the falloff is greater than (16 - this height), we need an additional sprite for the rest of the falloff
-				if flow_falloff > 16 - rect.size.y:
-					var falloff_rect = Rect2i(rect.position.x, rect.position.y + 16, rect.size.x, flow_falloff - (16 - rect.size.y))
-					var falloff_node = _getFlowPart()
-					falloff_node.position = falloff_rect.position
-					falloff_node.initFlowPart(flow_type, falloff_rect.position.x + 8, falloff_rect.size,
-												falloff_rect.size.y - flow_falloff, falloff_rect.size.y)
-			else:
-				# Instantiate a node and add to the scene tree so it's readied
-				var node = _getFlowPart()
+func _process(_delta: float) -> void:
+	# Update shader parameters for animation even if flow is disabled,
+	# since we might still want the flow texture to animate while not flowing
+	_updateShaderParams()
 
-				# Update position and size
-				node.position = rect.position
-				node.initFlowPart(flow_type, rect.position.x + 8, rect.size, 16, 16)
 
 func _physics_process(delta: float) -> void:
 	if !is_flow_enabled:
-		_min_flow_height_f = move_toward(_min_flow_height_f, flow_extent, flow_update_speed * delta)
+		_min_flow_height_f = move_toward(_min_flow_height_f, flow_extent, flow_update_speed_disable * delta)
 		_min_flow_height = min(flow_extent, int(_min_flow_height_f))
+
+		# For now, we don't bother raycasting while flow is disabled
+		# We can avoid breaking out here to still trigger fluid callbacks while fluid is disabling
 		return
 
 	_max_flow_height_f = move_toward(_max_flow_height_f, flow_extent, flow_update_speed * delta)
@@ -158,67 +106,35 @@ func _physics_process(delta: float) -> void:
 
 	# Raycast downwards at each column to find the water flow
 	var space_state = get_world_2d().direct_space_state
-	var hits = _ray_hits.duplicate()
+	var hits_changed = false
 	var hit_colliders: Dictionary[Object, Object] = {}
 	for i in range(16):
 		var hit = space_state.intersect_ray(_ray_queries[i])
 		if hit.is_empty():
 			# If we intersect nothing, push the max distance we draw water flow
-			hits.set(i, _max_flow_height)
+			if _ray_hits.get(i) != _max_flow_height:
+				_ray_hits.set(i, _max_flow_height)
+				hits_changed = true
 			continue
 
 		# Store hit collider in a fake set to trigger callbacks if the hits have changed
 		hit_colliders[hit.collider] = null
 
 		# Push the hit distance to the hits array
-		hits.set(i, min(_max_flow_height, int(floor(hit.position.y - _ref_position.y)) + flow_offset))
+		var hit_dist = min(_max_flow_height, int(floor(hit.position.y - _ref_position.y)) + flow_offset)
+		if _ray_hits.get(i) != hit_dist:
+			_ray_hits.set(i, hit_dist)
+			hits_changed = true
 
-	# If the hits didn't change, we don't need to update the water flow
-	# This is like 16 int equality checks but it's like fiiiiiiiiiiiiiine hashing would be more expensive probably
-	if hits == _ray_hits: return
-	_ray_hits = hits
+	# If the hits didn't change, we don't need to trigger callbacks anew
+	# Note we will still call the fluid hit callback multiple times potentially, so do not rely on a single call
+	if !hits_changed: return
 
 	# Hits changed; trigger callbacks on hit colliders
 	for collider in hit_colliders.keys():
 		if collider.has_method("onFluidHit"):
 			collider.onFluidHit(flow_type)
 
-	# Update the water flow parts based on the new hits
-	_flow_parts.clear()
-
-	# Event sweep my beloved
-	var events: Dictionary[int, int] = {}
-	for i in range(16):
-		var y = hits[i]
-		if y not in events: events[y] = (1 << 16) - 1
-		events[y] &= ~(1 << i)
-	events.sort()
-
-	var prev_y: int = 0
-	var mask = (1 << 16) - 1 # Start with all columns flowing
-	for y in events.keys():
-		# Add parts by blocks of 16 pixels, since animated tile rendering sucks
-		# Godot doesn't have a way to do absolute positioned tiling so we put sprites only at
-		# positions that are divisible by 16
-		for i in range(prev_y - (prev_y % 16), y, 16):
-			_flow_parts.append(WaterPart.new(i, min(i + 16, y), mask))
-			if i + 16 >= y:
-				# This is the bottom part, mark it as such for falloff handling
-				_flow_parts.back().is_bottom = true
-
-		mask &= events[y] # Stop flow for columns that hit something at this y
-		prev_y = y
-
-	# Add a final part if needed
-	if prev_y < _max_flow_height:
-		for i in range(prev_y, _max_flow_height, 16):
-			_flow_parts.append(WaterPart.new(i, min(i + 16, _max_flow_height), mask))
-			if prev_y + 16 >= _max_flow_height:
-				# This is the bottom part, mark it as such for falloff handling
-				_flow_parts.back().is_bottom = true
-
-	# Reintance flow sprites based on the new parts
-	_need_reinstance = true
 
 func enableFlow() -> void:
 	if is_flow_enabled: return
@@ -228,6 +144,8 @@ func enableFlow() -> void:
 	_max_flow_height_f = 0
 	_min_flow_height = 0
 	_max_flow_height = 0
+	_ray_hits.fill(0)
+
 
 func disableFlow() -> void:
 	if !is_flow_enabled: return
@@ -239,5 +157,3 @@ func disableFlow() -> void:
 	_max_flow_height = flow_extent
 
 	_ray_hits.fill(0)
-	_flow_parts.clear()
-	_reinstanceFlowParts()

@@ -1,14 +1,20 @@
 [gd_scene format=3 uid="uid://db8y3ikhdn1r8"]
 
 [ext_resource type="Script" uid="uid://dw23x5pynkluq" path="res://components/FluidFlow/FluidFlow.gd" id="1_vophg"]
-[ext_resource type="PackedScene" uid="uid://bq12a81hiyohf" path="res://components/FluidFlow/parts/WaterFlowPart.tscn" id="2_5bvrk"]
 [ext_resource type="Texture2D" uid="uid://kfehjyrcrjdi" path="res://assets/components/wide-vent.png" id="3_jmkeb"]
+[ext_resource type="Material" uid="uid://d2rxla01f7bnr" path="res://assets/materials/water_flow.tres" id="3_k0oyp"]
 
 [node name="WaterFlow" type="Node2D" unique_id=21526138]
 script = ExtResource("1_vophg")
-flow_part_scene = ExtResource("2_5bvrk")
 
 [node name="WideVent" type="Sprite2D" parent="." unique_id=1639393941]
 z_index = 2
 position = Vector2(0, 8)
 texture = ExtResource("3_jmkeb")
+
+[node name="FlowRect" type="ColorRect" parent="." unique_id=321912715]
+material = ExtResource("3_k0oyp")
+instance_shader_parameters/flow_distances_0 = Vector4i(0, 0, 0, 0)
+offset_left = -8.0
+offset_right = 8.0
+offset_bottom = 256.0
