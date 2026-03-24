@@ -72,11 +72,10 @@ func _getRaycastQueries() -> Array[PhysicsRayQueryParameters2D]:
 # Update the shader parameters based on the current flow heights and falloff settings
 func _updateShaderParams() -> void:
 	# Pass in values that might vary for animation and falloff handling
-	flow_rect.set_instance_shader_parameter("flow_extent", flow_extent)
 	flow_rect.set_instance_shader_parameter("flow_start", _min_flow_height_f)
 	flow_rect.set_instance_shader_parameter("flow_end", _max_flow_height_f)
-	flow_rect.set_instance_shader_parameter("flow_falloff_top", flow_falloff_top)
-	flow_rect.set_instance_shader_parameter("flow_falloff_bottom", flow_falloff)
+	flow_rect.set_instance_shader_parameter("flow_falloff_top", min(_min_flow_height_f, float(flow_falloff_top)))
+	flow_rect.set_instance_shader_parameter("flow_falloff_bottom", float(flow_falloff))
 
 	# Pass in the flow distance for each column
 	# Instance parameters don't support arrays, so we batch four columns into each ivec4 parameter
@@ -153,6 +152,7 @@ func enableFlow() -> void:
 	_max_flow_height_f = 0
 	_min_flow_height = 0
 	_max_flow_height = 0
+
 	_ray_hits.fill(0)
 
 
@@ -164,5 +164,3 @@ func disableFlow() -> void:
 	_max_flow_height_f = flow_extent
 	_min_flow_height = 0
 	_max_flow_height = flow_extent
-
-	_ray_hits.fill(0)
