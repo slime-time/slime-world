@@ -3,6 +3,9 @@ shader_type canvas_item;
 #include "res://assets/shaders/includes/noise.gdshaderinc"
 #include "res://assets/shaders/includes/blending.gdshaderinc"
 
+// Globals
+global uniform ivec2 SCREEN_SIZE_PIXELS;
+
 // Basic settings
 uniform sampler2D fluid_tex : filter_nearest, repeat_enable;  // The fluid texture to sample
 uniform float base_opacity = 0.8;                             // The base opacity of the fluid, before applying flow distance falloff
@@ -10,6 +13,11 @@ uniform int flow_extent = 256;                                // The extent of t
 uniform int frame_count = 16;                                 // The total number of frames in the texture
 
 // Extra VFX settings
+uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen texture provided by Godot
+uniform float refract_strength = 5.0;                                 // Strength of the refraction effect (offset in pixels)
+uniform float refract_frequency = 0.4;                                // Frequency of the vertical refraction waves
+uniform float refract_timescale = 1.2;                               // Timescale for the refraction animation
+
 uniform vec3 highlight_color = vec3(1.0, 1.0, 1.0);  // The color to use for the highlight noise effect
 uniform float highlight_noise_scale = 20.0;          // Noise sampling scale for highlight noise
 uniform float highlight_timescale = 0.6;             // Highlight noise timescale
@@ -53,6 +61,7 @@ vec4 get_part_color(int col, float pixel_y, float dist) {
     float frame_v = float(frame_index) / float(frame_count);
     float local_v = fract(pixel_y / 16.0) / float(frame_count);
     vec2 tex_uv = vec2(float(16 + col) / 48.0, frame_v + local_v);
+
     vec4 tex_color = texture(fluid_tex, tex_uv);
     tex_color.a *= base_opacity;
 
@@ -103,12 +112,25 @@ void fragment() {
         COLOR = get_part_color(col, pixel_y, dist);
     }
 
-    // Apply the highlight noise effect on top of the base color
-    if (highlight_intensity > 0.0) {
-        float highlight_noise_raw = snoise(vec3(SCREEN_UV * highlight_noise_scale, TIME * highlight_timescale));
-        float highlight_noise = pow(highlight_noise_raw, 0.5);
-        // COLOR = vec4(1.0, 1.0, 1.0, highlight_noise);
-        vec4 blend = soft_light(COLOR, vec4(highlight_color, COLOR.a));
-        COLOR = mix(COLOR, blend, highlight_noise * highlight_intensity);
+    // Apply screen refraction
+    if (COLOR.a > 0.0) {
+        float wave = sin(TIME * refract_timescale + floor(pixel_y) * refract_frequency);
+        float pixel_offset = round(wave * refract_strength * COLOR.a); // Include a factor of alpha to fade smoothly at the falloff
+
+        float pixel_size = 1.0 / float(SCREEN_SIZE_PIXELS.x);
+        vec2 refract_uv = SCREEN_UV + vec2(pixel_offset * pixel_size, 0.0);
+        vec4 refract_color = texture(screen_tex, refract_uv);
+
+        // Blend in the refracted color
+        // COLOR = blend(BLEND_OVERLAY, refract_color, COLOR, COLOR.a);
+        COLOR = blend(BLEND_SCREEN, refract_color, COLOR, COLOR.a);
+        COLOR.a = 1.0; // We render the refracted background, so don't allow the original background to show through
     }
+
+    // // Apply the highlight noise effect on top of the base color
+    // if (highlight_intensity > 0.0) {
+    //     float highlight_noise_raw = snoise(vec3(SCREEN_UV * highlight_noise_scale, TIME * highlight_timescale));
+    //     float highlight_noise = pow(highlight_noise_raw, 0.5);
+    //     COLOR = blend(BLEND_SOFT_LIGHT, COLOR, vec4(highlight_color, COLOR.a), highlight_noise * highlight_intensity);
+    // }
 }
