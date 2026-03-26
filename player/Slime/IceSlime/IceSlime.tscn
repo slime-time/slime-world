@@ -4,6 +4,8 @@
 [ext_resource type="Shape2D" uid="uid://dn3wb4tshmdya" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Base-8.tres" id="2_bcqe4"]
 [ext_resource type="Shape2D" uid="uid://c1grtdr31u6qe" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Body-8.tres" id="3_2o3kk"]
 [ext_resource type="Texture2D" uid="uid://ck1oxaalhbdgu" path="res://assets/ice-slime/ice-slime-8.png" id="4_k7rvt"]
+[ext_resource type="PackedScene" uid="uid://ck71hvloai78m" path="res://player/Slime/TransformConfirmers/MergeConfirm.tscn" id="5_2o3kk"]
+[ext_resource type="PackedScene" uid="uid://6g8tm78kme6l" path="res://player/Slime/TransformConfirmers/SplitConfirm.tscn" id="6_3so3y"]
 
 [sub_resource type="Animation" id="Animation_ui4vm"]
 length = 0.001
@@ -63,3 +65,7 @@ offset = Vector2(0, 0.5)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1811255284]
 libraries/ = SubResource("AnimationLibrary_2wi0r")
+
+[node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_2o3kk")]
+
+[node name="SplitConfirm" parent="MergeConfirm" unique_id=770495669 instance=ExtResource("6_3so3y")]

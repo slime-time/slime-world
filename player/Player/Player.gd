@@ -17,7 +17,7 @@ var slime_templates: Dictionary[Slime.Type, Resource] = {
 var slimes = []
 
 # The maximal distance that slimes can merge together
-var merge_distance = 70.0
+var merge_distance = 30.0
 
 # Store the frame the last merge was requested on, to avoid requesting a merge multiple times on one frame
 var merge_frame = -1
