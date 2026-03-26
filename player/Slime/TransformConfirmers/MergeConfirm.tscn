@@ -8,7 +8,6 @@
 [node name="MergeConfirm" type="Node2D" unique_id=488681826]
 
 [node name="Size8Confirm" type="Area2D" parent="." unique_id=1131443470]
-collision_layer = 0
 
 [node name="Size8Body" type="CollisionShape2D" parent="Size8Confirm" unique_id=1742504448]
 shape = ExtResource("1_k11mb")

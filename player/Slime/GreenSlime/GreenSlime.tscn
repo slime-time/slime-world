@@ -6,6 +6,7 @@
 [ext_resource type="Shape2D" uid="uid://c1grtdr31u6qe" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Body-8.tres" id="3_2wi0r"]
 [ext_resource type="PackedScene" uid="uid://ck71hvloai78m" path="res://player/Slime/TransformConfirmers/MergeConfirm.tscn" id="5_po2r2"]
 [ext_resource type="PackedScene" uid="uid://6g8tm78kme6l" path="res://player/Slime/TransformConfirmers/SplitConfirm.tscn" id="6_po2r2"]
+[ext_resource type="Shape2D" uid="uid://c0a4xjya8dw6g" path="res://player/Penny/Hitboxes/PennyHitbox.tres" id="7_05kq7"]
 
 [sub_resource type="Animation" id="Animation_ui4vm"]
 length = 0.001
@@ -70,5 +71,10 @@ libraries/ = SubResource("AnimationLibrary_2wi0r")
 [node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_po2r2")]
 
 [node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_po2r2")]
+
+[node name="TransformChecker" type="Area2D" parent="." unique_id=1476268175]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TransformChecker" unique_id=90655620]
+shape = ExtResource("7_05kq7")
 
 [editable path="MergeConfirm"]

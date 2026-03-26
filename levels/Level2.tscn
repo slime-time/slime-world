@@ -75,7 +75,7 @@ expand_mode = 1
 stretch_mode = 1
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("3_xcmrh")]
-position = Vector2(32, 45)
+position = Vector2(32, 44.99)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
 z_index = 2
