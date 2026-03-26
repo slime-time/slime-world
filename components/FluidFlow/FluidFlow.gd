@@ -7,6 +7,8 @@ enum Type {
 	ICE_WATER,
 }
 
+const FLUID_BLOCKING_COLLISION_LAYER = 8;
+
 # The flow materials for each fluid type
 const FLOW_MATERIALS: Dictionary[Type, ShaderMaterial] = {
 	Type.WATER: preload("res://assets/materials/water_flow.tres"),
@@ -27,6 +29,7 @@ const FLOW_MATERIALS: Dictionary[Type, ShaderMaterial] = {
 
 var _ref_position: Vector2i                                			# The absolute position of the emitter
 var _ray_queries: Array[PhysicsRayQueryParameters2D] = []  			# Raycast queries for each column
+var _ray_queries_blocking: Array[PhysicsRayQueryParameters2D] = []  # Raycast queries for each column with blocking layer mask
 var _flow_distance_targets: PackedInt32Array = PackedInt32Array()  	# The target flow distance for each column based on raycast hits
 var _flow_distances_f: PackedFloat32Array = PackedFloat32Array() 	# The actual flow distance for each column, gradually extending towards _flow_distance_targets
 var _flow_distances: PackedInt32Array = PackedInt32Array()       	# The actual flow distance for each column, as integers for shader parameters
@@ -51,16 +54,22 @@ func _ready() -> void:
 	_buildRayQueries()
 
 	# Set up the initial flow state
-	if is_flow_enabled: enableFlow()
+	if is_flow_enabled:
+		enableFlow()
+		# If starting enabled, we don't want to animate the flow downward
+		_flow_distances_f.fill(float(flow_extent))
+		_flow_distances.fill(flow_extent)
 	else: disableFlow()
 
 
 func _buildRayQueries() -> void:
 	_ray_queries.resize(16)
+	_ray_queries_blocking.resize(16)
 	for i in range(16):
 		var from = Vector2(_ref_position) + Vector2(i + 0.5, 0)
 		var to = Vector2(_ref_position) + Vector2(i + 0.5, flow_extent)
 		_ray_queries[i] = PhysicsRayQueryParameters2D.create(from, to)
+		_ray_queries_blocking[i] = PhysicsRayQueryParameters2D.create(from, to, 1 << (FLUID_BLOCKING_COLLISION_LAYER - 1))
 
 
 # Update the shader parameters based on the current flow heights and falloff settings
@@ -116,20 +125,29 @@ func _physics_process(delta: float) -> void:
 	var space_state = get_world_2d().direct_space_state
 	var hit_colliders: Dictionary[Object, Object] = {}	# Fake set for colliders we hit
 	for i in range(16):
+		# First, just look for non-blocking hits to find colliders to trigger the callback on
 		var hit = space_state.intersect_ray(_ray_queries[i])
-		if hit.is_empty():
+		if not hit.is_empty():
+			var hit_dist_f = hit.position.y - _ref_position.y
+			if hit_dist_f >= 0 and hit_dist_f < _flow_distances_f[i]:
+				# Within the flow area; put it in our collider callback set
+				hit_colliders[hit.collider] = null
+
+		# Now handle blocking hits
+		var hit_blocking = space_state.intersect_ray(_ray_queries_blocking[i])
+		if hit_blocking.is_empty():
 			# If we intersect nothing, the distance target for this column is the full flow extent
 			_flow_distance_targets[i] = flow_extent
 			continue
 
 		# Now, determine if this hit is actually within the flow area for this column
-		var hit_dist_f = hit.position.y - _ref_position.y
+		var hit_dist_f = hit_blocking.position.y - _ref_position.y
 		var new_target = min(flow_extent, int(floor(hit_dist_f)) + flow_offset)
 		if hit_dist_f >= 0 and hit_dist_f < _flow_distances_f[i]:
 			# Within the flow area; put it in our collider callback set
-			hit_colliders[hit.collider] = null
+			hit_colliders[hit_blocking.collider] = null
 
-			# Update the distance target for this column based on the hit
+			# Update the distance target for this column based on the hit_blocking
 			_flow_distance_targets[i] = new_target
 			_flow_distances_f[i] = min(_flow_distances_f[i], float(new_target))
 			_flow_distances[i] = min(_flow_distances[i], new_target)

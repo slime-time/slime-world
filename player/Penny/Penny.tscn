@@ -18,6 +18,7 @@ position = Vector2(0.5, 0.5)
 shape = SubResource("RectangleShape2D_qm3ld")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=25029721]
+z_index = -2
 texture_filter = 1
 texture = SubResource("CompressedTexture2D_1fj7d")
 offset = Vector2(0, 0.5)
