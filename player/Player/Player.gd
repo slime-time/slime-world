@@ -50,12 +50,13 @@ func mergeSlimes(requester_id: int):
 				setup.add_collision_exception_with(slimes[exemption_index])
 				
 		for start_slime in range(len(local_slimes)):
-			for target_slime in range(start_slime + 1, len(local_slimes)):
+			for target_slime in range(len(local_slimes)):
 				# Merge only if the slimes are the same type, not set to merge with any other slime, and
 				# within a set radius of each other, and there are no solid objects between them
-				if(my_merge[target_slime] == -1 and my_merge[start_slime] == -1 and
+				if(start_slime != target_slime and my_merge[target_slime] == -1 and my_merge[start_slime] == -1 and
 				local_slimes[start_slime].slime_type == local_slimes[target_slime].slime_type and 
-				local_slimes[start_slime].position.distance_to(local_slimes[target_slime].position) < merge_distance):
+				local_slimes[start_slime].position.distance_to(local_slimes[target_slime].position) < merge_distance and
+				local_slimes[start_slime].testMerge(sizes[start_slime] + local_slimes[target_slime].size, local_slimes[target_slime])):
 					
 					var obstacles: KinematicCollision2D = local_slimes[target_slime].move_and_collide(local_slimes[start_slime].position - local_slimes[target_slime].position, true)
 					
