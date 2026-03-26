@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://ck71hvloai78m"]
+
+[ext_resource type="Shape2D" uid="uid://c1grtdr31u6qe" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Body-8.tres" id="1_k11mb"]
+[ext_resource type="Shape2D" uid="uid://dn3wb4tshmdya" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Base-8.tres" id="2_nrmvf"]
+[ext_resource type="Shape2D" uid="uid://h07ln6y7mr2w" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-4/GreenSlime-Body-4.tres" id="3_8ceyb"]
+[ext_resource type="Shape2D" uid="uid://d2llr8wkf7hts" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-4/GreenSlime-Base-4.tres" id="4_ga0ja"]
+
+[node name="MergeConfirm" type="Node2D" unique_id=488681826]
+
+[node name="Size8Confirm" type="Area2D" parent="." unique_id=1131443470]
+
+[node name="Size8Body" type="CollisionShape2D" parent="Size8Confirm" unique_id=1742504448]
+shape = ExtResource("1_k11mb")
+
+[node name="Size8Base" type="CollisionShape2D" parent="Size8Confirm" unique_id=942952145]
+position = Vector2(0, 7.5)
+shape = ExtResource("2_nrmvf")
+
+[node name="Size4Confirm" type="Area2D" parent="." unique_id=758554775]
+
+[node name="Size4Body" type="CollisionShape2D" parent="Size4Confirm" unique_id=1917931899]
+position = Vector2(0, 3)
+rotation = 1.5707964
+shape = ExtResource("3_8ceyb")
+
+[node name="Size4Base" type="CollisionShape2D" parent="Size4Confirm" unique_id=275405152]
+position = Vector2(0, 7.5)
+shape = ExtResource("4_ga0ja")
