@@ -4,7 +4,6 @@
 
 [node name="SplitConfirm" type="Area2D" unique_id=770495669]
 rotation = 1.5707964
-collision_layer = 0
 
 [node name="SplitHitbox" type="CollisionShape2D" parent="." unique_id=502217743]
 shape = ExtResource("1_lert8")

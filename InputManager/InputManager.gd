@@ -58,8 +58,7 @@ func _input(event):
 	if event.is_action_pressed("transform") : 
 		if(is_human):
 			penny_became_slime.emit()
-			# Turning to slime always succeeds, so we can just set the is_human flag here
-			is_human = false
+			# If this is successful, Player.gd will set is_human to false
 		else:
 			slime_became_penny.emit()
 			# If this is successful, Slime.gd will set is_human to true
