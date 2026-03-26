@@ -12,6 +12,13 @@ uniform float base_opacity = 0.8;                             // The base opacit
 uniform int flow_extent = 256;                                // The extent of the flow texture in pixels, for calculating pixel UVs
 uniform int frame_count = 16;                                 // The total number of frames in the texture
 
+// Instance uniforms don't support arrays, so we split flow distances into int vectors
+// These are the distances each flow column extends down to
+instance uniform ivec4 flow_distances_0;
+instance uniform ivec4 flow_distances_4;
+instance uniform ivec4 flow_distances_8;
+instance uniform ivec4 flow_distances_12;
+
 // Extra VFX settings
 uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen texture provided by Godot
 uniform float refract_strength = 5.0;                                 // Strength of the refraction effect (offset in pixels)
@@ -25,15 +32,8 @@ uniform float highlight_intensity = 0.4;             // Intensity of the highlig
 
 instance uniform int frame_index = 0;               // The current animation frame index (0 to 16)
 instance uniform float flow_start = 0.0;            // How far down flow starts, in pixels from the top of the texture
-instance uniform float flow_end = 256.0;            // How far down flow can go, in pixels from the top of the texture
 instance uniform float flow_falloff_top = 16.0;     // How many pixels from the top to start fading out
 instance uniform float flow_falloff_bottom = 16.0;  // How many pixels from the hit point to start fading out
-
-// Instance uniforms don't support arrays, so we split flow distances into int vectors
-instance uniform ivec4 flow_distances_0;
-instance uniform ivec4 flow_distances_4;
-instance uniform ivec4 flow_distances_8;
-instance uniform ivec4 flow_distances_12;
 
 // Gets the flow distance for a given column index (0 to 15), or 0 if out of bounds
 int get_flow_distance(int col) {
@@ -82,7 +82,7 @@ vec4 get_part_color(int col, float pixel_y, float dist) {
 void fragment() {
     // Get the column index (0 to 15) and flow distance for this column
     int col = int(UV.x * 20.0) - 2; // 16 columns of flow; -2, -1, 16, and 17 are for borders
-    float dist = min(float(get_flow_distance(col)), flow_end);
+    float dist = float(get_flow_distance(col));
 
     // Get the pixel y coordinate we're drawing
     float pixel_y = UV.y * float(flow_extent);
