@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://6g8tm78kme6l"]
+
+[ext_resource type="Shape2D" uid="uid://c7o1oay48w04l" path="res://player/Slime/SplitHitboxes/Slime-Split-8.tres" id="1_lert8"]
+
+[node name="SplitConfirm" type="Area2D" unique_id=770495669]
+rotation = 1.5707964
+
+[node name="SplitHitbox" type="CollisionShape2D" parent="." unique_id=502217743]
+shape = ExtResource("1_lert8")

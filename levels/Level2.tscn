@@ -9,7 +9,6 @@
 [ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="7_pb71r"]
 [ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="8_behg1"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="9_gwanj"]
-[ext_resource type="PackedScene" uid="uid://cmk85sf0jtw4f" path="res://components/FluidFlow/parts/IceWaterFlowPart.tscn" id="10_nn1ti"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="11_vfe3a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vry63"]
@@ -53,7 +52,7 @@ texture = ExtResource("4_28og2")
 3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
 
 [sub_resource type="TileSet" id="TileSet_qehkn"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 129
 sources/0 = SubResource("TileSetAtlasSource_1mo47")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6yh2b"]
@@ -76,7 +75,7 @@ expand_mode = 1
 stretch_mode = 1
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("3_xcmrh")]
-position = Vector2(32, 45)
+position = Vector2(32, 44.99)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
 z_index = 2
@@ -122,40 +121,33 @@ can_slimes_interact = true
 [node name="WaterFlow1" parent="." unique_id=21526138 instance=ExtResource("9_gwanj")]
 position = Vector2(259, 70)
 flow_type = 2
-flow_part_scene = ExtResource("10_nn1ti")
 
 [node name="WaterFlow2" parent="." unique_id=730305254 instance=ExtResource("9_gwanj")]
 position = Vector2(279, 70)
-is_flow_enabled = false
 flow_type = 2
-flow_part_scene = ExtResource("10_nn1ti")
+is_flow_enabled = false
 
 [node name="WaterFlow3" parent="." unique_id=1645183018 instance=ExtResource("9_gwanj")]
 position = Vector2(299, 70)
 flow_type = 2
-flow_part_scene = ExtResource("10_nn1ti")
 
 [node name="WaterFlow4" parent="." unique_id=1400762230 instance=ExtResource("9_gwanj")]
 position = Vector2(319, 70)
-is_flow_enabled = false
 flow_type = 2
-flow_part_scene = ExtResource("10_nn1ti")
+is_flow_enabled = false
 
 [node name="WaterFlow5" parent="." unique_id=1623692096 instance=ExtResource("9_gwanj")]
 position = Vector2(367, 134)
 flow_type = 2
-flow_part_scene = ExtResource("10_nn1ti")
 
 [node name="WaterFlow6" parent="." unique_id=178986444 instance=ExtResource("9_gwanj")]
 position = Vector2(419, 134)
-is_flow_enabled = false
 flow_type = 2
-flow_part_scene = ExtResource("10_nn1ti")
+is_flow_enabled = false
 
 [node name="WaterFlow7" parent="." unique_id=1067358380 instance=ExtResource("9_gwanj")]
 position = Vector2(463, 134)
 flow_type = 2
-flow_part_scene = ExtResource("10_nn1ti")
 
 [node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("11_vfe3a")]
 position = Vector2(501, 156)

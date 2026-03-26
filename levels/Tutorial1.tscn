@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="4_5x43v"]
 [ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="5_8biif"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="6_e0ai5"]
-[ext_resource type="PackedScene" uid="uid://cmk85sf0jtw4f" path="res://components/FluidFlow/parts/IceWaterFlowPart.tscn" id="7_wwytw"]
 [ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="8_oh83v"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="9_3tse3"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="10_qijr3"]
@@ -54,7 +53,7 @@ texture = ExtResource("2_ww84j")
 3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_atv1j"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 129
 sources/0 = SubResource("TileSetAtlasSource_d3nal")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6yh2b"]
@@ -63,7 +62,7 @@ size = Vector2(8, 80)
 [node name="Node2D2" type="Node2D" unique_id=730916531]
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_wec8u")]
-position = Vector2(20, 206)
+position = Vector2(20, 205.99)
 
 [node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("9_3tse3")]
 position = Vector2(484, 129)
@@ -90,7 +89,6 @@ tile_set = SubResource("TileSet_atv1j")
 [node name="WaterFlow" parent="." unique_id=21526138 instance=ExtResource("6_e0ai5")]
 position = Vector2(135, 117)
 flow_type = 2
-flow_part_scene = ExtResource("7_wwytw")
 
 [node name="WaterFlow2" parent="." unique_id=1597407217 instance=ExtResource("6_e0ai5")]
 position = Vector2(278, 118)
@@ -98,7 +96,6 @@ position = Vector2(278, 118)
 [node name="WaterFlow3" parent="." unique_id=1845942874 instance=ExtResource("6_e0ai5")]
 position = Vector2(403, 70)
 flow_type = 2
-flow_part_scene = ExtResource("7_wwytw")
 
 [node name="Spike" type="RigidBody2D" parent="." unique_id=598144181]
 position = Vector2(101, 121)

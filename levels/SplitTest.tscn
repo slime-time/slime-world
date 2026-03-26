@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://2rc1lutvx61c"]
+
+[ext_resource type="Shape2D" uid="uid://c7o1oay48w04l" path="res://player/Slime/SplitHitboxes/Slime-Split-8.tres" id="1_u6mkf"]
+[ext_resource type="PackedScene" uid="uid://2hfdmccufaiv" path="res://player/Slime/GreenSlime/GreenSlime.tscn" id="2_1lhkm"]
+
+[node name="SplitTEst" type="Node2D" unique_id=1341861895]
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1222255068]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=484544848]
+rotation = 1.5707964
+shape = ExtResource("1_u6mkf")
+
+[node name="GreenSlime2" parent="." unique_id=1631753294 instance=ExtResource("2_1lhkm")]
+position = Vector2(-8, 0)
+
+[node name="GreenSlime" parent="." unique_id=980297046 instance=ExtResource("2_1lhkm")]
+position = Vector2(8, 0)

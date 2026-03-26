@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://c8x3lrxliw24h"]
 
 [ext_resource type="Script" uid="uid://bbrcua7m5o5px" path="res://player/Penny/Penny.gd" id="1_o24qj"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qm3ld"]
-size = Vector2(9, 15)
+[ext_resource type="Shape2D" uid="uid://c0a4xjya8dw6g" path="res://player/Penny/Hitboxes/PennyHitbox.tres" id="2_yucds"]
+[ext_resource type="Shape2D" uid="uid://c1grtdr31u6qe" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Body-8.tres" id="3_yo5c4"]
+[ext_resource type="Shape2D" uid="uid://dn3wb4tshmdya" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Base-8.tres" id="4_4b0bj"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1fj7d"]
 load_path = "res://.godot/imported/penny.png-4ce839b4e2ee4333b648ed97a2dfa336.ctex"
@@ -15,9 +15,19 @@ script = ExtResource("1_o24qj")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2028633091]
 texture_filter = 1
 position = Vector2(0.5, 0.5)
-shape = SubResource("RectangleShape2D_qm3ld")
+shape = ExtResource("2_yucds")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=25029721]
+z_index = -2
 texture_filter = 1
 texture = SubResource("CompressedTexture2D_1fj7d")
 offset = Vector2(0, 0.5)
+
+[node name="TransformChecker" type="Area2D" parent="." unique_id=1828918931]
+
+[node name="SlimeBody" type="CollisionShape2D" parent="TransformChecker" unique_id=637362726]
+shape = ExtResource("3_yo5c4")
+
+[node name="SlimeBase" type="CollisionShape2D" parent="TransformChecker" unique_id=1036238156]
+position = Vector2(0, 7.5)
+shape = ExtResource("4_4b0bj")

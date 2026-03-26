@@ -41,6 +41,12 @@ signal slime_type_changed
 # Size of this slime in 1/8ths of the largest slime
 var size
 
+# Hitboxes used for checking if this slime can merge
+var merge_confirm
+
+# Hitbox used for checking if this slime can split
+var split_confirm
+
 # True only when the signal to tranform into Penny has already been sent, as to avoid sending a second
 # From this slime
 var to_transform = false
@@ -57,14 +63,26 @@ func spikeHit():
 
 # Turn into two slimes
 func split():
-	var child_size = floor(size / 2)
-	size = ceil(size / 2)
-	position.x -= 8
-	has_split.emit(position + Vector2(16, 0), velocity, child_size, slime_type)
-	getMovementAbility()
-	updateHitbox()
-	updateSprite()
+	var split_blockers = split_confirm.get_overlapping_bodies()
+	if(len(split_blockers) == 1 and split_blockers[0] == self):
+		var child_size = floor(size / 2)
+		size = ceil(size / 2)
+		position.x -= 8
+		has_split.emit(position + Vector2(16, 0), velocity, child_size, slime_type)
+		getMovementAbility()
+		updateHitbox()
+		updateSprite()
+	else:
+		takeDamage(1)
 	
+# Returns true iff this slime can change size to become a "merged_size" slime, false otherwise.
+func testMerge(merged_size: int, merging_with: Node) -> bool:
+	var relevant_hitbox = merge_confirm.get_node("Size" + str(merged_size) + "Confirm")
+	for overlap in relevant_hitbox.get_overlapping_bodies():
+		if(overlap != self and overlap != merging_with and not overlap.is_queued_for_deletion()):
+			return false
+	return true
+
 # I was merged with another slime, increase my size
 func merge(merged_size: int):
 	size = merged_size
@@ -103,6 +121,8 @@ func _ready():
 	base_run_deceleration = run_deceleration
 	base_jump_velocity = jump_velocity
 	base_mass = mass
+	merge_confirm = get_node("MergeConfirm")
+	split_confirm = get_node("SplitConfirm")
 	updateHitbox()
 	updateSprite()
 	getMovementAbility()
