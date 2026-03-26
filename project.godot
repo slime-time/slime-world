@@ -83,3 +83,10 @@ textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
+
+[shader_globals]
+
+SCREEN_SIZE_PIXELS={
+"type": "ivec2",
+"value": Vector2i(512, 288)
+}
