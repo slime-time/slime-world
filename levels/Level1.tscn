@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="4_2qkcd"]
 [ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="5_441sy"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="6_qrpc2"]
-[ext_resource type="PackedScene" uid="uid://cmk85sf0jtw4f" path="res://components/FluidFlow/parts/IceWaterFlowPart.tscn" id="7_4718p"]
 [ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="8_sdtvc"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="9_1djsv"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="10_2qkcd"]
@@ -48,7 +47,7 @@ texture = ExtResource("2_ov672")
 3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
 
 [sub_resource type="TileSet" id="TileSet_qehkn"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 129
 sources/0 = SubResource("TileSetAtlasSource_1mo47")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6yh2b"]
@@ -106,24 +105,19 @@ tile_set = SubResource("TileSet_qehkn")
 z_index = -5
 position = Vector2(213, 86)
 flow_type = 2
-flow_part_scene = ExtResource("7_4718p")
 
 [node name="IceWaterFlow2" parent="." unique_id=1520204566 instance=ExtResource("6_qrpc2")]
 z_index = -5
 position = Vector2(277, 86)
 flow_type = 2
-flow_part_scene = ExtResource("7_4718p")
 
 [node name="IceWaterFlow3" parent="." unique_id=1096968694 instance=ExtResource("6_qrpc2")]
 z_index = -5
 position = Vector2(341, 86)
 flow_type = 2
-flow_part_scene = ExtResource("7_4718p")
 
 [node name="WaterFlow" parent="." unique_id=21526138 instance=ExtResource("6_qrpc2")]
-z_index = -5
 position = Vector2(405, 86)
-flow_update_speed = 256
 is_flow_enabled = false
 
 [node name="Lever" parent="." unique_id=1864762079 instance=ExtResource("8_sdtvc")]
