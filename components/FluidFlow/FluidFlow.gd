@@ -21,20 +21,22 @@ const FLOW_MATERIALS: Dictionary[Type, ShaderMaterial] = {
 @export var flow_animation_framerate: int = 8	# The framerate of the fluid flow animation
 @export var flow_extent: int = 256  	  		# The maximum distance the water can flow downwards
 @export var is_flow_enabled: bool = true  		# Whether the water flow is enabled
-@export var flow_fall_speed: int = 128			# How far to extend fluid downward per second (in pixels)
-@export var flow_retract_speed: int = 128		# How far to retract fluid downward per second (in pixels)
+@export var flow_fall_accel: int = 0			# Fluid acceleration due to gravity
+@export var flow_fall_base_speed: int = 96		# The base velocity at which fluid starts flowing
+@export var flow_retract_speed: int = 160		# How far to retract fluid downward per second (in pixels)
 @export var flow_falloff_top: int = 8	  		# Distance over which the flow fades out at the top
 @export var flow_falloff_bottom: int = 8		# Distance over which the flow fades out at the bottom
 @export var flow_offset: int = 2				# How many pixels to extend the flow past the hit point
 
-var _ref_position: Vector2i                                			# The absolute position of the emitter
-var _ray_queries: Array[PhysicsRayQueryParameters2D] = []  			# Raycast queries for each column
-var _ray_queries_blocking: Array[PhysicsRayQueryParameters2D] = []  # Raycast queries for each column with blocking layer mask
-var _flow_distance_targets: PackedInt32Array = PackedInt32Array()  	# The target flow distance for each column based on raycast hits
-var _flow_distances_f: PackedFloat32Array = PackedFloat32Array() 	# The actual flow distance for each column, gradually extending towards _flow_distance_targets
-var _flow_distances: PackedInt32Array = PackedInt32Array()       	# The actual flow distance for each column, as integers for shader parameters
-var _flow_start_f: float = 0										# The current starting height of the flow, for animating flow enable/disable
-var _flow_start: int = 0											# The current starting height of the flow, as an integer for shader parameters
+var _ref_position: Vector2i                                					# The absolute position of the emitter
+var _ray_queries: Array[PhysicsRayQueryParameters2D] = []  					# Raycast queries for each column
+var _ray_queries_blocking: Array[PhysicsRayQueryParameters2D] = []  		# Raycast queries for each column with blocking layer mask
+var _flow_distance_targets: PackedInt32Array = PackedInt32Array()  			# The target flow distance for each column based on raycast hits
+var _flow_distance_velocities: PackedFloat32Array = PackedFloat32Array() 	# The current velocity of the flow distance for each column, for accelerating flow falloff
+var _flow_distances_f: PackedFloat32Array = PackedFloat32Array() 			# The actual flow distance for each column, gradually extending towards _flow_distance_targets
+var _flow_distances: PackedInt32Array = PackedInt32Array()       			# The actual flow distance for each column, as integers for shader parameters
+var _flow_start_f: float = 0												# The current starting height of the flow, for animating flow enable/disable
+var _flow_start: int = 0													# The current starting height of the flow, as an integer for shader parameters
 
 
 func _ready() -> void:
@@ -47,6 +49,8 @@ func _ready() -> void:
 
 	# Initialize arrays
 	_flow_distance_targets.resize(16)
+	_flow_distance_velocities.resize(16)
+	_flow_distance_velocities.fill(flow_fall_base_speed)
 	_flow_distances_f.resize(16)
 	_flow_distances_f.fill(0)
 	_flow_distances.resize(16)
@@ -101,7 +105,14 @@ func _updateShaderParams() -> void:
 # Extends flow distances towards their targets
 func _extendFlows(delta: float) -> void:
 	for i in range(16):
-		_flow_distances_f[i] = move_toward(_flow_distances_f[i], _flow_distance_targets[i], flow_fall_speed * delta)
+		# Model acceleration due to gravity
+		var old_velocity = _flow_distance_velocities[i]
+		_flow_distance_velocities[i] += flow_fall_accel * delta
+
+		# Compute the integrated distance change
+		var delta_distance = (old_velocity + _flow_distance_velocities[i]) * 0.5 * delta
+
+		_flow_distances_f[i] = move_toward(_flow_distances_f[i], _flow_distance_targets[i], delta_distance)
 		_flow_distances[i] = min(int(_flow_distances_f[i]), flow_extent)
 
 
@@ -151,8 +162,11 @@ func _physics_process(delta: float) -> void:
 			_flow_distance_targets[i] = new_target
 			_flow_distances_f[i] = min(_flow_distances_f[i], float(new_target))
 			_flow_distances[i] = min(_flow_distances[i], new_target)
+
+			# If we updated the distance target, reset velocity for this column
+			_flow_distance_velocities[i] = flow_fall_base_speed
 		elif hit_dist_f >= 0:
-			# Not within the flow area; we need to change our target
+			# Not within the flow area but we need to change our target
 			_flow_distance_targets[i] = new_target
 
 	# Update shader parameters with new flow distances
