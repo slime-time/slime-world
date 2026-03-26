@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_ori4l"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_xdrm5"]
 [ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="3_av7kl"]
-[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/spike.png" id="4_muxx5"]
+[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="4_muxx5"]
 [ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="5_muxx5"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="7_hlr8m"]
 
@@ -57,7 +57,7 @@ size = Vector2(8, 65)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1016908615]
 position = Vector2(225, 160)
-tile_map_data = PackedByteArray("AAD9/wAAAAABAAAAAAD+/wAAAAABAAAAAAD//wAAAAABAAAAAAAAAAAAAAABAAAAAAABAAAAAAABAAAAAAACAAAAAAABAAAAAAABAAEAAAABAAIAAAD//wEAAAABAAIAAAAAAAEAAAABAAIAAAD+/wEAAAABAAIAAAD9/wEAAAABAAIAAAADAAEAAAACAAIAAAADAAAAAAACAAAAAAACAAEAAAABAAIAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAIAAAABAPv/AAADAAMAAAA=")
+tile_map_data = PackedByteArray("AAD9/wAAAAABAAAAAAD+/wAAAAABAAAAAAD//wAAAAABAAAAAAAAAAAAAAABAAAAAAABAAAAAAABAAAAAAACAAAAAAABAAAAAAABAAEAAAABAAIAAAD//wEAAAABAAIAAAAAAAEAAAABAAIAAAD+/wEAAAABAAIAAAD9/wEAAAABAAIAAAADAAEAAAACAAIAAAADAAAAAAACAAAAAAACAAEAAAABAAIAAAD8/wAAAAAAAAAAAAD8/wEAAAAAAAIAAAABAPv/AAADAAMAAAAAAP//AAABAAAAAAACAP//AAABAAAAAAA=")
 tile_set = SubResource("TileSet_muxx5")
 
 [node name="Player" parent="TileMapLayer" unique_id=1162088554 instance=ExtResource("1_ori4l")]

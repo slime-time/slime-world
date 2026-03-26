@@ -66,6 +66,6 @@ offset = Vector2(0, 0.5)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1811255284]
 libraries/ = SubResource("AnimationLibrary_2wi0r")
 
-[node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_2o3kk")]
+[node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_3so3y")]
 
-[node name="SplitConfirm" parent="MergeConfirm" unique_id=770495669 instance=ExtResource("6_3so3y")]
+[node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_2o3kk")]
