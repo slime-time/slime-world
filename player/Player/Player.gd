@@ -116,7 +116,6 @@ func makeSlime(starting_location: Vector2, starting_velocity: Vector2, size: int
 func makePennyIntoSlime():
 	# Make sure that Penny can actually change
 	var overlaps = penny.get_node("TransformChecker").get_overlapping_bodies()
-	print_debug(overlaps)
 	if(len(overlaps) == 1 and overlaps[0] == penny):
 		var old_velocity = penny.velocity;
 		penny.set_visible(false)
