@@ -56,7 +56,7 @@ rotation = 1.5707964
 shape = ExtResource("3_2wi0r")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=509701531]
-z_index = -1
+z_index = -2
 position = Vector2(0, -1)
 texture = ExtResource("2_ttqac")
 offset = Vector2(0, 0.5)
