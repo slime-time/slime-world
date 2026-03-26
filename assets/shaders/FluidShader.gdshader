@@ -11,6 +11,7 @@ uniform sampler2D fluid_tex : filter_nearest, repeat_enable;  // The fluid textu
 uniform float base_opacity = 0.8;                             // The base opacity of the fluid, before applying flow distance falloff
 uniform int flow_extent = 256;                                // The extent of the flow texture in pixels, for calculating pixel UVs
 uniform int frame_count = 16;                                 // The total number of frames in the texture
+uniform float outline_threshold = 0.0;                        // Max value of max(r,g,b) to be considered outline (no refraction)
 
 // Instance uniforms don't support arrays, so we split flow distances into int vectors
 // These are the distances each flow column extends down to
@@ -112,8 +113,11 @@ void fragment() {
         COLOR = get_part_color(col, pixel_y, dist);
     }
 
+    // Determine whether we're in an outline pixel
+    bool is_outline = max(COLOR.r, max(COLOR.g, COLOR.b)) <= outline_threshold;
+
     // Apply screen refraction
-    if (COLOR.a > 0.0) {
+    if (COLOR.a > 0.0 && !is_outline) {
         float wave = sin(TIME * refract_timescale + floor(pixel_y) * refract_frequency);
         float pixel_offset = round(wave * refract_strength * COLOR.a); // Include a factor of alpha to fade smoothly at the falloff
 
