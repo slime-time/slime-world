@@ -21,9 +21,9 @@ instance uniform ivec4 flow_distances_12;
 
 // Extra VFX settings
 uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen texture provided by Godot
-uniform float refract_strength = 5.0;                                 // Strength of the refraction effect (offset in pixels)
-uniform float refract_frequency = 0.4;                                // Frequency of the vertical refraction waves
-uniform float refract_timescale = 1.2;                               // Timescale for the refraction animation
+uniform float refract_strength = 1.0;                                 // Strength of the refraction effect (offset in pixels)
+uniform float refract_frequency = 0.7;                                // Frequency of the vertical refraction waves
+uniform float refract_timescale = 2.0;                               // Timescale for the refraction animation
 
 uniform vec3 highlight_color = vec3(1.0, 1.0, 1.0);  // The color to use for the highlight noise effect
 uniform float highlight_noise_scale = 20.0;          // Noise sampling scale for highlight noise
