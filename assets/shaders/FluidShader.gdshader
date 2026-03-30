@@ -43,6 +43,20 @@ uniform float foam_distance = 6.0;              // How many pixels (Δy) around 
 uniform float foam_steps = 4.0;                 // Minimum noise value to show foam
 uniform float foam_intensity = 2.5;             // Intensity of the foam effect, from 0 to 1
 
+// Voronoi (ice shard) settings
+group_uniforms Voronoi;
+uniform bool do_voronoi = false;                                  // Whether to apply the voronoi effect at all, for performance reasons
+uniform vec2 voronoi_cell_size = vec2(8.0, 8.0);                  // Size of a voronoi grid cell in pixels
+uniform float voronoi_refraction_strength = 1.5;                  // Strength of the effect voronoi cell values have on refraction offset
+uniform int voronoi_color_blend_mode : hint_blend_mode = 1;       // Blending mode to use for mixing voronoi cell colors into the fluid color
+uniform vec3 voronoi_color_factors = vec3(1.0, 1.0, 1.0);         // Per-channel factors to premultiply the voronoi cell color
+uniform float voronoi_color_mix = 0.5;                            // Strength of the effect voronoi cell values have on color, for each channel
+uniform float voronoi_lightness_strength = 0.5;                   // Strength of the effect avg(r,g,b) of the voronoi cell color has on lightness of the final color
+uniform vec4 voronoi_boundary_color = vec4(1.0, 1.0, 1.0, 0.5);   // Color to blend in for voronoi cell boundaries, where A is the strength of the boundary effect
+uniform float voronoi_boundary_threshold = 0.1;                   // Max value of the voronoi boundary distance to be considered a boundary pixel
+uniform float voronoi_boundary_exponent = 2.0;                    // Exponent to apply to the boundary effect strength, to make it more or less focused on the actual boundary line
+uniform float voronoi_boundary_steps = 3.0;
+
 instance uniform float flow_start = 0.0;            // How far down flow starts, in pixels from the top of the texture
 
 // Instance uniforms don't support arrays, so we split flow distances into int vectors
@@ -167,18 +181,45 @@ void fragment() {
     // Determine whether we're in an outline pixel
     bool is_outline = max(COLOR.r, max(COLOR.g, COLOR.b)) <= outline_threshold;
 
+    vec4 voronoi_sample;
+    if (do_voronoi && !is_outline) {
+        vec2 pixel_uv = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS) - vec2(0.0, qtime * displacement_timescale)) / vec2(SCREEN_SIZE_PIXELS);
+        voronoi_sample = voronoi(vec2(SCREEN_SIZE_PIXELS) / voronoi_cell_size, pixel_uv);
+
+        // Mix the voronoi cell value into the color
+        COLOR.rgb = blend(voronoi_color_blend_mode, COLOR.rgb, voronoi_sample.rgb * voronoi_color_factors, voronoi_color_mix);
+        float voronoi_lightness = (voronoi_sample.r + voronoi_sample.g + voronoi_sample.b) / 3.0;
+        COLOR.rgb = blend(voronoi_color_blend_mode, COLOR.rgb, vec3(voronoi_lightness), voronoi_lightness_strength);
+
+        // Apply the voronoi boundary
+        if (voronoi_sample.a <= voronoi_boundary_threshold) {
+            vec3 boundary_blend = voronoi_boundary_color.rgb;
+            float boundary_mix = pow((1.0 - voronoi_sample.a / voronoi_boundary_threshold), voronoi_boundary_exponent);
+            boundary_mix = round(boundary_mix * voronoi_boundary_steps) / voronoi_boundary_steps; // Step the boundary mix to create more distinct borders
+            COLOR.rgb = blend(voronoi_color_blend_mode, COLOR.rgb, boundary_blend, boundary_mix * voronoi_boundary_color.a);
+        }
+    }
+
     // Apply screen refraction
     if (COLOR.a > 0.0 && !is_outline) {
         float wave = sin(TIME * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
-        float pixel_offset = float(wave * refract_strength * COLOR.a); // Include a factor of alpha to fade smoothly at the falloff
+        vec2 pixel_offset = vec2(float(wave * refract_strength * COLOR.a), 0.0); // Include a factor of alpha to fade smoothly at the falloff
 
         // Include the displacement in the refraction offset
-        pixel_offset += get_displacement(col, pixel_y, qtime);
-        pixel_offset = round(pixel_offset); // Quantize the refraction to whole pixels to reduce distortion
+        pixel_offset.x += get_displacement(col, pixel_y, qtime);
+
+        // Include the voronoi displacement if enabled
+        if (do_voronoi) {
+            // Center the voronoi value around 0 and apply strength
+            pixel_offset += (voronoi_sample.rg - vec2(0.5)) * voronoi_refraction_strength;
+        }
+
+        // Quantize the refraction to whole pixels
+        pixel_offset = round(pixel_offset);
 
         float pixel_size = 1.0 / float(SCREEN_SIZE_PIXELS.x);
         vec2 snapped_screen_uv = (floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) + 0.5) / vec2(SCREEN_SIZE_PIXELS);
-        vec2 refract_uv = snapped_screen_uv + vec2(pixel_offset * pixel_size, 0.0);
+        vec2 refract_uv = snapped_screen_uv + pixel_offset * pixel_size;
         vec4 refract_color = texture(screen_tex, refract_uv);
 
         // Blend in the refracted color
