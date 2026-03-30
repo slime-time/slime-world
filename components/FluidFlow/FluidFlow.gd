@@ -18,14 +18,11 @@ const FLOW_MATERIALS: Dictionary[Type, ShaderMaterial] = {
 @onready var flow_rect: ColorRect = $FlowRect	# The color rect with the fluid flow shader
 
 @export var flow_type: Type = Type.WATER  		# The type of water flow
-@export var flow_animation_framerate: int = 8	# The framerate of the fluid flow animation
 @export var flow_extent: int = 256  	  		# The maximum distance the water can flow downwards
 @export var is_flow_enabled: bool = true  		# Whether the water flow is enabled
 @export var flow_fall_accel: int = 0			# Fluid acceleration due to gravity
 @export var flow_fall_base_speed: int = 96		# The base velocity at which fluid starts flowing
 @export var flow_retract_speed: int = 160		# How far to retract fluid downward per second (in pixels)
-@export var flow_falloff_top: int = 8	  		# Distance over which the flow fades out at the top
-@export var flow_falloff_bottom: int = 8		# Distance over which the flow fades out at the bottom
 @export var flow_offset: int = 2				# How many pixels to extend the flow past the hit point
 
 var _ref_position: Vector2i                                					# The absolute position of the emitter
@@ -80,8 +77,6 @@ func _buildRayQueries() -> void:
 func _updateShaderParams() -> void:
 	# Pass in values that might vary for animation and falloff handling
 	flow_rect.set_instance_shader_parameter("flow_start", float(_flow_start))
-	flow_rect.set_instance_shader_parameter("flow_falloff_top", min(float(_flow_start), float(flow_falloff_top)))
-	flow_rect.set_instance_shader_parameter("flow_falloff_bottom", float(flow_falloff_bottom))
 
 	# Pass in the flow distance for each column
 	# Instance parameters don't support arrays, so we batch four columns into each ivec4 parameter
@@ -89,17 +84,6 @@ func _updateShaderParams() -> void:
 	flow_rect.set_instance_shader_parameter("flow_distances_4", Vector4i(_flow_distances[4], _flow_distances[5], _flow_distances[6], _flow_distances[7]))
 	flow_rect.set_instance_shader_parameter("flow_distances_8", Vector4i(_flow_distances[8], _flow_distances[9], _flow_distances[10], _flow_distances[11]))
 	flow_rect.set_instance_shader_parameter("flow_distances_12", Vector4i(_flow_distances[12], _flow_distances[13], _flow_distances[14], _flow_distances[15]))
-
-	# Compute the current animation frame
-	var time = Time.get_ticks_usec() / 1000000.0
-	var frame = int(time * flow_animation_framerate) % 16
-	flow_rect.set_instance_shader_parameter("frame_index", frame)
-
-
-# func _process(_delta: float) -> void:
-# 	# Update shader parameters for animation even if flow is disabled,
-# 	# since we might still want the flow texture to animate while not flowing
-# 	_updateShaderParams()
 
 
 # Extends flow distances towards their targets

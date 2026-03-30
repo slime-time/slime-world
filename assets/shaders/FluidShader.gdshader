@@ -7,34 +7,47 @@ shader_type canvas_item;
 global uniform ivec2 SCREEN_SIZE_PIXELS;
 
 // Basic settings
+group_uniforms BasicSettings;
 uniform sampler2D fluid_tex : filter_nearest, repeat_enable;  // The fluid texture to sample
 uniform float base_opacity = 0.8;                             // The base opacity of the fluid, before applying flow distance falloff
 uniform int flow_extent = 256;                                // The extent of the flow texture in pixels, for calculating pixel UVs
+uniform int framerate = 8;                                    // The framerate of the fluid animation (frames per second)
 uniform int frame_count = 16;                                 // The total number of frames in the texture
 uniform float outline_threshold = 0.0;                        // Max value of max(r,g,b) to be considered outline (no refraction)
+uniform float flow_falloff_top = 8.0;     // How many pixels from the top to start fading out
+uniform float flow_falloff_bottom = 8.0;  // How many pixels from the hit point to start fading out
+
+
+// Refraction settings
+group_uniforms Refraction;
+uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen texture provided by Godot
+uniform float refract_strength = 0.8;                                 // Strength of the refraction effect (offset in pixels)
+uniform float refract_frequency = 0.5;                                // Frequency of the vertical refraction waves
+uniform float refract_timescale = 2.0;                               // Timescale for the refraction animation
+
+// Foam settings
+group_uniforms Foam;
+uniform vec3 foam_color = vec3(1.0, 1.0, 1.0);  // The color to use for the foam effect
+uniform float foam_noise_scale = 120.0;         // Noise sampling scale for foam
+uniform float foam_timescale = 8.0;             // Foam noise timescale
+uniform float foam_distance = 6.0;              // How many pixels (Δy) around the flow end are affected by foam
+uniform float foam_steps = 4.0;                 // Minimum noise value to show foam
+uniform float foam_intensity = 2.5;             // Intensity of the foam effect, from 0 to 1
+
+// // Noise-driven highlight settings
+// uniform vec3 foam_color = vec3(1.0, 1.0, 1.0);  // The color to use for the foam effect
+// uniform float foam_noise_scale = 20.0;          // Noise sampling scale for foam
+// uniform float foam_timescale = 0.2;             // Foam noise timescale
+// uniform float foam_intensity = 1.0;             // Intensity of the foam effect, from 0 to 1
+
+instance uniform float flow_start = 0.0;            // How far down flow starts, in pixels from the top of the texture
 
 // Instance uniforms don't support arrays, so we split flow distances into int vectors
 // These are the distances each flow column extends down to
-instance uniform ivec4 flow_distances_0;
-instance uniform ivec4 flow_distances_4;
-instance uniform ivec4 flow_distances_8;
-instance uniform ivec4 flow_distances_12;
-
-// Extra VFX settings
-uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen texture provided by Godot
-uniform float refract_strength = 1.0;                                 // Strength of the refraction effect (offset in pixels)
-uniform float refract_frequency = 0.7;                                // Frequency of the vertical refraction waves
-uniform float refract_timescale = 2.0;                               // Timescale for the refraction animation
-
-uniform vec3 highlight_color = vec3(1.0, 1.0, 1.0);  // The color to use for the highlight noise effect
-uniform float highlight_noise_scale = 20.0;          // Noise sampling scale for highlight noise
-uniform float highlight_timescale = 0.6;             // Highlight noise timescale
-uniform float highlight_intensity = 0.4;             // Intensity of the highlight noise effect, from 0 to 1
-
-instance uniform int frame_index = 0;               // The current animation frame index (0 to 16)
-instance uniform float flow_start = 0.0;            // How far down flow starts, in pixels from the top of the texture
-instance uniform float flow_falloff_top = 16.0;     // How many pixels from the top to start fading out
-instance uniform float flow_falloff_bottom = 16.0;  // How many pixels from the hit point to start fading out
+instance uniform ivec4 flow_distances_0 = ivec4(256);
+instance uniform ivec4 flow_distances_4 = ivec4(256);
+instance uniform ivec4 flow_distances_8 = ivec4(256);
+instance uniform ivec4 flow_distances_12 = ivec4(256);
 
 // Gets the flow distance for a given column index (0 to 15), or 0 if out of bounds
 int get_flow_distance(int col) {
@@ -53,11 +66,13 @@ float get_flow_distance_offset(int col, float offset) {
 
 // Gets the UV coordinates for sampling a certain pixel column and y coordinate
 // col is 0-16 if a regular flow part, or -1/-2/16/17 for border parts
-vec4 get_part_color(int col, float pixel_y, float dist) {
+vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv) {
     if (pixel_y > dist + flow_falloff_bottom) {
         // This pixel is outside the flow area, so draw nothing
         return vec4(0.0);
     }
+
+    int frame_index = int(TIME * float(framerate)) % frame_count;
 
     float frame_v = float(frame_index) / float(frame_count);
     float local_v = fract(pixel_y / 16.0) / float(frame_count);
@@ -67,14 +82,29 @@ vec4 get_part_color(int col, float pixel_y, float dist) {
     tex_color.a *= base_opacity;
 
     // Handle fade out at the top
-    if (pixel_y <= flow_start + flow_falloff_top) {
-        tex_color.a *= (pixel_y - flow_start) / float(flow_falloff_top);
+    if (pixel_y <= flow_start + min(flow_start, flow_falloff_top)) {
+        tex_color.a *= round(pixel_y - flow_start) / min(flow_start, flow_falloff_top);
     }
 
     // Handle fade out at the bottom
     // We count dist as the start of falloff and dist+falloff as the end
     if (pixel_y >= dist) {
         tex_color.a *= (dist + flow_falloff_bottom - pixel_y) / float(flow_falloff_bottom);
+    }
+
+    // Apply foam effect near the bottom of the flow
+    if (abs(pixel_y - dist) <= foam_distance) {
+        float qtime = round(TIME * float(framerate)) / float(frame_count); // Time quantized to animation framerate
+
+        vec2 pixel_uv = floor(screen_uv * vec2(SCREEN_SIZE_PIXELS)) / vec2(SCREEN_SIZE_PIXELS);
+        vec3 noise_uv = vec3(pixel_uv * foam_noise_scale + vec2(0.0, qtime * foam_timescale), 0.0);
+        float foam_noise_raw = snoise(noise_uv);
+        float foam_amount = min(1.0, (1.0 - pow(1.0 - foam_noise_raw, 2.0)) * pow(1.0 - floor(abs(pixel_y - dist)) / foam_distance, 1.5) * foam_intensity);
+
+        float foam_stepped = round(foam_amount * foam_steps) / foam_steps; // Step the foam amount to create more distinct patches
+        float foam_alpha = (0.5 + (tex_color.a / 2.0)) * clamp((round(pixel_y) - round(flow_start)) / flow_falloff_bottom, 0.0, 1.0);
+        vec4 foam_blend = vec4(foam_color, foam_alpha);
+        tex_color = blend(BLEND_SCREEN, tex_color, foam_blend, foam_stepped);
     }
 
     return tex_color;
@@ -94,23 +124,23 @@ void fragment() {
         // I am just hardcoding the four cases here because it's easier honestly I know it sucks don't @ me
         if (pixel_y <= get_flow_distance_offset(col - 1, flow_falloff_bottom)) {
             // We are part of the right border of the left neighbor's flow
-            COLOR = get_part_color(16, pixel_y, float(get_flow_distance(col - 1)));
+            COLOR = get_part_color(16, pixel_y, float(get_flow_distance(col - 1)), SCREEN_UV);
         } else if (pixel_y <= get_flow_distance_offset(col - 2, flow_falloff_bottom)) {
             // We are a further right border part of the left neighbor's flow
-            COLOR = get_part_color(17, pixel_y, float(get_flow_distance(col - 2)));
+            COLOR = get_part_color(17, pixel_y, float(get_flow_distance(col - 2)), SCREEN_UV);
         } else if (pixel_y <= get_flow_distance_offset(col + 1, flow_falloff_bottom)) {
             // We are part of the left border of the right neighbor's flow
-            COLOR = get_part_color(-1, pixel_y, float(get_flow_distance(col + 1)));
+            COLOR = get_part_color(-1, pixel_y, float(get_flow_distance(col + 1)), SCREEN_UV);
         } else if (pixel_y <= get_flow_distance_offset(col + 2, flow_falloff_bottom)) {
             // We are a further left border part of the right neighbor's flow
-            COLOR = get_part_color(-2, pixel_y, float(get_flow_distance(col + 2)));
+            COLOR = get_part_color(-2, pixel_y, float(get_flow_distance(col + 2)), SCREEN_UV);
         } else {
             // We are not part of any flow, so draw nothing
             COLOR.a = 0.0;
         }
     } else {
         // We're in the flow area for this column, so draw the regular flow part
-        COLOR = get_part_color(col, pixel_y, dist);
+        COLOR = get_part_color(col, pixel_y, dist, SCREEN_UV);
     }
 
     // Determine whether we're in an outline pixel
@@ -133,8 +163,11 @@ void fragment() {
 
     // // Apply the highlight noise effect on top of the base color
     // if (highlight_intensity > 0.0) {
-    //     float highlight_noise_raw = snoise(vec3(SCREEN_UV * highlight_noise_scale, TIME * highlight_timescale));
-    //     float highlight_noise = pow(highlight_noise_raw, 0.5);
-    //     COLOR = blend(BLEND_SOFT_LIGHT, COLOR, vec4(highlight_color, COLOR.a), highlight_noise * highlight_intensity);
+    //     vec2 pixel_uv = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) / vec2(SCREEN_SIZE_PIXELS);
+    //     vec3 noise_uv = vec3(pixel_uv * highlight_noise_scale, TIME * highlight_timescale);
+    //     float highlight_noise_raw = snoise(noise_uv);
+    //     float highlight_noise = pow(highlight_noise_raw, 2.0);
+    //     // COLOR.a = highlight_noise;
+    //     COLOR = blend(BLEND_HARD_LIGHT, COLOR, vec4(highlight_color, COLOR.a), highlight_noise * highlight_intensity);
     // }
 }
