@@ -41,21 +41,42 @@ vec4 linear_dodge(vec4 base, vec4 blend) { return base + blend; }
 vec4 color_burn(vec4 base, vec4 blend) { return 1.0 - (1.0 - base) / blend; }
 vec4 linear_burn (vec4 base, vec4 blend) { return base + blend - 1.0; }
 
-const uint BLEND_MULTIPLY = 0u;
-const uint BLEND_SCREEN = 1u;
-const uint BLEND_DARKEN = 2u;
-const uint BLEND_LIGHTEN = 3u;
-const uint BLEND_DIFFERENCE = 4u;
-const uint BLEND_EXCLUSION = 5u;
-const uint BLEND_OVERLAY = 6u;
-const uint BLEND_HARD_LIGHT = 7u;
-const uint BLEND_SOFT_LIGHT = 8u;
-const uint BLEND_COLOR_DODGE = 9u;
-const uint BLEND_LINEAR_DODGE = 10u;
-const uint BLEND_COLOR_BURN = 11u;
-const uint BLEND_LINEAR_BURN = 12u;
+const int BLEND_MULTIPLY = 0;
+const int BLEND_SCREEN = 1;
+const int BLEND_DARKEN = 2;
+const int BLEND_LIGHTEN = 3;
+const int BLEND_DIFFERENCE = 4;
+const int BLEND_EXCLUSION = 5;
+const int BLEND_OVERLAY = 6;
+const int BLEND_HARD_LIGHT = 7;
+const int BLEND_SOFT_LIGHT = 8;
+const int BLEND_COLOR_DODGE = 9;
+const int BLEND_LINEAR_DODGE = 10;
+const int BLEND_COLOR_BURN = 11;
+const int BLEND_LINEAR_BURN = 12;
 
-vec4 blend(uint MODE, vec4 base, vec4 over, float factor) {
+vec3 blend(int MODE, vec3 base3, vec3 over3, float factor) {
+    vec4 base = vec4(base3, 1.0);
+    vec4 over = vec4(over3, 1.0);
+    switch (MODE) {
+        case BLEND_MULTIPLY: return mix(base, multiply(base, over), factor).rgb;
+        case BLEND_SCREEN: return mix(base, screen(base, over), factor).rgb;
+        case BLEND_DARKEN: return mix(base, darken(base, over), factor).rgb;
+        case BLEND_LIGHTEN: return mix(base, lighten(base, over), factor).rgb;
+        case BLEND_DIFFERENCE: return mix(base, difference(base, over), factor).rgb;
+        case BLEND_EXCLUSION: return mix(base, exclusion(base, over), factor).rgb;
+        case BLEND_OVERLAY: return mix(base, overlay(base, over), factor).rgb;
+        case BLEND_HARD_LIGHT: return mix(base, hard_light(base, over), factor).rgb;
+        case BLEND_SOFT_LIGHT: return mix(base, soft_light(base, over), factor).rgb;
+        case BLEND_COLOR_DODGE: return mix(base, color_dodge(base, over), factor).rgb;
+        case BLEND_LINEAR_DODGE: return mix(base, linear_dodge(base, over), factor).rgb;
+        case BLEND_COLOR_BURN: return mix(base, color_burn(base, over), factor).rgb;
+        case BLEND_LINEAR_BURN: return mix(base, linear_burn(base, over), factor).rgb;
+        default: return base.rgb;
+    }
+}
+
+vec4 blend(int MODE, vec4 base, vec4 over, float factor) {
     switch (MODE) {
         case BLEND_MULTIPLY: return mix(base, multiply(base, over), factor);
         case BLEND_SCREEN: return mix(base, screen(base, over), factor);
@@ -73,3 +94,19 @@ vec4 blend(uint MODE, vec4 base, vec4 over, float factor) {
         default: return base;
     }
 }
+
+#define hint_blend_mode hint_enum(  \
+    "MULTIPLY",                     \
+    "SCREEN",                       \
+    "DARKEN",                       \
+    "LIGHTEN",                      \
+    "DIFFERENCE",                   \
+    "EXCLUSION",                    \
+    "OVERLAY",                      \
+    "HARD_LIGHT",                   \
+    "SOFT_LIGHT",                   \
+    "COLOR_DODGE",                  \
+    "LINEAR_DODGE",                 \
+    "COLOR_BURN",                   \
+    "LINEAR_BURN"                   \
+)
