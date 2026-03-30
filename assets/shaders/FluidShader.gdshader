@@ -21,9 +21,9 @@ uniform float flow_falloff_bottom = 8.0;  // How many pixels from the hit point 
 group_uniforms HorizontalDisplacement;
 // Each octave defines {amplitude, frequency} of a sine wave
 // Uniform arrays can't have default values so we just hardcode the number of octaves... godot sucks sometimes
-uniform vec2 displacement_octave0 = vec2(0.6, 0.1);
-uniform vec2 displacement_octave1 = vec2(0.4, 0.3);
-uniform vec2 displacement_octave2 = vec2(0.2, 0.7);
+uniform vec2 displacement_octave0 = vec2(0.3, 0.1);
+uniform vec2 displacement_octave1 = vec2(0.1, 0.3);
+uniform vec2 displacement_octave2 = vec2(0.05, 0.7);
 uniform float displacement_timescale = 32.0;          // How fast the displacement wave should move downward
 uniform float displacement_column_offset = 0.2;       // How much to offset the displacement wave by each column
 
@@ -42,12 +42,6 @@ uniform float foam_timescale = 5.0;             // Foam noise timescale
 uniform float foam_distance = 6.0;              // How many pixels (Δy) around the flow end are affected by foam
 uniform float foam_steps = 4.0;                 // Minimum noise value to show foam
 uniform float foam_intensity = 2.5;             // Intensity of the foam effect, from 0 to 1
-
-// // Noise-driven highlight settings
-// uniform vec3 foam_color = vec3(1.0, 1.0, 1.0);  // The color to use for the foam effect
-// uniform float foam_noise_scale = 20.0;          // Noise sampling scale for foam
-// uniform float foam_timescale = 0.2;             // Foam noise timescale
-// uniform float foam_intensity = 1.0;             // Intensity of the foam effect, from 0 to 1
 
 instance uniform float flow_start = 0.0;            // How far down flow starts, in pixels from the top of the texture
 
@@ -76,7 +70,7 @@ float get_flow_distance_offset(int col, float offset) {
 // Gets the horizontal displacement for the given position
 float get_displacement(int col, float pixel_y, float qtime) {
     float displacement = 0.0;
-    float wave_y = pixel_y + float(col) * displacement_column_offset - qtime * displacement_timescale;
+    float wave_y = round(pixel_y + 0.5) + float(col) * displacement_column_offset - qtime * displacement_timescale;
     displacement += displacement_octave0.x * sin(displacement_octave0.y * wave_y);
     displacement += displacement_octave1.x * sin(displacement_octave1.y * wave_y);
     displacement += displacement_octave2.x * sin(displacement_octave2.y * wave_y);
@@ -99,7 +93,7 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
     float local_v = fract(pixel_y / 16.0) / float(frame_count);
 
     // Compute displacement for the current pixel
-      float displacement = get_displacement(col, pixel_y, qtime);
+    float displacement = get_displacement(col, pixel_y, qtime);
 
     // Calculate the sampling UV
     vec2 tex_uv = vec2((16.5 + float(col) + displacement) / 48.0, frame_v + local_v);
@@ -175,29 +169,20 @@ void fragment() {
 
     // Apply screen refraction
     if (COLOR.a > 0.0 && !is_outline) {
-        float wave = sin(TIME * refract_timescale + floor(pixel_y) * refract_frequency);
-        float pixel_offset = round(wave * refract_strength * COLOR.a); // Include a factor of alpha to fade smoothly at the falloff
+        float wave = sin(TIME * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
+        float pixel_offset = float(wave * refract_strength * COLOR.a); // Include a factor of alpha to fade smoothly at the falloff
 
         // Include the displacement in the refraction offset
         pixel_offset += get_displacement(col, pixel_y, qtime);
+        pixel_offset = round(pixel_offset); // Quantize the refraction to whole pixels to reduce distortion
 
         float pixel_size = 1.0 / float(SCREEN_SIZE_PIXELS.x);
-        vec2 refract_uv = SCREEN_UV + vec2(pixel_offset * pixel_size, 0.0);
+        vec2 snapped_screen_uv = (floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) + 0.5) / vec2(SCREEN_SIZE_PIXELS);
+        vec2 refract_uv = snapped_screen_uv + vec2(pixel_offset * pixel_size, 0.0);
         vec4 refract_color = texture(screen_tex, refract_uv);
 
         // Blend in the refracted color
-        // COLOR = blend(BLEND_OVERLAY, refract_color, COLOR, COLOR.a);
         COLOR = blend(BLEND_SCREEN, refract_color, COLOR, COLOR.a);
         COLOR.a = 1.0; // We render the refracted background, so don't allow the original background to show through
     }
-
-    // // Apply the highlight noise effect on top of the base color
-    // if (highlight_intensity > 0.0) {
-    //     vec2 pixel_uv = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) / vec2(SCREEN_SIZE_PIXELS);
-    //     vec3 noise_uv = vec3(pixel_uv * highlight_noise_scale, TIME * highlight_timescale);
-    //     float highlight_noise_raw = snoise(noise_uv);
-    //     float highlight_noise = pow(highlight_noise_raw, 2.0);
-    //     // COLOR.a = highlight_noise;
-    //     COLOR = blend(BLEND_HARD_LIGHT, COLOR, vec4(highlight_color, COLOR.a), highlight_noise * highlight_intensity);
-    // }
 }
