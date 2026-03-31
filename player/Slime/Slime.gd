@@ -23,6 +23,8 @@ enum Type {
 	UNSET = 0,
 	GREEN_SLIME = 1,
 	ICE_SLIME = 2,
+	TAR_SLIME = 3,
+	ENERGIZED_SLIME = 4
 }
 # What type of slime is this slime?
 var slime_type: Type

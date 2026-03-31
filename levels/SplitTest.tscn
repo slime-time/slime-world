@@ -1,7 +1,53 @@
 [gd_scene format=3 uid="uid://2rc1lutvx61c"]
 
 [ext_resource type="Shape2D" uid="uid://c7o1oay48w04l" path="res://player/Slime/SplitHitboxes/Slime-Split-8.tres" id="1_u6mkf"]
-[ext_resource type="PackedScene" uid="uid://2hfdmccufaiv" path="res://player/Slime/GreenSlime/GreenSlime.tscn" id="2_1lhkm"]
+[ext_resource type="Script" uid="uid://drxkpiyewqrnl" path="res://player/Slime/GreenSlime/GreenSlime.gd" id="2_tc0hi"]
+[ext_resource type="Shape2D" uid="uid://d2llr8wkf7hts" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-4/GreenSlime-Base-4.tres" id="3_jpdmr"]
+[ext_resource type="Shape2D" uid="uid://h07ln6y7mr2w" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-4/GreenSlime-Body-4.tres" id="4_qj0df"]
+[ext_resource type="Texture2D" uid="uid://dnk8wtom04aol" path="res://assets/slime/slime-8.png" id="5_ihu5s"]
+[ext_resource type="PackedScene" uid="uid://ck71hvloai78m" path="res://player/Slime/TransformConfirmers/MergeConfirm.tscn" id="6_i7jb6"]
+[ext_resource type="PackedScene" uid="uid://6g8tm78kme6l" path="res://player/Slime/TransformConfirmers/SplitConfirm.tscn" id="7_10nyt"]
+[ext_resource type="Shape2D" uid="uid://c0a4xjya8dw6g" path="res://player/Penny/Hitboxes/PennyHitbox.tres" id="8_qln0b"]
+[ext_resource type="Shape2D" uid="uid://dn3wb4tshmdya" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Base-8.tres" id="9_qh7q8"]
+[ext_resource type="Shape2D" uid="uid://c1grtdr31u6qe" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Body-8.tres" id="10_bvjn2"]
+
+[sub_resource type="Animation" id="Animation_ui4vm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_vablb"]
+resource_name = "idle"
+length = 0.9
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2wi0r"]
+_data = {
+&"RESET": SubResource("Animation_ui4vm"),
+&"idle": SubResource("Animation_vablb")
+}
 
 [node name="SplitTEst" type="Node2D" unique_id=1341861895]
 
@@ -11,8 +57,75 @@
 rotation = 1.5707964
 shape = ExtResource("1_u6mkf")
 
-[node name="GreenSlime2" parent="." unique_id=1631753294 instance=ExtResource("2_1lhkm")]
+[node name="GreenSlime2" type="CharacterBody2D" parent="." unique_id=1631753294]
 position = Vector2(-8, 0)
+platform_floor_layers = 2
+script = ExtResource("2_tc0hi")
 
-[node name="GreenSlime" parent="." unique_id=980297046 instance=ExtResource("2_1lhkm")]
+[node name="SlimeBase" type="CollisionShape2D" parent="GreenSlime2" unique_id=2046034733]
+position = Vector2(0, 7.5)
+shape = ExtResource("3_jpdmr")
+
+[node name="SlimeBody" type="CollisionShape2D" parent="GreenSlime2" unique_id=32116123]
+rotation = 1.5707964
+shape = ExtResource("4_qj0df")
+
+[node name="Sprite2D" type="Sprite2D" parent="GreenSlime2" unique_id=509701531]
+z_index = -2
+position = Vector2(0, -1)
+texture = ExtResource("5_ihu5s")
+offset = Vector2(0, 0.5)
+hframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GreenSlime2" unique_id=1811255284]
+libraries/ = SubResource("AnimationLibrary_2wi0r")
+
+[node name="MergeConfirm" parent="GreenSlime2" unique_id=488681826 instance=ExtResource("6_i7jb6")]
+visible = false
+
+[node name="SplitConfirm" parent="GreenSlime2" unique_id=770495669 instance=ExtResource("7_10nyt")]
+visible = false
+
+[node name="TransformChecker" type="Area2D" parent="GreenSlime2" unique_id=1476268175]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreenSlime2/TransformChecker" unique_id=90655620]
+shape = ExtResource("8_qln0b")
+
+[node name="GreenSlime" type="CharacterBody2D" parent="." unique_id=980297046]
 position = Vector2(8, 0)
+platform_floor_layers = 2
+script = ExtResource("2_tc0hi")
+
+[node name="SlimeBase" type="CollisionShape2D" parent="GreenSlime" unique_id=1434598265]
+position = Vector2(0, 7.5)
+shape = ExtResource("9_qh7q8")
+
+[node name="SlimeBody" type="CollisionShape2D" parent="GreenSlime" unique_id=1510519870]
+rotation = 1.5707964
+shape = ExtResource("10_bvjn2")
+
+[node name="Sprite2D" type="Sprite2D" parent="GreenSlime" unique_id=639435803]
+z_index = -2
+position = Vector2(0, -1)
+texture = ExtResource("5_ihu5s")
+offset = Vector2(0, 0.5)
+hframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GreenSlime" unique_id=9823944]
+libraries/ = SubResource("AnimationLibrary_2wi0r")
+
+[node name="MergeConfirm" parent="GreenSlime" unique_id=2093812650 instance=ExtResource("6_i7jb6")]
+visible = false
+
+[node name="SplitConfirm" parent="GreenSlime" unique_id=1397668300 instance=ExtResource("7_10nyt")]
+visible = false
+
+[node name="TransformChecker" type="Area2D" parent="GreenSlime" unique_id=1244563367]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GreenSlime/TransformChecker" unique_id=1853468330]
+shape = ExtResource("8_qln0b")
+
+[editable path="GreenSlime2/MergeConfirm"]
+[editable path="GreenSlime/MergeConfirm"]
