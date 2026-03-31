@@ -89,13 +89,13 @@ vec2 random_point(vec2 uv) {
 }
 
 // Returns a vector with RGB values unique to our voronoi cell and A being the distance from a boundary
-vec4 voronoi(vec2 grid_extent, vec2 uv) {
+vec4 sample_voronoi(vec2 grid_extent, vec2 uv) {
     // UV coordinates of the grid cell we're in
     vec2 cell_uv = floor(vec2(uv.x * grid_extent.x, uv.y * grid_extent.y));
     vec2 cell_remainder_uv = fract(vec2(uv.x * grid_extent.x, uv.y * grid_extent.y));
 
     float min_dist = 1.0, second_min_dist = 1.0;
-    vec2 min_point = vec2(-1.0);
+    vec2 min_point = vec2(0.0);
 
     // Check the neighborhood of cells' points for the closest one
     vec2 neighbor_cell_uv = vec2(-1.0);
