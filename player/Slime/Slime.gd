@@ -64,13 +64,13 @@ func spikeHit():
 		die()
 
 # Turn into two slimes
-func split():
+func split(child_slime_type: Slime.Type = slime_type):
 	var split_blockers = split_confirm.get_overlapping_bodies()
 	if(len(split_blockers) == 1 and split_blockers[0] == self):
 		var child_size = floor(size / 2)
 		size = ceil(size / 2)
 		position.x -= 8
-		has_split.emit(position + Vector2(16, 0), velocity, child_size, slime_type)
+		has_split.emit(position + Vector2(16, 0), velocity, child_size, child_slime_type)
 		getMovementAbility()
 		updateHitbox()
 		updateSprite()
