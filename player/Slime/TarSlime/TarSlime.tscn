@@ -46,7 +46,10 @@ _data = {
 &"idle": SubResource("Animation_vablb")
 }
 
-[node name="GreenSlime" type="CharacterBody2D" unique_id=1631753294]
+[node name="TarSlime" type="CharacterBody2D" unique_id=1631753294]
+floor_stop_on_slope = false
+floor_constant_speed = true
+floor_max_angle = 0.2617994
 platform_floor_layers = 2
 script = ExtResource("1_p6pge")
 
@@ -60,9 +63,7 @@ shape = ExtResource("3_li6jj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=509701531]
 z_index = -2
-position = Vector2(0, -1)
 texture = ExtResource("4_p6pge")
-offset = Vector2(0, 0.5)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1811255284]
 libraries/ = SubResource("AnimationLibrary_2wi0r")

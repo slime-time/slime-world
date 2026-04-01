@@ -69,10 +69,13 @@ hframes = 4
 libraries/ = SubResource("AnimationLibrary_2wi0r")
 
 [node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_po2r2")]
+visible = false
 
 [node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_po2r2")]
+visible = false
 
 [node name="TransformChecker" type="Area2D" parent="." unique_id=1476268175]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TransformChecker" unique_id=90655620]
 shape = ExtResource("7_05kq7")

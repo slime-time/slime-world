@@ -1,0 +1,84 @@
+[gd_scene format=4 uid="uid://cp6dyfkge0v6k"]
+
+[ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_m2w1q"]
+[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_yfubr"]
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="3_x1wqx"]
+[ext_resource type="PackedScene" uid="uid://cotcgyguj35sh" path="res://components/Spike/Spike.tscn" id="3_yfubr"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="4_231kk"]
+[ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="5_nqp0n"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
+texture = ExtResource("2_yfubr")
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+
+[sub_resource type="TileSet" id="TileSet_qehkn"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_1mo47")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
+shader = ExtResource("3_x1wqx")
+shader_parameter/darkness = 0.730000034675
+shader_parameter/edge_softness = 3.30200015358512
+
+[node name="Node2D" type="Node2D" unique_id=730916531]
+
+[node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_m2w1q")]
+position = Vector2(253, 94)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
+texture_filter = 1
+position = Vector2(250, 150)
+tile_map_data = PackedByteArray("AAD9/wEAAAABAAAAAAD+/wEAAAABAAAAAAD//wEAAAABAAAAAAAAAAEAAAABAAAAAAABAAEAAAABAAAAAAACAAEAAAABAAAAAAADAAEAAAABAAAAAAAEAAEAAAACAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAIAAAAEAAIAAAACAAIAAAADAAIAAAABAAIAAAACAAIAAAABAAIAAAAAAAIAAAABAAIAAAABAAIAAAABAAIAAAD//wIAAAABAAIAAAD+/wIAAAABAAIAAAD9/wIAAAABAAIAAAADAAQAAAABAAMAAAACAAQAAAABAAMAAAABAAQAAAABAAMAAAAAAAQAAAABAAMAAAD//wQAAAABAAMAAAD+/wQAAAABAAMAAAD9/wQAAAABAAMAAAD8/wQAAAAAAAMAAAAEAAQAAAACAAMAAAAGAAQAAAADAAMAAAAGAAIAAAADAAIAAAAGAAEAAAADAAAAAAD+/wAAAAADAAEAAAD+////AAADAAEAAAD+//7/AAADAAAAAAA=")
+tile_set = SubResource("TileSet_qehkn")
+
+[node name="Spike" parent="TileMapLayer" unique_id=598144181 instance=ExtResource("3_yfubr")]
+position = Vector2(42, 13)
+rotation = 3.1415927
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=1386845488]
+layer = -100
+
+[node name="BackgroundTexture" type="TextureRect" parent="Background" unique_id=1173638536]
+material = SubResource("ShaderMaterial_qehkn")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_231kk")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("5_nqp0n")]
+position = Vector2(197, 157)

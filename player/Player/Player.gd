@@ -11,6 +11,7 @@ var penny;
 var slime_templates: Dictionary[Slime.Type, Resource] = {
 	Slime.Type.GREEN_SLIME: preload("res://player/Slime/GreenSlime/GreenSlime.tscn"),
 	Slime.Type.ICE_SLIME: preload("res://player/Slime/IceSlime/IceSlime.tscn"),
+	Slime.Type.TAR_SLIME: preload("res://player/Slime/TarSlime/TarSlime.tscn")
 }
 
 # Reference to all slimes that exist
