@@ -262,7 +262,7 @@ void fragment() {
         pixel_offset = round(pixel_offset);
 
         float pixel_size = 1.0 / float(SCREEN_SIZE_PIXELS.x);
-        vec2 snapped_screen_uv = (floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) + 0.5) / vec2(SCREEN_SIZE_PIXELS);
+        vec2 snapped_screen_uv = (floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) + vec2(0.0, 1.0)) / vec2(SCREEN_SIZE_PIXELS);
         vec2 refract_uv = snapped_screen_uv + pixel_offset * pixel_size;
         vec4 refract_color = texture(screen_tex, refract_uv);
 
