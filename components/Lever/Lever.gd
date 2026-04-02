@@ -31,7 +31,7 @@ func _ready() -> void:
 		flipOff.call_deferred()
 
 func onBodyEntered(body: Node) -> void:
-	if body is PlayerMovement:
+	if body is PlayerMovement and body.canInteract():
 		if body is Slime and !can_slimes_interact:
 			return
 
@@ -43,7 +43,7 @@ func onBodyEntered(body: Node) -> void:
 		active_sprite.visible = true
 
 func onBodyExited(_body: Node) -> void:
-	if _body is PlayerMovement:
+	if _body is PlayerMovement and _body.canInteract():
 		var player = _body as PlayerMovement
 		player.clearInteractionTarget(self)
 		_players_in_area.erase(player)
