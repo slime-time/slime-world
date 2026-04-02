@@ -100,6 +100,19 @@ func _extendFlows(delta: float) -> void:
 		_flow_distances[i] = min(int(_flow_distances_f[i]), flow_extent)
 
 
+# Collect all (not necessarily blocking) hits within the flow area for a ray query
+func _getFluidRayHits(space_state: PhysicsDirectSpaceState2D) -> Array[Object]:
+	var hits: Dictionary[Object, Object] = {}	# Fake set for colliders we hit
+	for i in range(16):
+		var hit = space_state.intersect_ray(_ray_queries[i])
+		if not hit.is_empty():
+			var hit_dist_f = hit.position.y - _ref_position.y
+			if hit_dist_f >= _flow_start_f and hit_dist_f < _flow_distances_f[i]:
+				# Within the flow area; put it in our collider callback set
+				hits[hit.collider] = null
+	return hits.keys()
+
+
 func _physics_process(delta: float) -> void:
 	# Extend the flows downward towards their current targets
 	_extendFlows(delta)
@@ -108,9 +121,12 @@ func _physics_process(delta: float) -> void:
 		_flow_start_f = move_toward(_flow_start_f, flow_extent, flow_retract_speed * delta)
 		_flow_start = min(int(_flow_start_f), flow_extent)
 
-		# We don't bother raycasting when flow is disabled
-		# This means as soon as flow is disabled, intersections won't get the fluid hit callback
-		# This is probably fine and the alternative would be hard
+		# When flow is disabled, we still query non-blocking hits to trigger callbacks for transformation
+		var space_state = get_world_2d().direct_space_state
+		var hit_colliders = _getFluidRayHits(space_state)
+		for collider in hit_colliders:
+			if collider.has_method("onFluidHit"):
+				collider.onFluidHit(flow_type)
 
 		# Make sure shader parameters are updated wiht extended start and flow distances
 		_updateShaderParams()
@@ -118,17 +134,10 @@ func _physics_process(delta: float) -> void:
 
 	# Raycast downwards at each column to find the water flow
 	var space_state = get_world_2d().direct_space_state
-	var hit_colliders: Dictionary[Object, Object] = {}	# Fake set for colliders we hit
-	for i in range(16):
-		# First, just look for non-blocking hits to find colliders to trigger the callback on
-		var hit = space_state.intersect_ray(_ray_queries[i])
-		if not hit.is_empty():
-			var hit_dist_f = hit.position.y - _ref_position.y
-			if hit_dist_f >= 0 and hit_dist_f < _flow_distances_f[i]:
-				# Within the flow area; put it in our collider callback set
-				hit_colliders[hit.collider] = null
+	var hit_colliders = _getFluidRayHits(space_state)	# Collect non-blocking hits
 
-		# Now handle blocking hits
+	# Now handle blocking hits
+	for i in range(16):
 		var hit_blocking = space_state.intersect_ray(_ray_queries_blocking[i])
 		if hit_blocking.is_empty():
 			# If we intersect nothing, the distance target for this column is the full flow extent
@@ -139,9 +148,6 @@ func _physics_process(delta: float) -> void:
 		var hit_dist_f = hit_blocking.position.y - _ref_position.y
 		var new_target = min(flow_extent, int(floor(hit_dist_f)) + flow_offset)
 		if hit_dist_f >= 0 and hit_dist_f < _flow_distances_f[i]:
-			# Within the flow area; put it in our collider callback set
-			hit_colliders[hit_blocking.collider] = null
-
 			# Update the distance target for this column based on the hit_blocking
 			_flow_distance_targets[i] = new_target
 			_flow_distances_f[i] = min(_flow_distances_f[i], float(new_target))
@@ -157,7 +163,7 @@ func _physics_process(delta: float) -> void:
 	_updateShaderParams()
 
 	# Trigger callbacks on colliders we hit within the flow area
-	for collider in hit_colliders.keys():
+	for collider in hit_colliders:
 		if collider.has_method("onFluidHit"):
 			collider.onFluidHit(flow_type)
 

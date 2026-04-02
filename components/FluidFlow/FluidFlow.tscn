@@ -6,6 +6,7 @@
 
 [node name="WaterFlow" type="Node2D" unique_id=21526138]
 script = ExtResource("1_vophg")
+flow_retract_speed = 256
 
 [node name="WideVent" type="Sprite2D" parent="." unique_id=1639393941]
 z_index = 2
