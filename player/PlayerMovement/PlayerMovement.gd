@@ -26,6 +26,11 @@ var interaction_target: InteractionTarget = null
 
 var coyote_timer: Timer = null
 
+# Whether this character can currently interact with things (e.g. always false for ice slime)
+# If this changes at some point, the child script must alert any interaction targets in the area
+func canInteract() -> bool:
+	return true
+
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
 
