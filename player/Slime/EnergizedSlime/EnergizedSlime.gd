@@ -9,12 +9,11 @@ func _ready():
 	health = config.get_value("slime_health", "energized_slime")
 
 # Energized slime cannot merge, but splits whenever the merge button is pressed
-func becomePenny():
-	var old_size = size
-	split(Slime.Type.GREEN_SLIME)
-	# Only change the type of this slime if the splitting was successful
-	if(size < old_size):
-		slime_type_changed.emit(self, Slime.Type.GREEN_SLIME)
+func _physics_process(delta: float):
+	if(Input.is_action_just_pressed("split")):
+		split()
+	else:
+		super(delta)
 
 # Get the movement ability of this specific slime (including size in calculation)
 func getMovementAbility():

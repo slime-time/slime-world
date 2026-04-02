@@ -6,15 +6,19 @@ var climb_max_speed
 	
 func move(direction: float, delta: float):
 	if(is_on_wall()):
-		# Tar slime moves orthogonally to the wall normal
-		var floor_direction = get_wall_normal().orthogonal()
-		# If the magnitude of this vector is exceeded, then we consider this 
-		var target_velocity = velocity - floor_direction * direction * run_acceleration * delta
-		velocity = target_velocity
-		velocity.y = max(velocity.y, climb_max_speed)
-		velocity.y = min(velocity.y, terminal_velocity)
-		velocity.x = max(velocity.x, -run_max_velocity)
-		velocity.x = min(velocity.x, run_max_velocity)
+		var wall_direction = get_wall_normal()
+		if(wall_direction.x * direction < 0):
+			# Tar slime moves orthogonally to the wall normal
+			var floor_direction = get_wall_normal().orthogonal()
+			# If the magnitude of this vector is exceeded, then we consider this 
+			var target_velocity = velocity - floor_direction * direction * run_acceleration * delta
+			velocity = target_velocity
+			velocity.y = max(velocity.y, climb_max_speed)
+			velocity.y = min(velocity.y, terminal_velocity)
+			velocity.x = max(velocity.x, -run_max_velocity)
+			velocity.x = min(velocity.x, run_max_velocity)
+		else:
+			super(direction, delta)
 	else:
 		super(direction, delta)
 		
