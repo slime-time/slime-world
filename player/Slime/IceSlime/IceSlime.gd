@@ -21,3 +21,7 @@ func getMovementAbility():
 func canInteract() -> bool:
 	# Ice slime cannot interact with things
 	return false
+
+func isElastic() -> bool:
+	# Ice slime has elastic collisions with walls and other static bodies
+	return true
