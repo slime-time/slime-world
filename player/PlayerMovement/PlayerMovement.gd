@@ -189,7 +189,7 @@ func _physics_process(delta: float) -> void:
 
 				# Bounce away from the rigidbody if we are an elastic collider
 				if isElastic() and abs(normal.x) > 0.1:
-					velocity.x = pre_slide_velocity.bounce(-normal).x
+					velocity.x = -pre_slide_velocity.x
 
 			elif isElastic() and (collider is StaticBody2D or collider is TileMapLayer) and abs(normal.x) > 0.1:
-				velocity.x = pre_slide_velocity.bounce(-normal).x
+				velocity.x = -pre_slide_velocity.x
