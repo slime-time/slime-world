@@ -249,9 +249,11 @@ void fragment() {
     // Compute the voronoi effect for ice shards
     vec4 voronoi = vec4(0.0);
     if (do_voronoi && !is_outline) {
-        // vec2 perturb = sin(SCREEN_UV * voronoi_perturb_spread + qtime * voronoi_perturb_timescale) * voronoi_perturb_radius;
-        vec2 perturb = sin(voronoi_perturb_frequency * qtime + SCREEN_UV * voronoi_perturb_spread) * voronoi_perturb_amplitude;
-        vec2 pixel_uv = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS) - vec2(0.0, qtime * voronoi_scroll_speed) + perturb) / vec2(SCREEN_SIZE_PIXELS);
+        vec2 pixel_screen_uv = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) / vec2(SCREEN_SIZE_PIXELS);
+        vec2 perturb = sin(voronoi_perturb_frequency * qtime + pixel_screen_uv * voronoi_perturb_spread) * voronoi_perturb_amplitude;
+
+        vec2 pixel_uv_offset = floor(perturb - vec2(0.0, qtime * voronoi_scroll_speed)) / vec2(SCREEN_SIZE_PIXELS);
+        vec2 pixel_uv = pixel_screen_uv + pixel_uv_offset;
         vec4 voronoi_raw = sample_voronoi(vec2(SCREEN_SIZE_PIXELS) / voronoi_cell_size, pixel_uv);
 
         // Apply biasing to the RGB channels
@@ -300,6 +302,4 @@ void fragment() {
         COLOR = blend(BLEND_SCREEN, refract_color, COLOR, COLOR.a);
         COLOR.a = 1.0; // We render the refracted background, so don't allow the original background to show through
     }
-
-    // COLOR = voronoi;
 }
