@@ -39,6 +39,18 @@ uniform int cascade_blend : hint_blend_mode = 1;                      // Blend m
 uniform vec3 cascade_color : source_color = vec3(1.0);                // Color to blend in for the cascade effect
 uniform float cascade_mix = 0.5;                                      // Strength of the cascade effect
 
+// Vertical streak settings
+group_uniforms Streaks;
+uniform vec2 streak_noise_scale = vec2(0.1, 0.5);                     // Scale of the noise for vertical streaks
+uniform float streak_noise_timescale = 0.5;                           // How quickly to morph the noise for vertical streaks
+uniform float streak_scroll_speed = 16.0;                             // How fast the vertical streaks should move downward
+uniform int streak_blend : hint_blend_mode = 1;                       // Blend mode to use for vertical streaks
+uniform vec3 streak_color : source_color = vec3(1.0);                 // Color to blend in for vertical streaks
+uniform float streak_bias_low = 0.3;                                  // Where to start fading streaks from 0 to 1
+uniform float streak_bias_high = 0.7;                                 // Where to stop fading streaks from 0 to 1
+uniform float streak_steps = 3.0;                                     // Number of steps to posterize the streak effect into
+uniform float streak_intensity = 0.5;                                 // Strength of the vertical streak effect
+
 // Refraction settings
 group_uniforms Refraction;
 uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen texture provided by Godot
@@ -130,6 +142,7 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
 
     // Compute displacement for the current pixel
     float displacement = get_displacement(col, pixel_y, qtime);
+    float displacement_2 = get_displacement(col, 1.2 * pixel_y + float(col), qtime);
 
     // Calculate the sampling UV
     vec2 tex_uv = vec2((16.5 + float(col) + displacement) / 48.0, frame_v + local_v);
@@ -153,6 +166,14 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
         float parabola_dist = clamp(floor(pixel_y) - parabola_y + parabola_noise, 0, cascade_distance + cascade_noise_strength);
         float cascade_factor = round((1.0 - parabola_dist / cascade_distance) * cascade_steps) / cascade_steps * cascade_mix;
         tex_color.rgb = blend(cascade_blend, tex_color.rgb, cascade_color, cascade_factor);
+    }
+
+    // Mix in streaks
+    if (streak_intensity > 0.0) {
+        vec2 streak_noise_uv = vec2(float(col) + round(displacement_2 / 2.0), floor(pixel_y) - qtime * streak_scroll_speed) * streak_noise_scale;
+        float streak_noise = smoothstep(streak_bias_low, streak_bias_high, snoise(vec3(streak_noise_uv, streak_noise_timescale * qtime)));
+        float streak_factor = round(streak_noise * streak_steps) / streak_steps;
+        tex_color = blend(streak_blend, tex_color, vec4(streak_color, tex_color.a), streak_factor * streak_intensity);
     }
 
     // Handle fade out at the bottom
