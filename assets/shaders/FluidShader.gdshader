@@ -183,11 +183,20 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
     }
 
     // Apply foam effect near the bottom of the flow
-    if (abs(pixel_y - dist) <= foam_distance) {
+    float closest_foam_dist = abs(pixel_y - dist);
+    for (int dc = -1; dc <= 1; dc++) {
+        float neighbor_dist = float(get_flow_distance(col + dc));
+        closest_foam_dist = min(closest_foam_dist, abs(pixel_y - neighbor_dist));
+    }
+    if (closest_foam_dist <= foam_distance) {
         vec2 pixel_uv = floor(screen_uv * vec2(SCREEN_SIZE_PIXELS)) / vec2(SCREEN_SIZE_PIXELS);
         vec3 noise_uv = vec3(pixel_uv * foam_noise_scale + vec2(0.0, qtime * foam_timescale), 0.0);
         float foam_noise_raw = snoise(noise_uv);
-        float foam_amount = min(1.0, (1.0 - pow(1.0 - foam_noise_raw, 2.0)) * pow(1.0 - floor(abs(pixel_y - dist)) / foam_distance, 1.5) * foam_intensity);
+        float foam_amount = min(1.0, (1.0 - pow(1.0 - foam_noise_raw, 2.0)) * pow(1.0 - floor(closest_foam_dist) / foam_distance, 1.5) * foam_intensity);
+        if (abs(pixel_y - dist) > foam_distance) {
+            // Rendering a neighbor's foam only, so reduce intensity
+            foam_amount *= 0.5;
+        }
 
         float foam_stepped = round(foam_amount * foam_steps) / foam_steps; // Step the foam amount to create more distinct patches
         float foam_alpha = (0.5 + (tex_color.a / 2.0)) * clamp((round(pixel_y) - round(flow_start)) / flow_falloff_bottom, 0.0, 1.0);
