@@ -83,7 +83,6 @@ func _physics_process(_delta: float) -> void:
 	_min_left_extent = 0
 	_max_right_extent = 0
 	for i in range(0, fluid_level):
-		print("Row ", i, ": left extent = ", _fluid_extents_left[i], ", right extent = ", _fluid_extents_right[i])
 		_min_left_extent = min(_min_left_extent, _fluid_extents_left[i])
 		_max_right_extent = max(_max_right_extent, _fluid_extents_right[i])
 	_fluid_rect_size = Vector2(_max_right_extent - _min_left_extent, 24)
