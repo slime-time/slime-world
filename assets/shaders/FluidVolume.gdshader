@@ -8,9 +8,8 @@ global uniform ivec2 SCREEN_SIZE_PIXELS;
 
 // Basic settings
 group_uniforms BasicSettings;
-uniform vec3 base_color: source_color = vec3(0.2, 0.4, 0.8);        // The base color of the fluid, before applying flow texture or lighting
-uniform vec3 outline_color: source_color = vec3(0.0);               // The color to use for the outline
-uniform float base_opacity = 0.8;                                   // The base opacity of the fluid, before applying flow distance falloff
+uniform vec4 base_color: source_color = vec4(0.2, 0.4, 0.8, 0.8);   // The base color of the fluid, before applying flow texture or lighting
+uniform vec4 outline_color: source_color = vec4(0.0);               // The color to use for the outline
 uniform int framerate = 12;                                         // The framerate of the fluid animation (frames per second)
 
 // Wave settings
@@ -117,6 +116,6 @@ void fragment() {
     if (pixel_coords.y > fluid_height) discard; // Empty pixel above the fluid and waves
 
     bool is_outline = pixel_coords.y >= fluid_height;
-    if (is_outline) COLOR = vec4(outline_color, base_opacity); // Outline pixel
-    else COLOR = vec4(base_color, base_opacity); // Fluid pixel
+    if (is_outline) COLOR = outline_color; // Outline pixel
+    else COLOR = base_color; // Fluid pixel
 }

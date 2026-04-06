@@ -4,13 +4,12 @@
 
 [resource]
 shader = ExtResource("1_ddu72")
-shader_parameter/base_color = Color(0.23137255, 0.34117648, 0.45882353, 1)
+shader_parameter/base_color = Color(0.23, 0.34116662, 0.46, 0.80784315)
 shader_parameter/outline_color = Color(0.16862746, 0.16862746, 0.27058825, 1)
-shader_parameter/base_opacity = 0.8
 shader_parameter/framerate = 12
 shader_parameter/wave_octave0 = Vector2(2, 0.2)
 shader_parameter/wave_octave1 = Vector2(1, 0.5)
-shader_parameter/wave_octave2 = Vector2(0, 1)
+shader_parameter/wave_octave2 = Vector2(0, 0.9)
 shader_parameter/wave_envelope = Vector2(0.3, 0.05)
 shader_parameter/wave_envelope_range = Vector2(0, 1)
 shader_parameter/wave_amplitude = 1.0

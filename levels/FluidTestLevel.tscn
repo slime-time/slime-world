@@ -91,6 +91,7 @@ tile_set = SubResource("TileSet_qehkn")
 
 [node name="FluidVolume" parent="." unique_id=1534517962 instance=ExtResource("7_hfg54")]
 position = Vector2(153, 182)
+fluid_level = 11
 
 [connection signal="flip_off" from="Lever" to="WaterFlow" method="disableFlow"]
 [connection signal="flip_on" from="Lever" to="WaterFlow" method="enableFlow"]
