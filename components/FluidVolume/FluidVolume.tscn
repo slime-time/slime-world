@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dlqrks40kpbah"]
+
+[ext_resource type="Script" uid="uid://cngktv2rxua32" path="res://components/FluidVolume/FluidVolume.gd" id="1_t8o42"]
+[ext_resource type="Material" uid="uid://ci635lgafmwsl" path="res://assets/materials/water_volume.tres" id="2_s6p6x"]
+
+[node name="FluidVolume" type="Node2D" unique_id=1534517962]
+script = ExtResource("1_t8o42")
+fluid_velocity = 8.0
+metadata/_custom_type_script = "uid://cngktv2rxua32"
+
+[node name="FluidRect" type="ColorRect" parent="." unique_id=1948601530]
+material = ExtResource("2_s6p6x")
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -24.0
+offset_right = 32.0
+grow_horizontal = 2
+grow_vertical = 0
