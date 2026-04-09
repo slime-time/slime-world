@@ -8,14 +8,14 @@ global uniform ivec2 SCREEN_SIZE_PIXELS;
 
 // Basic settings
 group_uniforms BasicSettings;
-uniform sampler2D fluid_tex : filter_nearest, repeat_enable;  // The fluid texture to sample
-uniform float base_opacity = 0.8;                             // The base opacity of the fluid, before applying flow distance falloff
-uniform int flow_extent = 256;                                // The extent of the flow texture in pixels, for calculating pixel UVs
-uniform int framerate = 12;                                    // The framerate of the fluid animation (frames per second)
-uniform int frame_count = 16;                                 // The total number of frames in the texture
-uniform float outline_threshold = 0.0;                        // Max value of max(r,g,b) to be considered outline (no refraction)
-uniform float flow_falloff_top = 8.0;     // How many pixels from the top to start fading out
-uniform float flow_falloff_bottom = 8.0;  // How many pixels from the hit point to start fading out
+uniform sampler2D fluid_tex : filter_nearest, repeat_enable;          // The fluid texture to sample
+uniform float base_opacity = 0.8;                                     // The base opacity of the fluid, before applying flow distance falloff
+uniform int flow_extent = 256;                                        // The extent of the flow texture in pixels, for calculating pixel UVs
+uniform int framerate = 12;                                           // The framerate of the fluid animation (frames per second)
+uniform int frame_count = 16;                                         // The total number of frames in the texture
+uniform float outline_threshold = 0.0;                                // Max value of max(r,g,b) to be considered outline (no refraction)
+uniform float flow_falloff_top = 8.0;                                 // How many pixels from the top to start fading out
+uniform float flow_falloff_bottom = 8.0;                              // How many pixels from the hit point to start fading out
 
 // Displacement settings
 group_uniforms HorizontalDisplacement;
@@ -24,26 +24,74 @@ group_uniforms HorizontalDisplacement;
 uniform vec2 displacement_octave0 = vec2(0.3, 0.1);
 uniform vec2 displacement_octave1 = vec2(0.1, 0.3);
 uniform vec2 displacement_octave2 = vec2(0.05, 0.7);
-uniform float displacement_timescale = 32.0;          // How fast the displacement wave should move downward
-uniform float displacement_column_offset = 0.2;       // How much to offset the displacement wave by each column
+uniform float displacement_timescale = 32.0;                          // How fast the displacement wave should move downward
+uniform float displacement_column_offset = 0.2;                       // How much to offset the displacement wave by each column
+
+// Cascade settings
+group_uniforms Cascades;
+uniform vec3 cascade_coefficients = vec3(0.5);                        // Coefficients of {ax^4 + bx^2 + c} for the cascade parabola
+uniform float cascade_noise_timescale = 0.5;                          // How quickly to morph the noise applied to cascade brightness
+uniform float cascade_noise_scale = 0.1;                              // Scale of the noise applied to cascade brightness
+uniform float cascade_noise_strength = 0.5;                           // Strength of the noise applied to cascade brightness
+uniform float cascade_steps = 3.0;                                    // Number of steps to posterize the cascade effect into
+uniform float cascade_distance = 16.0;                                // How many pixels the cascade effect should extend downward from the parabola
+uniform int cascade_blend : hint_blend_mode = 1;                      // Blend mode to use for the cascade effect
+uniform vec3 cascade_color : source_color = vec3(1.0);                // Color to blend in for the cascade effect
+uniform float cascade_mix = 0.5;                                      // Strength of the cascade effect
+
+// Vertical streak settings
+group_uniforms Streaks;
+uniform vec2 streak_noise_scale = vec2(0.1, 0.5);                     // Scale of the noise for vertical streaks
+uniform float streak_noise_timescale = 0.5;                           // How quickly to morph the noise for vertical streaks
+uniform float streak_scroll_speed = 16.0;                             // How fast the vertical streaks should move downward
+uniform int streak_blend : hint_blend_mode = 1;                       // Blend mode to use for vertical streaks
+uniform vec3 streak_color : source_color = vec3(1.0);                 // Color to blend in for vertical streaks
+uniform float streak_bias_low = 0.3;                                  // Where to start fading streaks from 0 to 1
+uniform float streak_bias_high = 0.7;                                 // Where to stop fading streaks from 0 to 1
+uniform float streak_steps = 3.0;                                     // Number of steps to posterize the streak effect into
+uniform float streak_intensity = 0.5;                                 // Strength of the vertical streak effect
 
 // Refraction settings
 group_uniforms Refraction;
 uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen texture provided by Godot
 uniform float refract_strength = 0.8;                                 // Strength of the refraction effect (offset in pixels)
 uniform float refract_frequency = 0.5;                                // Frequency of the vertical refraction waves
-uniform float refract_timescale = 2.0;                               // Timescale for the refraction animation
+uniform float refract_timescale = 2.0;                                // Timescale for the refraction animation
 
 // Foam settings
 group_uniforms Foam;
-uniform vec3 foam_color = vec3(1.0, 1.0, 1.0);  // The color to use for the foam effect
-uniform float foam_noise_scale = 120.0;         // Noise sampling scale for foam
-uniform float foam_timescale = 5.0;             // Foam noise timescale
-uniform float foam_distance = 6.0;              // How many pixels (Δy) around the flow end are affected by foam
-uniform float foam_steps = 4.0;                 // Minimum noise value to show foam
-uniform float foam_intensity = 2.5;             // Intensity of the foam effect, from 0 to 1
+uniform vec3 foam_color : source_color = vec3(1.0, 1.0, 1.0);         // The color to use for the foam effect
+uniform float foam_noise_scale = 120.0;                               // Noise sampling scale for foam
+uniform float foam_timescale = 5.0;                                   // Foam noise timescale
+uniform float foam_distance = 6.0;                                    // How many pixels (Δy) around the flow end are affected by foam
+uniform float foam_steps = 4.0;                                       // Minimum noise value to show foam
+uniform float foam_intensity = 2.5;                                   // Intensity of the foam effect, from 0 to 1
 
-instance uniform float flow_start = 0.0;            // How far down flow starts, in pixels from the top of the texture
+// Voronoi (ice shard) settings
+group_uniforms Voronoi;
+uniform bool do_voronoi = false;                                      // Whether to apply the voronoi effect at all, for performance reasons
+uniform vec2 voronoi_cell_size = vec2(8.0, 8.0);                      // Size of a voronoi grid cell in pixels
+uniform float voronoi_scroll_speed = 48.0;                            // How fast the voronoi pattern should move downward
+uniform vec2 voronoi_refraction_strength = vec2(1.5);                 // Strength of the effect voronoi cell values have on refraction offset in each dimension
+uniform float voronoi_value_bias_low = 0.5;                           // Where to start fading values from 0 to 1
+uniform float voronoi_value_bias_high = 0.5;                          // Where to stop fading values from 0 to 1
+uniform vec2 voronoi_perturb_amplitude = vec2(1.0, 1.0);              // Amplitude of the sine wave perturbation on voronoi sampling UVs
+uniform vec2 voronoi_perturb_frequency = vec2(1.0, 1.0);              // Frequency of the perturbation in each dimension
+uniform float voronoi_perturb_spread = 20.0;                          // How much pixel coordinates factor into the phase offset
+uniform int voronoi_color_blend : hint_blend_mode = 1;                // Blending mode to use for mixing voronoi cell colors into the fluid color
+uniform vec3 voronoi_color_fac = vec3(1.0, 1.0, 1.0);                 // Per-channel factors to premultiply the voronoi cell color
+uniform float voronoi_color_mix = 0.5;                                // Strength of the effect voronoi cell values have on color, for each channel
+uniform int voronoi_lightness_blend: hint_blend_mode = 2;             // Blend mode for lightness
+uniform float voronoi_lightness_strength = 0.5;                       // Strength of the effect avg(r,g,b) of the voronoi cell color has on lightness of the final color
+uniform int voronoi_border_blend: hint_blend_mode = 1;                // Blend mode for voronoi borders
+uniform vec3 voronoi_border_color: source_color = vec3(1.0);          // Color to blend in for voronoi cell boundaries
+uniform float voronoi_border_vanish = 1.0;                            // Exponent for the factor of average voronoi cell value on border effect strength
+uniform float voronoi_border_spread = 1.0;                            // How far away from a border to draw
+uniform float voronoi_border_exponent = 2.0;                          // Exponent for the voronoi border spread effect
+uniform float voronoi_border_steps = 3.0;                             // Number of steps to quantize the voronoi border effect into
+uniform float voronoi_border_mix = 0.5;                               // Strength of the voronoi border effect
+
+instance uniform float flow_start = 0.0;                              // How far down flow starts, in pixels from the top of the texture
 
 // Instance uniforms don't support arrays, so we split flow distances into int vectors
 // These are the distances each flow column extends down to
@@ -94,6 +142,7 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
 
     // Compute displacement for the current pixel
     float displacement = get_displacement(col, pixel_y, qtime);
+    float displacement_2 = get_displacement(col, 1.2 * pixel_y + float(col), qtime);
 
     // Calculate the sampling UV
     vec2 tex_uv = vec2((16.5 + float(col) + displacement) / 48.0, frame_v + local_v);
@@ -106,6 +155,27 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
         tex_color.a *= round(pixel_y - flow_start) / min(flow_start, flow_falloff_top);
     }
 
+    // Mix in the cascade effect
+    if (cascade_mix > 0.0) {
+        float pixel_x = 2.0 * (floor(16.5 + float(col)) / 48.0 - 0.5);
+        float parabola_y = dot(cascade_coefficients, vec3(pow(pixel_x, 4.0), pixel_x * pixel_x, 1.0)) * float(flow_extent);
+
+        vec3 parabola_noise_uv = vec3(pixel_x, floor(pixel_y), qtime * cascade_noise_timescale) * cascade_noise_scale;
+        float parabola_noise = snoise(parabola_noise_uv) * cascade_noise_strength;
+
+        float parabola_dist = clamp(floor(pixel_y) - parabola_y + parabola_noise, 0, cascade_distance + cascade_noise_strength);
+        float cascade_factor = round((1.0 - parabola_dist / cascade_distance) * cascade_steps) / cascade_steps * cascade_mix;
+        tex_color.rgb = blend(cascade_blend, tex_color.rgb, cascade_color, cascade_factor);
+    }
+
+    // Mix in streaks
+    if (streak_intensity > 0.0) {
+        vec2 streak_noise_uv = vec2(float(col) + round(displacement_2 / 2.0), floor(pixel_y) - qtime * streak_scroll_speed) * streak_noise_scale;
+        float streak_noise = smoothstep(streak_bias_low, streak_bias_high, snoise(vec3(streak_noise_uv, streak_noise_timescale * qtime)));
+        float streak_factor = round(streak_noise * streak_steps) / streak_steps;
+        tex_color = blend(streak_blend, tex_color, vec4(streak_color, tex_color.a), streak_factor * streak_intensity);
+    }
+
     // Handle fade out at the bottom
     // We count dist as the start of falloff and dist+falloff as the end
     if (pixel_y >= dist) {
@@ -113,11 +183,20 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
     }
 
     // Apply foam effect near the bottom of the flow
-    if (abs(pixel_y - dist) <= foam_distance) {
+    float closest_foam_dist = abs(pixel_y - dist);
+    for (int dc = -1; dc <= 1; dc++) {
+        float neighbor_dist = float(get_flow_distance(col + dc));
+        closest_foam_dist = min(closest_foam_dist, abs(pixel_y - neighbor_dist));
+    }
+    if (closest_foam_dist <= foam_distance) {
         vec2 pixel_uv = floor(screen_uv * vec2(SCREEN_SIZE_PIXELS)) / vec2(SCREEN_SIZE_PIXELS);
         vec3 noise_uv = vec3(pixel_uv * foam_noise_scale + vec2(0.0, qtime * foam_timescale), 0.0);
         float foam_noise_raw = snoise(noise_uv);
-        float foam_amount = min(1.0, (1.0 - pow(1.0 - foam_noise_raw, 2.0)) * pow(1.0 - floor(abs(pixel_y - dist)) / foam_distance, 1.5) * foam_intensity);
+        float foam_amount = min(1.0, (1.0 - pow(1.0 - foam_noise_raw, 2.0)) * pow(1.0 - floor(closest_foam_dist) / foam_distance, 1.5) * foam_intensity);
+        if (abs(pixel_y - dist) > foam_distance) {
+            // Rendering a neighbor's foam only, so reduce intensity
+            foam_amount *= 0.5;
+        }
 
         float foam_stepped = round(foam_amount * foam_steps) / foam_steps; // Step the foam amount to create more distinct patches
         float foam_alpha = (0.5 + (tex_color.a / 2.0)) * clamp((round(pixel_y) - round(flow_start)) / flow_falloff_bottom, 0.0, 1.0);
@@ -167,18 +246,56 @@ void fragment() {
     // Determine whether we're in an outline pixel
     bool is_outline = max(COLOR.r, max(COLOR.g, COLOR.b)) <= outline_threshold;
 
+    // Compute the voronoi effect for ice shards
+    vec4 voronoi = vec4(0.0);
+    if (do_voronoi && !is_outline) {
+        vec2 pixel_screen_uv = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) / vec2(SCREEN_SIZE_PIXELS);
+        vec2 perturb = sin(voronoi_perturb_frequency * qtime + pixel_screen_uv * voronoi_perturb_spread) * voronoi_perturb_amplitude;
+
+        vec2 pixel_uv_offset = floor(perturb - vec2(0.0, qtime * voronoi_scroll_speed)) / vec2(SCREEN_SIZE_PIXELS);
+        vec2 pixel_uv = pixel_screen_uv + pixel_uv_offset;
+        vec4 voronoi_raw = sample_voronoi(vec2(SCREEN_SIZE_PIXELS) / voronoi_cell_size, pixel_uv);
+
+        // Apply biasing to the RGB channels
+        voronoi.rgb = smoothstep(vec3(voronoi_value_bias_low), vec3(voronoi_value_bias_high), voronoi_raw.rgb);
+        voronoi.a = voronoi_raw.a;
+        float magnitude = length(voronoi.rgb);
+
+        // Mix the voronoi cell value into the color and lightness
+        COLOR.rgb = blend(voronoi_color_blend, COLOR.rgb, voronoi.rgb * voronoi_color_fac, voronoi_color_mix);
+        float voronoi_lightness = magnitude;
+        COLOR.rgb = blend(voronoi_color_blend, COLOR.rgb, vec3(voronoi_lightness), voronoi_lightness_strength);
+
+        // Apply the voronoi borders
+        float border_dist = voronoi.a;
+        if (border_dist <= voronoi_border_spread) {
+            vec3 border_blend = voronoi_border_color;
+            float border_mix = pow((1.0 - border_dist / voronoi_border_spread), voronoi_border_exponent) * pow(magnitude, voronoi_border_vanish);
+            border_mix = round(border_mix * voronoi_border_steps) / voronoi_border_steps; // Step the border mix to create more distinct borders
+            COLOR.rgb = blend(voronoi_border_blend, COLOR.rgb, border_blend, border_mix * voronoi_border_mix);
+        }
+    }
+
     // Apply screen refraction
     if (COLOR.a > 0.0 && !is_outline) {
         float wave = sin(TIME * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
-        float pixel_offset = float(wave * refract_strength * COLOR.a); // Include a factor of alpha to fade smoothly at the falloff
+        vec2 pixel_offset = vec2(float(wave * refract_strength * COLOR.a), 0.0); // Include a factor of alpha to fade smoothly at the falloff
 
         // Include the displacement in the refraction offset
-        pixel_offset += get_displacement(col, pixel_y, qtime);
-        pixel_offset = round(pixel_offset); // Quantize the refraction to whole pixels to reduce distortion
+        pixel_offset.x += get_displacement(col, pixel_y, qtime);
+
+        // Include the voronoi displacement if enabled
+        if (do_voronoi) {
+            // Center the voronoi value around 0 and apply strength
+            pixel_offset += (voronoi.rg - vec2(0.5)) * voronoi_refraction_strength;
+        }
+
+        // Quantize the refraction to whole pixels
+        pixel_offset = round(pixel_offset);
 
         float pixel_size = 1.0 / float(SCREEN_SIZE_PIXELS.x);
-        vec2 snapped_screen_uv = (floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) + 0.5) / vec2(SCREEN_SIZE_PIXELS);
-        vec2 refract_uv = snapped_screen_uv + vec2(pixel_offset * pixel_size, 0.0);
+        vec2 snapped_screen_uv = (floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS)) + vec2(0.0, 1.0)) / vec2(SCREEN_SIZE_PIXELS);
+        vec2 refract_uv = snapped_screen_uv + pixel_offset * pixel_size;
         vec4 refract_color = texture(screen_tex, refract_uv);
 
         // Blend in the refracted color

@@ -4,10 +4,8 @@
 // Directly taken from https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 // ...with some adaptations (e.g. nonnegative range)
 // TODO: eventually integrate newer implementation from https://github.com/patriciogonzalezvivo/lygia/blob/main/generative/snoise.glsl
-
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
-
 float snoise(vec3 v){
   const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
   const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
@@ -76,4 +74,45 @@ float snoise(vec3 v){
   float res = 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
   // return res;
   return 0.5 * (1.0 + res); // edit: remap to [0, 1]
+}
+
+// Voronoi noise
+// adapted from https://godotshaders.com/snippet/voronoi/
+
+// Gets a random point in the cell defined by the UV coordinates
+vec2 random_point(vec2 uv) {
+    vec2 p = vec2(
+        dot(uv, vec2(127.1, 311.7)),
+        dot(uv, vec2(269.5, 183.3))
+    );
+    return fract(sin(p) * 43758.5453123);
+}
+
+// Returns a vector with RGB values unique to our voronoi cell and A being the distance from a boundary
+vec4 sample_voronoi(vec2 grid_extent, vec2 uv) {
+    // UV coordinates of the grid cell we're in
+    vec2 cell_uv = floor(vec2(uv.x * grid_extent.x, uv.y * grid_extent.y));
+    vec2 cell_remainder_uv = fract(vec2(uv.x * grid_extent.x, uv.y * grid_extent.y));
+
+    float min_dist = 1.0, second_min_dist = 1.0;
+    vec2 min_point = vec2(0.0);
+
+    // Check the neighborhood of cells' points for the closest one
+    vec2 neighbor_cell_uv = vec2(-1.0);
+    for (; neighbor_cell_uv.y <= 1.0; neighbor_cell_uv.y++) {
+        neighbor_cell_uv.x = -1.0;
+        for (; neighbor_cell_uv.x <= 1.0; neighbor_cell_uv.x++) {
+            vec2 neighbor_point = random_point(cell_uv + neighbor_cell_uv);
+            vec2 diff = neighbor_cell_uv + neighbor_point - cell_remainder_uv;
+            float dist = length(diff);
+            if (dist < min_dist) {
+                second_min_dist = min_dist;
+                min_dist = dist;
+                min_point = neighbor_point;
+            }
+        }
+    }
+
+    float boundary_dist = second_min_dist - min_dist;
+    return vec4(min_point, random_point(min_point).x, boundary_dist);
 }

@@ -25,6 +25,16 @@ var screen: Vector2
 var interaction_target: InteractionTarget = null
 
 var coyote_timer: Timer = null
+var hover_timer: Timer = null
+
+# Whether this slime should have elastic collisions with static bodies (e.g. true for ice slime to bounce off walls)
+func isElastic() -> bool:
+	return false
+
+# Whether this character can currently interact with things (e.g. always false for ice slime)
+# If this changes at some point, the child script must alert any interaction targets in the area
+func canInteract() -> bool:
+	return true
 
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
@@ -73,6 +83,10 @@ func jump(delta: float) -> void:
 
 # Determine player-controlled character behavior in free fall
 func fall(delta: float) -> void:
+	# If the hover timer is running, don't apply gravity
+	if not hover_timer.is_stopped():
+		return
+
 	# We assume gravity only affects the y component lol
 	velocity.y = move_toward(velocity.y, terminal_velocity, get_gravity().y * delta)
 
@@ -91,6 +105,11 @@ func _ready() -> void:
 	coyote_timer.wait_time = coyote_time
 	coyote_timer.one_shot = true
 	add_child(coyote_timer)
+
+	# Set up timer for midair hover
+	hover_timer = Timer.new()
+	hover_timer.one_shot = true
+	add_child(hover_timer)
 
 
 # Loads movement options
@@ -159,11 +178,37 @@ func _physics_process(delta: float) -> void:
 					velocity.y = pre_slide_velocity.y
 					continue
 
-				# Convert to Δvel
-				var push_velocity = impact_velocity * (mass / collider.getMass())
-				collider.velocity.x = move_toward(collider.velocity.x, push_velocity.x, run_acceleration * delta)
+				# Prevent re-pushing if the slimes are already bouncing apart
+				var is_approaching = sign(pre_slide_velocity.x - collider.velocity.x) == sign(collider.global_position.x - global_position.x)
+				if not is_approaching:
+					continue
+
+				# Elastic collisions
+				var m1 = mass
+				var m2 = collider.getMass()
+				var v1 = pre_slide_velocity.x
+				var v2 = collider.velocity.x
+				var M = (m1 - m2) / (m1 + m2)
+				velocity.x = M * v1 + (2 * m2 / (m1 + m2)) * v2
+				collider.velocity.x = (2 * m1 / (m1 + m2)) * v1 - M * v2
 
 			elif collider is RigidBody2D:
 				# Impulse is F*time
 				var impulse = impact_velocity * mass
 				collider.apply_central_impulse(impulse)
+
+				# Bounce away from the rigidbody if we are an elastic collider
+				if isElastic() and abs(normal.x) > 0.1:
+					velocity.x = -pre_slide_velocity.x
+
+			elif isElastic() and (collider is StaticBody2D or collider is TileMapLayer) and abs(normal.x) > 0.1:
+				velocity.x = -pre_slide_velocity.x
+
+	# Start the hover timer if we hit the ceiling
+	if pre_slide_velocity.y < 0 and is_on_ceiling():
+		# Figure out how much time we have to the apex of our jump
+		var time_to_apex = -pre_slide_velocity.y / get_gravity().y
+
+		if time_to_apex > 0:
+			velocity.y = 0
+			hover_timer.start(time_to_apex)
