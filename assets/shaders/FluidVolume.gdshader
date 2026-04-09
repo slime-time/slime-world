@@ -23,10 +23,39 @@ uniform float wave_amplitude = 0.5;                                 // Overall a
 uniform float wave_timescale = 1.0;                                 // How quickly the wave animates over time, as a multiplier on top of fluid velocity
 uniform float wave_row_offset = 0.2;                                // How much to offset the displacement wave by each row up
 
-// Instance uniforms (udpated per volume)
-instance uniform vec2 fluid_rect_size = vec2(64, 16);               // Size of the rectangle we're drawing fluid on, in pixels
-instance uniform int fluid_level = 16;                              // The fluid level, from 0 to 16 (# of rows from the bottom that have fluid)
-instance uniform float fluid_velocity = 0.0;                        // The horizontal velocity of the fluid, in vibe units per second (+ is rightward)
+// Horizontal streak settings
+group_uniforms Streaks;
+uniform vec2 streak_noise_scale = vec2(0.1, 0.5);                     // Scale of the noise for horizontal streaks
+uniform float streak_noise_timescale = 0.5;                           // How quickly to morph the noise for horizontal streaks
+uniform float streak_scroll_speed = 16.0;                             // How fast the horizontal streaks should move downward
+uniform int streak_blend : hint_blend_mode = 1;                       // Blend mode to use for horizontal streaks
+uniform vec3 streak_color : source_color = vec3(1.0);                 // Color to blend in for horizontal streaks
+uniform float streak_bias_low = 0.3;                                  // Where to start fading streaks from 0 to 1
+uniform float streak_bias_high = 0.7;                                 // Where to stop fading streaks from 0 to 1
+uniform float streak_steps = 3.0;                                     // Number of steps to posterize the streak effect into
+uniform float streak_intensity = 0.5;                                 // Strength of the horizontal streak effect
+group_uniforms Streaks2;
+uniform vec2 streak2_noise_scale = vec2(0.1, 0.5);                     // Scale of the noise for horizontal streaks
+uniform float streak2_noise_timescale = 0.5;                           // How quickly to morph the noise for horizontal streaks
+uniform float streak2_scroll_speed = 16.0;                             // How fast the horizontal streaks should move downward
+uniform int streak2_blend : hint_blend_mode = 1;                       // Blend mode to use for horizontal streaks
+uniform vec3 streak2_color : source_color = vec3(1.0);                 // Color to blend in for horizontal streaks
+uniform float streak2_bias_low = 0.3;                                  // Where to start fading streaks from 0 to 1
+uniform float streak2_bias_high = 0.7;                                 // Where to stop fading streaks from 0 to 1
+uniform float streak2_steps = 3.0;                                     // Number of steps to posterize the streak effect into
+uniform float streak2_intensity = 0.5;                                 // Strength of the horizontal streak effect
+
+// Refraction settings
+group_uniforms Refraction;
+uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen texture provided by Godot
+uniform float refract_strength = 0.8;                                 // Strength of the refraction effect (offset in pixels)
+uniform float refract_frequency = 0.5;                                // Frequency of the vertical refraction waves
+uniform float refract_timescale = 2.0;                                // Timescale for the refraction animation
+
+// Instance uniforms (updated per volume)
+instance uniform vec2 fluid_rect_size = vec2(64, 16);                 // Size of the rectangle we're drawing fluid on, in pixels
+instance uniform int fluid_level = 16;                                // The fluid level, from 0 to 16 (# of rows from the bottom that have fluid)
+instance uniform float fluid_velocity = 0.0;                          // The horizontal velocity of the fluid, in vibe units per second (+ is rightward)
 
 // Instance uniforms don't support arrays, so we split flow extents into int vectors
 // Distance each row up from the bottom extends to the left
@@ -98,9 +127,27 @@ float get_fluid_height(vec2 pixel_coords, float qtime) {
     return float(fluid_level) + get_wave_displacement(vec2(pixel_coords.x, float(fluid_level)), qtime);
 }
 
-// vec4 apply_refraction(vec4 color, vec2 pixel_coords, vec2 screen_pixel_coords) {
+vec4 apply_refraction(vec4 color, vec2 pixel_coords, vec2 screen_pixel_coords, float qtime) {
+    // Horizontal refraction part
+    float wave = sin(qtime * refract_timescale + round(screen_pixel_coords.y + 0.5) * refract_frequency);
+    vec2 pixel_offset = vec2(float(wave * refract_strength * color.a), 0.0); // Include a factor of alpha to fade smoothly at the falloff
 
-// }
+    // Include the displacement in the refraction offset
+    pixel_offset.x += get_wave_displacement(pixel_coords, qtime);
+
+    // Quantize the refraction to whole pixels
+    pixel_offset = round(pixel_offset + 0.5);
+
+    float pixel_size = 1.0 / float(SCREEN_SIZE_PIXELS.x);
+    vec2 snapped_screen_uv = (screen_pixel_coords) / vec2(SCREEN_SIZE_PIXELS);
+    vec2 refract_uv = snapped_screen_uv + pixel_offset * pixel_size;
+    vec4 refract_color = texture(screen_tex, refract_uv);
+
+    // Blend in the refracted color
+    color = blend(BLEND_SCREEN, refract_color, color, color.a);
+    color.a = 1.0; // We render the refracted background, so don't allow the original background to show through
+    return color;
+}
 
 void fragment() {
     vec2 screen_pixel_coords = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS));   // Quantized screen coordinates of the pixel we're drawing
@@ -117,5 +164,29 @@ void fragment() {
 
     bool is_outline = pixel_coords.y >= fluid_height;
     if (is_outline) COLOR = outline_color; // Outline pixel
-    else COLOR = base_color; // Fluid pixel
+    else {
+        // Fluid pixel
+        COLOR = base_color;
+
+        // Mix in streaks
+        if (streak_intensity > 0.0) {
+            float displacement = get_wave_displacement(pixel_coords, qtime);
+            vec2 streak_noise_coords = (screen_pixel_coords + vec2(-qtime * streak_scroll_speed * fluid_velocity, round(displacement / 2.0))) * streak_noise_scale / 10.0;
+            // vec2 streak_noise_coords = vec2(float(col) + , round(displacement / 2.0) floor(pixel_y) - qtime * streak_scroll_speed) * streak_noise_scale;
+            float streak_noise = smoothstep(streak_bias_low, streak_bias_high, snoise(vec3(streak_noise_coords, streak_noise_timescale * qtime)));
+            float streak_factor = round(streak_noise * streak_steps) / streak_steps;
+            COLOR = blend(streak_blend, COLOR, vec4(streak_color, COLOR.a), streak_factor * streak_intensity);
+        }
+        if (streak2_intensity > 0.0) {
+            float displacement = get_wave_displacement(pixel_coords, qtime);
+            vec2 streak2_noise_coords = (screen_pixel_coords * 2.0 + vec2(-qtime * streak2_scroll_speed * fluid_velocity, round(displacement / 2.0))) * streak2_noise_scale / 10.0;
+            // vec2 streak2_noise_coords = vec2(float(col) + , round(displacement / 2.0) floor(pixel_y) - qtime * streak2_scroll_speed) * streak2_noise_scale;
+            float streak2_noise = smoothstep(streak2_bias_low, streak2_bias_high, snoise(vec3(streak2_noise_coords, streak2_noise_timescale * qtime)));
+            float streak2_factor = round(streak2_noise * streak2_steps) / streak2_steps;
+            COLOR = blend(streak2_blend, COLOR, vec4(streak2_color, COLOR.a), streak2_factor * streak2_intensity);
+        }
+
+        // Apply refraction to the fluid color
+        COLOR = apply_refraction(COLOR, pixel_coords, screen_pixel_coords, qtime);
+    }
 }
