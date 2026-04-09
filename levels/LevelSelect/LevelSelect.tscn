@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d2n5hnnnf8678"]
 
-[ext_resource type="Script" uid="uid://dbhvxu4avvfcg" path="res://levels/LevelSelect/LevelSelect.gd" id="1_8vtko"]
+[ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/LevelSelect/LevelSelect.gd" id="1_8vtko"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="1_dleve"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_8vtko"]
 [ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="3_j12p5"]
