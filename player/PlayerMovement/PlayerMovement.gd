@@ -15,8 +15,12 @@ var run_max_velocity: float
 var run_acceleration: float
 var run_deceleration: float
 var jump_velocity: float
+var climb_max_speed: float
 var terminal_velocity: float
 var coyote_time: float
+
+# Count the number of tar globs intersecting with this slime
+var tar_intersections: int
 
 # Screen bounds
 var screen: Vector2
@@ -36,6 +40,24 @@ func isElastic() -> bool:
 func canInteract() -> bool:
 	return true
 
+# Returns true iff this player object can climb right now (i.e. is in tar and against a wall)
+func canClimb(direction: float):
+	if(tar_intersections > 0 and is_on_wall()):
+		var wall_direction = get_wall_normal()
+		if(wall_direction.x * direction < 0):
+			return true
+	return false
+
+func climb(direction: float, delta: float):
+	# Tar slime moves orthogonally to the wall normal
+	var floor_direction = get_wall_normal().orthogonal()
+	# If the magnitude of this vector is exceeded, then we consider this too fast
+	var target_velocity = velocity - floor_direction * direction * run_acceleration * delta
+	velocity = target_velocity
+	velocity.y = max(velocity.y, climb_max_speed)
+	velocity.y = min(velocity.y, terminal_velocity)
+	velocity.x = max(velocity.x, -run_max_velocity)
+	velocity.x = min(velocity.x, run_max_velocity)
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
 
@@ -92,6 +114,7 @@ func fall(delta: float) -> void:
 
 var config = ConfigFile.new()
 func _ready() -> void:
+	tar_intersections = 0
 	screen = get_viewport_rect().size
 	# Attempt to read movement settings from an external file
 	var error = config.load("res://settings.cfg")

@@ -4,19 +4,17 @@ var base_climb_max_speed
 # Maximum speed this slime can climb up objects
 var climb_max_speed
 	
+func canClimb(direction: float):
+	if(is_on_wall()):
+		var wall_direction = get_wall_normal()
+		if(wall_direction.x * direction < 0):
+			return true
+	return false
 func move(direction: float, delta: float):
 	if(is_on_wall()):
 		var wall_direction = get_wall_normal()
 		if(wall_direction.x * direction < 0):
-			# Tar slime moves orthogonally to the wall normal
-			var floor_direction = get_wall_normal().orthogonal()
-			# If the magnitude of this vector is exceeded, then we consider this 
-			var target_velocity = velocity - floor_direction * direction * run_acceleration * delta
-			velocity = target_velocity
-			velocity.y = max(velocity.y, climb_max_speed)
-			velocity.y = min(velocity.y, terminal_velocity)
-			velocity.x = max(velocity.x, -run_max_velocity)
-			velocity.x = min(velocity.x, run_max_velocity)
+			
 		else:
 			super(direction, delta)
 	else:
@@ -26,7 +24,7 @@ func move(direction: float, delta: float):
 
 
 func read_movement_data(my_name):
-	base_climb_max_speed = config.get_value(my_name, "climb_max_velocity", -50)
+	base_climb_max_speed = config.get_value(my_name, "climb_max_velocity")
 	super(my_name)
 
 func _ready():
