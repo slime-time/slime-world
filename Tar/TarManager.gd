@@ -15,12 +15,16 @@ func _ready():
 	tar_globs.resize((window_height * window_width) / 8)
 	resetTar()
 	
+# Get the coordinates that the slime glob object should be placed at
+func convertToCoordinates(x: float, y: float) -> Vector2i:
+	var round_x: int = GLOB_SIZE * (min(max(0, roundi(x)), window_width) / GLOB_SIZE)
+	var round_y: int = GLOB_SIZE * (min(max(0, roundi(y)), window_height) / GLOB_SIZE)
+	return Vector2i(round_x, round_y)
+	
 # Get the index in the array that cooresponds to the location (Assuming a perfect bit array)
-func convertLocation(x: float, y: float) -> int:
-	var round_x: int = min(max(0, roundi(x)), window_width) / GLOB_SIZE
-	var round_y: int = min(max(0, roundi(y)), window_height) / GLOB_SIZE
+func convertLocation(coordinates: Vector2i) -> int:
 	# The offset in the array to get to the column that we care about
-	return round_x * (window_height / GLOB_SIZE) + round_y
+	return (coordinates.x / GLOB_SIZE) * (window_height / GLOB_SIZE) + (abs(coordinates.y) / GLOB_SIZE)
 
 # Tests if there is a tar glob at the specified location
 # Returns true iff there is NOT a tar glob at the queried location
@@ -29,8 +33,8 @@ func checkLocation(true_index: int) -> bool:
 	var tar_byte = tar_globs.decode_u8(true_index / 8)
 	# Get the relevant bit
 	if((tar_byte & (1 << (true_index % 8))) > 0):
-		return true
-	return false
+		return false
+	return true
 	
 # Store the fact that we've placed a tar glob at this location
 func setLocation(true_index: int):

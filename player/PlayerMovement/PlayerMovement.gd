@@ -49,7 +49,7 @@ func canClimb(direction: float):
 	return false
 
 func climb(direction: float, delta: float):
-	# Tar slime moves orthogonally to the wall normal
+	# Climbing slimes move orthogonally to the wall normal
 	var floor_direction = get_wall_normal().orthogonal()
 	# If the magnitude of this vector is exceeded, then we consider this too fast
 	var target_velocity = velocity - floor_direction * direction * run_acceleration * delta
@@ -58,6 +58,7 @@ func climb(direction: float, delta: float):
 	velocity.y = min(velocity.y, terminal_velocity)
 	velocity.x = max(velocity.x, -run_max_velocity)
 	velocity.x = min(velocity.x, run_max_velocity)
+	
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
 
@@ -90,9 +91,12 @@ func onFluidHit(_fluid_type: FluidFlow.Type) -> void:
 
 # Move along the ground or in the air
 func move(direction: float, delta: float) -> void:
-	# Move towards the target velocity
-	var target_velocity = direction * run_max_velocity
-	velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
+	if(canClimb(direction)):
+		climb(direction, delta)
+	else:
+		# Move towards the target velocity
+		var target_velocity = direction * run_max_velocity
+		velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
 
 # To implement sliding later, we likely want to pass a delta to this function
 func stop(delta: float) -> void:
