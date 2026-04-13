@@ -1,4 +1,4 @@
-class_name Enemy
+@abstract class_name Enemy
 extends CharacterBody2D
 
 #initalize in editor
@@ -15,30 +15,29 @@ var combat_state: bool
 var is_patroling: bool	
 
 
-func _ready():
-    combatState= false
+func ready():
+	combat_state= false
+	read_enemy_data("generic_enemy_parameters")
 
-    # Attempt to read enemy settings from an external file
+	#establish if enemy will patrol or stay put
+	if (patrol.size() > 1):
+		patrol_index = 1
+		is_patroling = true
+	else: is_patroling = false
+	
+func read_enemy_data(sectionName):
+	var config = ConfigFile.new()
+	
+	# Attempt to read enemy settings from an external file
 	var error = config.load("res://settings.cfg")
 	# Assert that the data was read
 	assert(error == OK, "Failed to read enemy settings from settings.cfg")
-    #read values from settings.cfg
-    read_enemy_data("generic_enemy_parameters")
-
-    #establish if we will patrol or stay put
-	if (patrol.size > 1):
-        patrolIndex = 1
-        isPatroling = true
-    else: isPatroling = false
-    
-func read_enemy_data(sectionName):
-    walk_speed= config.get_value(sectionName, "walk_speed", walk_speed)
-    los_cone_deg= config.get_value(sectionName, "los_cone_deg", los_cone_deg)
-    los_distance= config.get_value(sectionName, "los_distance", los_distance)
+	#read values from settings.cfg
+	walk_speed = config.get_value(sectionName, "walk_speed", walk_speed)
+	los_cone_deg = config.get_value(sectionName, "los_cone_deg", los_cone_deg)
+	los_distance = config.get_value(sectionName, "los_distance", los_distance)
 
 @abstract 
-func attack():
-
+func attack()
 
 	
-

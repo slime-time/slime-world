@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://bb0dd5dg6k0o1"]
+
+[node name="EnemyHurtbox" type="Node2D" unique_id=2066971595]
