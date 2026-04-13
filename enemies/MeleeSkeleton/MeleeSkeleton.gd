@@ -1,6 +1,8 @@
 class_name MeleeSkeleton
 extends "res://enemies/enemy.gd"
 
+var hitbox_radius: float
+
 func ready():
     super()
     
@@ -11,7 +13,7 @@ func ready():
     #read values from settings.cfg
     read_melee_data("melee_parameters")
 
-func read_melee_data(sectionName)
+func read_melee_data(sectionName):
 
 
 func attack():
