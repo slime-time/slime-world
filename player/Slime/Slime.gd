@@ -2,9 +2,9 @@
 extends PlayerMovement
 
 # Store the y position of the circular body for the round/blob slime of the corresponding size
-const BODY_OFFSETS = [0, 0, 0, 0, 3, 0, 0, 0, 0]
+const BODY_OFFSETS = [0, 8, 5, 4, 3, 2, 2, 0.5, 0]
 
-# The name used to load the sprites for this slime type
+# The name used to load the sprites for this slime vtype
 var sprite_name: String
 
 # The name used to load the hitboxes for this slime type
@@ -23,6 +23,8 @@ enum Type {
 	UNSET = 0,
 	GREEN_SLIME = 1,
 	ICE_SLIME = 2,
+	TAR_SLIME = 3,
+	ENERGIZED_SLIME = 4
 }
 # What type of slime is this slime?
 var slime_type: Type
@@ -62,13 +64,13 @@ func spikeHit():
 		die()
 
 # Turn into two slimes
-func split():
+func split(child_slime_type: Slime.Type = slime_type):
 	var split_blockers = split_confirm.get_overlapping_bodies()
 	if(len(split_blockers) == 1 and split_blockers[0] == self):
 		var child_size = floor(size / 2)
-		size = ceil(size / 2)
+		size = ceili(size / 2.0)
 		position.x -= 8
-		has_split.emit(position + Vector2(16, 0), velocity, child_size, slime_type)
+		has_split.emit(position + Vector2(16, 0), velocity, child_size, child_slime_type)
 		getMovementAbility()
 		updateHitbox()
 		updateSprite()
