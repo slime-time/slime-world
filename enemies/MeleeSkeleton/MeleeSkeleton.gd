@@ -13,7 +13,7 @@ func read_melee_data(sectionName):
 	var error = config.load("res://settings.cfg")
 	# Assert that the data was read
 	assert(error == OK, "Failed to read enemy settings from settings.cfg")
-	#read values from settings.cfg
+	hitbox_radius = config.get_value(sectionName, "hitbox_radius", hitbox_radius)
 	
 	return
 
