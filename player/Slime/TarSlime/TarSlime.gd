@@ -1,22 +1,39 @@
 extends Slime
 
-var base_climb_max_speed
-# Maximum speed this slime can climb up objects
-var climb_max_speed
 	
+# Since we override the move function, once we call the generic
+# move function we already know that this slime cannot climb in its current state, so save some
+# time by not even bothering to calculate the wall normal again 
+func canClimb(_direction: float):
+	return false
+	
+const GLOB_TEMPLATE = preload("res://Tar/TarGlob/TarGlob.tscn")
 func move(direction: float, delta: float):
 	if(is_on_wall()):
 		var wall_direction = get_wall_normal()
 		if(wall_direction.x * direction < 0):
-			# Tar slime moves orthogonally to the wall normal
-			var floor_direction = get_wall_normal().orthogonal()
-			# If the magnitude of this vector is exceeded, then we consider this 
-			var target_velocity = velocity - floor_direction * direction * run_acceleration * delta
-			velocity = target_velocity
-			velocity.y = max(velocity.y, climb_max_speed)
-			velocity.y = min(velocity.y, terminal_velocity)
-			velocity.x = max(velocity.x, -run_max_velocity)
-			velocity.x = min(velocity.x, run_max_velocity)
+			var wallFinder = PhysicsRayQueryParameters2D.create(global_position, global_position - 20 * wall_direction)
+			
+			# The location the tar glob wants to go, without any coordinate smushing for the tar grid
+			# Also useful information about whether or not the tar slime is actually touching a wall or
+			# something else
+			var tarGlobLocationRaw = get_world_2d().direct_space_state.intersect_ray(wallFinder)
+			if(not tarGlobLocationRaw.size() == 0 and tarGlobLocationRaw.collider is TileMapLayer):
+				# round slime globs away from the colliding wall to maximize collision with other slimes
+				if(wall_direction.x > 0):
+					tarGlobLocationRaw.position.x += TarManager.GLOB_SIZE
+				
+				var tarGlobLocation: Vector2i = TarManager.convertToCoordinates(tarGlobLocationRaw.position.x, global_position.y)
+				var tarGlobIndex: int = TarManager.convertLocation(tarGlobLocation)
+				# If there is no tar at that location, set the tar and make the tar object
+				if(TarManager.checkLocation(tarGlobIndex)):
+					TarManager.setLocation(tarGlobIndex)
+					var tarGlob = GLOB_TEMPLATE.instantiate()
+					tarGlob.set_global_position(Vector2(tarGlobLocation))
+					get_tree().get_current_scene().add_child(tarGlob)
+				
+				
+			climb(direction, delta)
 		else:
 			super(direction, delta)
 	else:
@@ -26,7 +43,7 @@ func move(direction: float, delta: float):
 
 
 func read_movement_data(my_name):
-	base_climb_max_speed = config.get_value(my_name, "climb_max_velocity", -50)
+	base_climb_max_speed = config.get_value(my_name, "climb_max_velocity")
 	super(my_name)
 
 func _ready():

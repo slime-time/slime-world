@@ -17,6 +17,7 @@ var base_run_max_velocity
 var base_run_acceleration
 var base_run_deceleration
 var base_jump_velocity
+var base_climb_max_speed # Maximum speed this slime can climb up objects
 var base_mass
 
 enum Type {
@@ -122,6 +123,7 @@ func _ready():
 	base_run_acceleration = run_acceleration
 	base_run_deceleration = run_deceleration
 	base_jump_velocity = jump_velocity
+	base_climb_max_speed = climb_max_speed
 	base_mass = mass
 	merge_confirm = get_node("MergeConfirm")
 	split_confirm = get_node("SplitConfirm")

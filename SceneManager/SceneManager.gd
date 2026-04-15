@@ -17,6 +17,7 @@ func resetScene():
 	var tree = get_tree()
 	if(tree.get_frame() != last_death):
 		last_death = tree.get_frame()
+		TarManager.resetTar()
 		tree.call_deferred("reload_current_scene")
 	
 # Pause the game, and stop the player from moving. The player can unpause from this position
