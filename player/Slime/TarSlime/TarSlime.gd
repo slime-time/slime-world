@@ -1,13 +1,10 @@
 extends Slime
 
-var base_climb_max_speed
-# Maximum speed this slime can climb up objects
 	
-func canClimb(direction: float):
-	if(is_on_wall()):
-		var wall_direction = get_wall_normal()
-		if(wall_direction.x * direction < 0):
-			return true
+# Since we override the move function, once we call the generic
+# move function we already know that this slime cannot climb in its current state, so save some
+# time by not even bothering to calculate the wall normal again 
+func canClimb(_direction: float):
 	return false
 	
 const GLOB_TEMPLATE = preload("res://Tar/TarGlob/TarGlob.tscn")
@@ -22,6 +19,10 @@ func move(direction: float, delta: float):
 			# something else
 			var tarGlobLocationRaw = get_world_2d().direct_space_state.intersect_ray(wallFinder)
 			if(not tarGlobLocationRaw.size() == 0 and tarGlobLocationRaw.collider is TileMapLayer):
+				# round slime globs away from the colliding wall to maximize collision with other slimes
+				if(wall_direction.x > 0):
+					tarGlobLocationRaw.position.x += TarManager.GLOB_SIZE
+				
 				var tarGlobLocation: Vector2i = TarManager.convertToCoordinates(tarGlobLocationRaw.position.x, global_position.y)
 				var tarGlobIndex: int = TarManager.convertLocation(tarGlobLocation)
 				# If there is no tar at that location, set the tar and make the tar object

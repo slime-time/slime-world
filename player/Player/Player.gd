@@ -123,7 +123,7 @@ func makePennyIntoSlime():
 		var old_velocity = penny.velocity;
 		penny.set_visible(false)
 		# Make a slime at Penny's position
-		makeSlime(penny.position, Vector2.ZERO, 8, Slime.Type.TAR_SLIME)
+		makeSlime(penny.position, Vector2.ZERO, 4, Slime.Type.TAR_SLIME)
 		penny.set_process_mode(Node.PROCESS_MODE_DISABLED)
 		slimes[0].velocity = old_velocity
 		InputManager.is_human = false

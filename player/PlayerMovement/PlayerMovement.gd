@@ -145,6 +145,7 @@ func read_movement_data(my_name):
 	run_max_velocity = config.get_value(my_name, "run_max_velocity", run_max_velocity)
 	run_acceleration = config.get_value(my_name, "run_acceleration", run_acceleration)
 	run_deceleration = config.get_value(my_name, "run_deceleration", run_deceleration)
+	climb_max_speed = config.get_value(my_name, "climb_max_velocity", climb_max_speed)
 	jump_velocity = config.get_value(my_name, "jump_velocity", jump_velocity)
 	terminal_velocity = config.get_value(my_name, "terminal_velocity", terminal_velocity)
 	coyote_time = config.get_value(my_name, "coyote_time", terminal_velocity)

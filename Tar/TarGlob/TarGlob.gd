@@ -6,11 +6,8 @@ func _ready():
 func enterTar(other: Node2D):
 	if(other is PlayerMovement):
 		other.tar_intersections += 1
-		print(other.tar_intersections)
 
 func exitTar(other: Node2D):
 	if(other is PlayerMovement):
 		other.tar_intersections -= 1
-		print(other.tar_intersections)
-		
 	

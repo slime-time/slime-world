@@ -17,6 +17,7 @@ func getMovementAbility():
 	run_acceleration *= mul
 	run_deceleration *= mul
 	jump_velocity *= mul
+	climb_max_speed = 0
 
 func canInteract() -> bool:
 	# Ice slime cannot interact with things
