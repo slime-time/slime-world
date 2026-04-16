@@ -7,7 +7,7 @@ func entityEntered(_trigger: Node2D):
 		queue_free()
 		for entity in get_colliding_bodies():
 			if(entity is PlayerMovement):
-				entity.spikeHit()
+				entity.hit()
 			
 
 func _ready():
