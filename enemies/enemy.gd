@@ -10,39 +10,38 @@ var los_area : Area2D
 var los_cone_deg: float
 var los_distance: int
 
+var attack_hitbox: Area2D
+var combat_target: Node2D
 # 0:neutral  1:combat
 var combat_state: bool
-# 0:static  1:moving
+# 0:static  1:patrolling
 var is_patroling: bool	
 
 
-func ready():
+func _ready():
 	combat_state= false
-	read_enemy_data("generic_enemy_parameters")
+	attack_hitbox = get_node("AttackHitbox")
+	attack_hitbox.body_entered.connect(attack)
+	
 	los_area = get_node("SkeletonLoS")
+	los_area.body_entered.connect(detect)
+	los_area.body_exited.connect(deaggro)
+	
+	read_enemy_data("generic_enemy_parameters")
+	set_los_cone()
 
-	#establish if enemy will patrol or stay put
-	if (patrol.size() > 1):
-		patrol_index = 1
-		is_patroling = true
-	else: is_patroling = false
+
 	
-func _physics_process(delta : float):
-	var detected_bodies : Array[Node2D] = los_area.get_overlapping_bodies()
-	for body in detected_bodies:
-		if (body.name == "Penny") or (body.name.contains("Slime")):
+func detect(target : Node2D ):
+	if target is PlayerMovement:
+			combat_target = target
 			combat_state = true
-			is_patroling = false
-	if is_patroling:
-		return
-	elif combat_state:
-		attack()
-		combat_state = false
-		is_patroling = true
-	
 	return
 	
-func _on_body_entered():
+func deaggro(target : Node2D ):
+	if target is PlayerMovement:
+			combat_target = null
+			combat_state = false
 	return
 	
 func read_enemy_data(sectionName):
@@ -59,13 +58,15 @@ func read_enemy_data(sectionName):
 
 func set_los_cone():
 	#draw polygon for enemy line of sight, can refactor to accept args instead of reading value from settings.cfg
-	var cone = CollisionPolygon2D.new()
+	var cone = CollisionPolygon2D.new() 
+	var origin : Vector2 = Vector2(los_area.position.x, los_area.position.y)
 	var y_offset : int = int(tan(los_cone_deg * (PI/180)) * los_distance)
-	cone.polygon= PackedVector2Array([Vector2(0,0), Vector2(los_distance, y_offset), Vector2(los_distance, -y_offset)])
+	cone.polygon= PackedVector2Array([origin, Vector2(origin.x + los_distance, origin.y + y_offset), 
+	Vector2(origin.x + los_distance, origin.y -y_offset)])
 	
 	los_area.add_child(cone)
 
 @abstract 
-func attack()
+func attack(target : Node2D)
 
 	
