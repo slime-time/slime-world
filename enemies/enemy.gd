@@ -34,7 +34,6 @@ func _physics_process(delta : float):
 			combat_state = true
 			is_patroling = false
 	if is_patroling:
-		if position
 		return
 	elif combat_state:
 		attack()
