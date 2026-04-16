@@ -51,7 +51,7 @@ platform_floor_layers = 2
 script = ExtResource("1_ttqac")
 
 [node name="SlimeBase" type="CollisionShape2D" parent="." unique_id=2046034733]
-position = Vector2(0, 7.5)
+position = Vector2(0, 6.5)
 shape = ExtResource("2_vablb")
 
 [node name="SlimeBody" type="CollisionShape2D" parent="." unique_id=32116123]
