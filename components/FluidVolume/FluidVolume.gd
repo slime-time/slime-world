@@ -1,21 +1,23 @@
 extends Node2D
 class_name FluidVolume
 
-@export var fluid_type: FluidFlow.Type = FluidFlow.Type.WATER			# The type of fluid in this volume
-@export var fluid_level: int = 8										# The level of the fluid
-@export var fluid_extent_left: int = 32									# How far, at most, the fluid extends left from the volume's origin
-@export var fluid_extent_right: int = 32								# How far, at most, the fluid extends right from the volume's origin
-@export var fluid_velocity: float = 0.0									# The horizontal velocity at which the fluid flows (±x)
-@export var blocking_corner_radius: int = 1;							# How far to round inside corners, to fill out pixel gaps in the tilemap blocked by a collider corner
+@export var fluid_type: FluidFlow.Type = FluidFlow.Type.WATER				# The type of fluid in this volume
+@export var fluid_level: int = 8											# The level of the fluid
+@export var fluid_extent_left: int = 32										# How far, at most, the fluid extends left from the volume's origin
+@export var fluid_extent_right: int = 32									# How far, at most, the fluid extends right from the volume's origin
+@export var fluid_velocity: float = 0.0										# The horizontal velocity at which the fluid flows (±x)
+@export var blocking_corner_radius: int = 1;								# How far to round inside corners, to fill out pixel gaps in the tilemap blocked by a collider corner
 
-@onready var fluid_rect: ColorRect = $FluidRect							# The color rect we render the fluid shader on
+@onready var fluid_rect: ColorRect = $FluidRect								# The color rect we render the fluid shader on
+@onready var fluid_area: Area2D = $FluidArea								# The area we use for fluid interactions
+@onready var fluid_collider: CollisionShape2D = $FluidArea/FluidCollider	# The collider we use for fluid interactions
 
-var _origin: Vector2													# The absolute position of the fluid volume's origin
-var _min_left_extent: int = 0											# The minimum left extent of the fluid, based on raycasts
-var _max_right_extent: int = 0											# The maximum right extent of the fluid, based on raycasts
-var _fluid_rect_size: Vector2											# The size of the fluid rect, based on fluid extents but always with fixed height
-var _fluid_extents_left: PackedInt32Array = PackedInt32Array()			# The left extents of flow from the origin, for each row increasing from 0 at the bottom
-var _fluid_extents_right: PackedInt32Array = PackedInt32Array()			# The right extents ^
+var _origin: Vector2														# The absolute position of the fluid volume's origin
+var _min_left_extent: int = 0												# The minimum left extent of the fluid, based on raycasts
+var _max_right_extent: int = 0												# The maximum right extent of the fluid, based on raycasts
+var _fluid_rect_size: Vector2												# The size of the fluid rect, based on fluid extents but always with fixed height
+var _fluid_extents_left: PackedInt32Array = PackedInt32Array()				# The left extents of flow from the origin, for each row increasing from 0 at the bottom
+var _fluid_extents_right: PackedInt32Array = PackedInt32Array()				# The right extents ^
 
 func _setShaderParameters() -> void:
 	# Set primary settings
@@ -51,7 +53,16 @@ func _setShaderParameters() -> void:
 		fluid_rect.set_instance_shader_parameter("extents_left_" + str(i), left)
 		fluid_rect.set_instance_shader_parameter("extents_right_" + str(i), right)
 
-func _physics_process(_delta: float) -> void:
+func _ready() -> void:
+	_updateFluidExtents.call_deferred()
+
+func _onBodyEntered(body: Node2D) -> void:
+	print("body entered fluid: " + str(body))
+
+func _onBodyExited(body: Node2D) -> void:
+	print("body left fluid: " + str(body))
+
+func _updateFluidExtents() -> void:
 	_origin = global_position.floor()
 	_fluid_extents_left.resize(16)
 	_fluid_extents_right.resize(16)
@@ -90,6 +101,15 @@ func _physics_process(_delta: float) -> void:
 	# Set the color rect offsets to match
 	fluid_rect.offset_left = _min_left_extent
 	fluid_rect.offset_right = _max_right_extent
+
+	# Set the collider extents to match
+	var width = _max_right_extent - _min_left_extent
+	var height = fluid_level
+	fluid_collider.shape.size = Vector2(width, height)
+
+	# CollisionShape2D position is based on its center
+	fluid_collider.position.x = (_min_left_extent + _max_right_extent) / 2.0
+	fluid_collider.position.y = -height / 2.0
 
 	# Set shader parameters on the color rect
 	_setShaderParameters()
