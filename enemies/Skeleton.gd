@@ -1,4 +1,4 @@
-@abstract class_name Enemy
+@abstract class_name Skeleton
 extends CharacterBody2D
 
 #initalize in editor
@@ -36,12 +36,14 @@ func detect(target : Node2D ):
 	if target is PlayerMovement:
 			combat_target = target
 			combat_state = true
+			is_patroling = false
 	return
 	
 func deaggro(target : Node2D ):
 	if target is PlayerMovement:
 			combat_target = null
 			combat_state = false
+			is_patroling = true
 	return
 	
 func read_enemy_data(sectionName):
@@ -57,7 +59,6 @@ func read_enemy_data(sectionName):
 	los_distance = config.get_value(sectionName, "los_distance", los_distance)
 
 func set_los_cone():
-	#draw polygon for enemy line of sight, can refactor to accept args instead of reading value from settings.cfg
 	var cone = CollisionPolygon2D.new() 
 	var origin : Vector2 = Vector2(los_area.position.x, los_area.position.y)
 	var y_offset : int = int(tan(los_cone_deg * (PI/180)) * los_distance)
