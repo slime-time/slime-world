@@ -69,6 +69,14 @@ texture = ExtResource("4_p6pge")
 libraries/ = SubResource("AnimationLibrary_2wi0r")
 
 [node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_oopj3")]
+
+[node name="Size8Confirm" parent="MergeConfirm" index="0" unique_id=1131443470]
+visible = false
+
+[node name="Size4Confirm" parent="MergeConfirm" index="1" unique_id=758554775]
+visible = false
+
+[node name="Size2Confirm" parent="MergeConfirm" index="2" unique_id=1458689163]
 visible = false
 
 [node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_72nuc")]

@@ -25,3 +25,4 @@ func getMovementAbility():
 	run_acceleration = base_run_acceleration * mul
 	run_deceleration = base_run_deceleration * mul
 	jump_velocity = base_jump_velocity * mul
+	climb_max_speed = base_climb_max_speed * mul

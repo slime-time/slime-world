@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://d3s6ehh3xuahr"]
+
+[ext_resource type="Script" uid="uid://bnqn51tyghoa6" path="res://Tar/TarGlob/TarGlob.gd" id="1_ujtv7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sgldl"]
+size = Vector2(4, 4)
+
+[node name="TarGlob" type="Area2D" unique_id=245750635]
+script = ExtResource("1_ujtv7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1935844539]
+shape = SubResource("RectangleShape2D_sgldl")
