@@ -1,5 +1,5 @@
 class_name MeleeSkeleton
-extends Enemy
+extends Skeleton
 
 var stop : int
 var sprite
@@ -33,7 +33,7 @@ func _physics_process(_delta : float):
 				await turnaround()
 			
 	elif combat_state:
-		position.x = move_toward(position.x, combat_target.position.x, walk_speed)
+		position.x = move_toward(position.x, combat_target.global_position.x, walk_speed)
 
 	return
 
@@ -58,14 +58,18 @@ func deaggro(target : Node2D ):
 	if target is PlayerMovement:
 			combat_target = null
 			combat_state = false
+			is_patroling = true
 			#reorient sprite and hitbox if necessary
 			if ((patrol[patrol_index].x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].x - global_position.x) > 0 and sprite.flip_h):
 				await turnaround()
 	return
 
 func attack(target : Node2D):
+
 	if (target is PlayerMovement) and combat_state:
-		#play animation
+		#play animation and confirm hit
 		target.hit()
+		
+		
 	return
 	

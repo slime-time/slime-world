@@ -1,5 +1,5 @@
 class_name RangedSkeleton
-extends Enemy
+extends Skeleton
 
 
 func attack(target : Node2D):
