@@ -21,7 +21,8 @@ func _ready() -> void:
 	sfx_stream = get_node("SfxStream")
 	
 	song_changed.connect(change_track_playback)
-	finished.connect(music_stream.play)
+	#looping behavior
+	music_stream.finished.connect(music_stream.play)
 	sfx_changed.connect(sfx_stream.play)
 	
 
@@ -35,9 +36,11 @@ func set_current_track(name : String):
 func set_current_sfx(name : String):
 	for sound in sfx:
 		if(sound.contains(name)):
-			sfx_stream.load
+			sfx_stream.stream.load(name)
 			sfx_changed.emit()
 			
 
-func change_track_playback():
+func change_track_playback(song : String):
 	music_stream.stop()
+	music_stream.load(song)
+	music_stream.play()
