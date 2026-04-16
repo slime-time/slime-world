@@ -7,16 +7,17 @@
 radius = 7.777778
 height = 22.222223
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_oju2m"]
+
 [node name="MeleeSkeleton" type="CharacterBody2D" unique_id=1999367218]
 script = ExtResource("1_gop5g")
-patrol = null
 
-[node name="SkeletonBody" type="CollisionShape2D" parent="." unique_id=100681247]
+[node name="SkeletonHitbox" type="CollisionShape2D" parent="." unique_id=100681247]
 position = Vector2(1, 0)
 scale = Vector2(0.9, 0.9)
 shape = SubResource("CapsuleShape2D_oju2m")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=341276675]
+[node name="MeleeSprite" type="Sprite2D" parent="." unique_id=341276675]
 z_index = -2
 texture_filter = 1
 texture = ExtResource("2_oju2m")
@@ -25,7 +26,9 @@ offset = Vector2(0, 0.5)
 [node name="SkeletonLoS" type="Area2D" parent="." unique_id=848074523]
 position = Vector2(5, -4)
 
-[node name="CollisionShape2D" type="CollisionPolygon2D" parent="SkeletonLoS" unique_id=965934065]
-position = Vector2(7, 0)
-polygon = PackedVector2Array(5, -6, 5, 5, -6, 0)
-disabled = true
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=699947950]
+position = Vector2(11, -1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=1993008067]
+scale = Vector2(0.5, 1)
+shape = SubResource("CircleShape2D_oju2m")
