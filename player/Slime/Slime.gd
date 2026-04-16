@@ -2,7 +2,7 @@
 extends PlayerMovement
 
 # Store the y position of the circular body for the round/blob slime of the corresponding size
-const BODY_OFFSETS = [0, 8, 5, 4, 3, 2, 2, 0.5, 0]
+const BODY_OFFSETS = [0, 5, 4, 3, 2, 2, 0, 0, 0]
 
 # The name used to load the sprites for this slime vtype
 var sprite_name: String

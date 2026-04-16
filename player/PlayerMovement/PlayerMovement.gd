@@ -42,11 +42,14 @@ func canInteract() -> bool:
 
 # Returns true iff this player object can climb right now (i.e. is in tar and against a wall)
 func canClimb(direction: float):
+	tar_intersections = 3
 	if(tar_intersections > 0 and is_on_wall()):
 		var wall_direction = get_wall_normal()
 		if(wall_direction.x * direction < 0):
 			return true
+	print_debug(is_on_wall())
 	return false
+
 
 func climb(direction: float, delta: float):
 	# Climbing slimes move orthogonally to the wall normal
@@ -58,6 +61,8 @@ func climb(direction: float, delta: float):
 	velocity.y = min(velocity.y, terminal_velocity)
 	velocity.x = max(velocity.x, -run_max_velocity)
 	velocity.x = min(velocity.x, run_max_velocity)
+	if(abs(velocity.x) == 0):
+		velocity.x = direction
 	
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
