@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://duoa6x0tin2mn"]
+
+[ext_resource type="Script" uid="uid://dcysu570vco8j" path="res://AudioManager/AudioManager.gd" id="1_ukwy1"]
+
+[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_hs254"]
+
+[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_ukwy1"]
+
+[node name="AudioManager" type="Control" unique_id=554836896]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_ukwy1")
+
+[node name="MusicStream" type="AudioStreamPlayer" parent="." unique_id=1546351758]
+stream = SubResource("AudioStreamWAV_hs254")
+bus = &"ActiveMusicTrack"
+
+[node name="SfxStream" type="AudioStreamPlayer2D" parent="." unique_id=122239951]
+stream = SubResource("AudioStreamWAV_ukwy1")
