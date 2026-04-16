@@ -65,8 +65,8 @@ func setInteractionTarget(target: InteractionTarget) -> void:
 func clearInteractionTarget(target: InteractionTarget) -> void:
 	if interaction_target == target:
 		interaction_target = null
-# Do whatever this character does when hit by a spike (split if slime, take damage otherwise)
-@abstract func spikeHit()
+# Do whatever this character does when hit (split if slime, take damage otherwise)
+@abstract func hit()
 
 # Defined so that PlayerMovement instances can be pushed by eachother
 func getMass() -> float:

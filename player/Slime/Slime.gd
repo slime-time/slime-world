@@ -58,7 +58,7 @@ var to_transform = false
 func canBecomePenny():
 	return false
 
-func spikeHit():
+func hit():
 	if(size > 1):
 		split()
 	else:
