@@ -6,6 +6,6 @@ func _ready():
 	super()
 	read_movement_data("penny_movement")
 
-# If Penny is hit by a spike, she takes 1 damage
-func spikeHit():
+# If Penny is hit, she takes 1 damage
+func hit():
 	takeDamage(1)

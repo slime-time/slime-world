@@ -26,7 +26,6 @@ var merge_frame = -1
 # Merge slimes iff the slime requesting the merge is the slime at slimes[0], to prevent multiple
 # Merge requests happening at the same time
 func mergeSlimes(requester_id: int):
-	
 	if(len(slimes) > 0 and merge_frame != get_tree().get_frame() and slimes[0].get_instance_id() == requester_id):
 		merge_frame = get_tree().get_frame()
 		var local_slimes = slimes.duplicate()
