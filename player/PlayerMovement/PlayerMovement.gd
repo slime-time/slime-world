@@ -48,6 +48,7 @@ func canClimb(direction: float):
 			return true
 	return false
 
+
 func climb(direction: float, delta: float):
 	# Climbing slimes move orthogonally to the wall normal
 	var floor_direction = get_wall_normal().orthogonal()
@@ -58,6 +59,8 @@ func climb(direction: float, delta: float):
 	velocity.y = min(velocity.y, terminal_velocity)
 	velocity.x = max(velocity.x, -run_max_velocity)
 	velocity.x = min(velocity.x, run_max_velocity)
+	if(abs(velocity.x) == 0):
+		velocity.x = direction
 	
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
