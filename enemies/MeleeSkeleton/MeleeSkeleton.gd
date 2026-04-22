@@ -1,41 +1,17 @@
 class_name MeleeSkeleton
 extends Skeleton
 
-var stop : int
-var sprite
+
+var attack_hitbox: Area2D
 
 func _ready():
+	sprite = get_node("MeleeSprite")
+	attack_hitbox = get_node("AttackHitbox")
+	attack_hitbox.body_entered.connect(attack)
 	super()
 	read_melee_data("melee_parameters")
-	sprite = get_node("MeleeSprite")
-	#establish if melee enemy will patrol or stay put until player is encountered
-	if (patrol.size() > 1):
-		is_patroling = true
-		patrol_index = 1
-	else: is_patroling = false
-	stop = 0
 	
-func _physics_process(_delta : float):
-	if stop:
-		stop -= 1
-		return
-	
-	if is_patroling:
-		position.x = move_toward(position.x, float(patrol[patrol_index].x), walk_speed)
-		
-		if position.x == patrol[patrol_index].x:
-			velocity.x = 0
-			patrol_index = (patrol_index + 1) % patrol.size()
-			#wait 10 frames
-			stop = 10
-			#reorient sprite and hitbox if necessary
-			if ((patrol[patrol_index].x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].x - global_position.x) > 0 and sprite.flip_h):
-				await turnaround()
-			
-	elif combat_state:
-		position.x = move_toward(position.x, combat_target.global_position.x, walk_speed)
 
-	return
 
 func read_melee_data(sectionName):
 	var config = ConfigFile.new()
@@ -46,6 +22,9 @@ func read_melee_data(sectionName):
 	
 	return
 
+func combat_behavior():
+	position.x = move_toward(position.x, combat_target.global_position.x, walk_speed)
+
 func turnaround():
 	if !sprite.flip_h:
 		sprite.flip_h = true
@@ -54,18 +33,7 @@ func turnaround():
 	attack_hitbox.position.x = -attack_hitbox.position.x
 	return
 
-func deaggro(target : Node2D ):
-	if target is PlayerMovement:
-			combat_target = null
-			combat_state = false
-			is_patroling = true
-			#reorient sprite and hitbox if necessary
-			if ((patrol[patrol_index].x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].x - global_position.x) > 0 and sprite.flip_h):
-				await turnaround()
-	return
-
 func attack(target : Node2D):
-
 	if (target is PlayerMovement) and combat_state:
 		#play animation and confirm hit
 		target.hit()

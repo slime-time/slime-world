@@ -69,10 +69,6 @@ tile_set = SubResource("TileSet_ps7ft")
 position = Vector2(65, 28)
 scale = Vector2(0.7, 1)
 
-[node name="MeleeSkeleton" parent="." unique_id=1999367218 instance=ExtResource("5_23275")]
-position = Vector2(193, 155)
-patrol = Array[Vector2]([Vector2(193, 155), Vector2(233, 155), Vector2(263, 0)])
-
 [node name="Spike" type="RigidBody2D" parent="." unique_id=653497353]
 position = Vector2(261, 74)
 script = ExtResource("6_pc5vb")
@@ -89,3 +85,12 @@ script = ExtResource("8_cepy0")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Spike/Area2D" unique_id=1782776641]
 position = Vector2(0.5, 43)
 shape = SubResource("RectangleShape2D_ps7ft")
+
+[node name="MeleeSkeleton" parent="." unique_id=1999367218 instance=ExtResource("5_23275")]
+position = Vector2(204, 155)
+
+[node name="PatrolPoint1" type="Node2D" parent="." unique_id=1479614142]
+position = Vector2(236, 157)
+
+[node name="PatrolPoint2" type="Node2D" parent="." unique_id=126970297]
+position = Vector2(290, 158)

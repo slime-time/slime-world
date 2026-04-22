@@ -2,15 +2,16 @@
 extends CharacterBody2D
 
 #initalize in editor
-@export var patrol: Array[Vector2]
+@export var patrol: Array[Node2D]
 var patrol_index: int
 var walk_speed: float
+var stop : int
+var sprite
 
 var los_area : Area2D
 var los_cone_deg: float
 var los_distance: int
 
-var attack_hitbox: Area2D
 var combat_target: Node2D
 # 0:neutral  1:combat
 var combat_state: bool
@@ -20,8 +21,6 @@ var is_patroling: bool
 
 func _ready():
 	combat_state= false
-	attack_hitbox = get_node("AttackHitbox")
-	attack_hitbox.body_entered.connect(attack)
 	
 	los_area = get_node("SkeletonLoS")
 	los_area.body_entered.connect(detect)
@@ -29,7 +28,40 @@ func _ready():
 	
 	read_enemy_data("generic_enemy_parameters")
 	set_los_cone()
+	#establish if enemy will patrol or stay put until player is encountered
+	if (patrol.size() > 0):
+		is_patroling = true
+		patrol_index = 1
+		
+		#automatically set first patrol point as enemys original position
+		var origin = Node2D.new()
+		origin.position = position
+		patrol.push_front(origin)
+	else: is_patroling = false
+	stop = 0
 
+func _physics_process(_delta : float):
+	if stop:
+		stop -= 1
+		return
+	
+	if is_patroling:
+		var next = float(patrol[patrol_index].position.x)
+		#reorient sprite and hitbox if necessary
+		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
+			await turnaround()
+		position.x = move_toward(position.x, next, walk_speed)
+		
+		if position.x == next:
+			velocity.x = 0
+			patrol_index = (patrol_index + 1) % patrol.size()
+			#wait 10 frames
+			stop = 10
+			
+	elif combat_state:
+		combat_behavior()
+
+	return
 
 	
 func detect(target : Node2D ):
@@ -41,9 +73,13 @@ func detect(target : Node2D ):
 	
 func deaggro(target : Node2D ):
 	if target is PlayerMovement:
-			combat_target = null
-			combat_state = false
-			is_patroling = true
+		combat_target = null
+		combat_state = false
+		is_patroling = true
+		
+		#reorient sprite and hitbox if necessary
+		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
+			await turnaround()
 	return
 	
 func read_enemy_data(sectionName):
@@ -70,4 +106,8 @@ func set_los_cone():
 @abstract 
 func attack(target : Node2D)
 
-	
+@abstract
+func turnaround()
+
+@abstract
+func combat_behavior()	
