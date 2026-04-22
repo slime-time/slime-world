@@ -14,7 +14,7 @@ func _ready() -> void:
 			button.disabled = true;
 
 		# Give it functionality
-		button.pressed.connect(func(): GameManager.call_deferred("load_level", level_idx))
+		button.pressed.connect(func(): GameManager.call_deferred("loadLevel", level_idx))
 
 		# Actually place the button into the scene
 		add_child(button)	

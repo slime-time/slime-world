@@ -10,13 +10,13 @@ const levels: Array[String] = [
 	"res://levels/Level2.tscn"
 ]
 
-func load_level(x : int):
+func loadLevel(x : int):
 	assert(0 <= x && x <= highest_level_unlocked)
 	cur_level = x
 	get_tree().call_deferred("change_scene_to_file", levels[x])
 
 # Completes the current level we're on and loads next level if one was just unlocked
-func complete_level():
+func completeLevel():
 	var nxt : int = cur_level
 
 	# Unlock the next level
@@ -32,4 +32,4 @@ func complete_level():
 	if (nxt == levels.size()):
 		nxt = 0
 
-	load_level(nxt)
+	loadLevel(nxt)
