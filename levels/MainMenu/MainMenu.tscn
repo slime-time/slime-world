@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://ob27y2if7ueg"]
 
-[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="2_kyhc2"]
-[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_jl0ce"]
-[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="4_wrpfa"]
-[ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/LevelSelect/LevelSelect.gd" id="6_kyhc2"]
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="1_pr6oe"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_obe7s"]
+[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="3_da0pr"]
+[ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/MainMenu/LevelSelect.gd" id="4_7onnh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
-shader = ExtResource("2_kyhc2")
+shader = ExtResource("1_pr6oe")
 shader_parameter/darkness = 0.730000034675
 shader_parameter/edge_softness = 3.30200015358512
 
@@ -21,7 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("3_jl0ce")
+texture = ExtResource("2_obe7s")
 expand_mode = 1
 stretch_mode = 1
 
@@ -45,7 +45,7 @@ theme_override_colors/font_shadow_color = Color(0.38, 1, 0.566, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = -1
 theme_override_constants/shadow_outline_size = 4
-theme_override_fonts/font = ExtResource("4_wrpfa")
+theme_override_fonts/font = ExtResource("3_da0pr")
 theme_override_font_sizes/font_size = 24
 text = "slime girl, slime world"
 horizontal_alignment = 1
@@ -64,4 +64,4 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-script = ExtResource("6_kyhc2")
+script = ExtResource("4_7onnh")
