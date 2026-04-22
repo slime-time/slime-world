@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://ob27y2if7ueg"]
 
+[ext_resource type="Script" uid="uid://me1j64rma2d8" path="res://levels/MainMenu/MainMenu.gd" id="1_7onnh"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="1_pr6oe"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_obe7s"]
 [ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="3_da0pr"]
 [ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/MainMenu/LevelSelect.gd" id="4_7onnh"]
+[ext_resource type="Script" uid="uid://bhgn4v5l4thqa" path="res://levels/MainMenu/SaveSlotSelect.gd" id="5_da0pr"]
+[ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://components/MainMenuButton/MainMenuButton.tscn" id="6_7onnh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
 shader = ExtResource("1_pr6oe")
@@ -12,6 +15,7 @@ shader_parameter/edge_softness = 3.30200015358512
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1747510423]
 layer = -100
+script = ExtResource("1_7onnh")
 
 [node name="BackgroundTexture" type="TextureRect" parent="." unique_id=1823849411]
 material = SubResource("ShaderMaterial_0bmyu")
@@ -60,8 +64,41 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="LevelSelect" type="GridContainer" parent="CenterContainer/VBoxContainer/ScrollContainer" unique_id=1412943189]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/ScrollContainer" unique_id=857197836]
+layout_mode = 2
+
+[node name="LevelSelect" type="GridContainer" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1412943189]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("4_7onnh")
+
+[node name="SaveSlotSelect" type="GridContainer" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=452763105]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("5_da0pr")
+
+[node name="NewGame" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=926866542 instance=ExtResource("6_7onnh")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New Game"
+
+[node name="LoadGame" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1240916343 instance=ExtResource("6_7onnh")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Game"
+
+[node name="BackButton" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1242364560 instance=ExtResource("6_7onnh")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Back"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/NewGame" to="." method="_onNewGamePressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/LoadGame" to="." method="_onLoadGamePressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/BackButton" to="." method="_onBackButtonPressed"]

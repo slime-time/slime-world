@@ -1,4 +1,4 @@
-extends Control
+extends GridContainer
 
 const MainMenuButton = preload("res://components/MainMenuButton/MainMenuButton.tscn")
 
