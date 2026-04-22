@@ -42,12 +42,10 @@ func canInteract() -> bool:
 
 # Returns true iff this player object can climb right now (i.e. is in tar and against a wall)
 func canClimb(direction: float):
-	tar_intersections = 3
 	if(tar_intersections > 0 and is_on_wall()):
 		var wall_direction = get_wall_normal()
 		if(wall_direction.x * direction < 0):
 			return true
-	print_debug(is_on_wall())
 	return false
 
 
