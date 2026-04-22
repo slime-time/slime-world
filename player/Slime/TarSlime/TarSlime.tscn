@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://35gjypc8vdx" path="res://player/Slime/TarSlime/TarSlime.gd" id="1_p6pge"]
 [ext_resource type="Shape2D" uid="uid://8426i0bh3yoj" path="res://player/Slime/TarSlime/Hitboxes/TarSlime-8/TarSlime-Base-8.tres" id="2_ts53f"]
-[ext_resource type="Shape2D" uid="uid://bdey2o6iuus6u" path="res://player/Slime/TarSlime/Hitboxes/TarSlime-8-funny/TarSlime-Body-8.tres" id="3_li6jj"]
+[ext_resource type="Shape2D" uid="uid://cigf4hhwoujm6" path="res://player/Slime/TarSlime/Hitboxes/TarSlime-8/TarSlime-Body-8.tres" id="3_p6pge"]
 [ext_resource type="Texture2D" uid="uid://cj040xq44fy4k" path="res://assets/tar-slime/tar-slime-8.png" id="4_p6pge"]
 [ext_resource type="PackedScene" uid="uid://ck71hvloai78m" path="res://player/Slime/TransformConfirmers/MergeConfirm.tscn" id="5_oopj3"]
 [ext_resource type="PackedScene" uid="uid://6g8tm78kme6l" path="res://player/Slime/TransformConfirmers/SplitConfirm.tscn" id="6_72nuc"]
@@ -59,7 +59,7 @@ shape = ExtResource("2_ts53f")
 
 [node name="SlimeBody" type="CollisionShape2D" parent="." unique_id=32116123]
 rotation = 1.5707964
-shape = ExtResource("3_li6jj")
+shape = ExtResource("3_p6pge")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=509701531]
 z_index = -2
