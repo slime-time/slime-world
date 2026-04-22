@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="1_dleve"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_8vtko"]
 [ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="3_j12p5"]
-[ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://levels/LevelSelect/LevelSelectButton.tscn" id="4_vx5hu"]
+[ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://components/MainMenuButton/MainMenuButton.tscn" id="4_vx5hu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
 shader = ExtResource("1_dleve")
