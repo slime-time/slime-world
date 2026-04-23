@@ -10,7 +10,7 @@ func _ready() -> void:
 		button.text = "Level " + str(level_idx)
 
 		# Disable button if level hasn't been unlocked yet
-		if (level_idx > GameManager.highest_level_unlocked):
+		if (level_idx > GameManager.current_state.highest_level_unlocked):
 			button.disabled = true;
 
 		# Give it functionality
