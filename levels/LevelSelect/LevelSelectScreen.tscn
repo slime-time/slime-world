@@ -3,6 +3,7 @@
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="2_kyhc2"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_jl0ce"]
 [ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="4_wrpfa"]
+[ext_resource type="PackedScene" uid="uid://duoa6x0tin2mn" path="res://AudioManager/AudioManager.tscn" id="5_whr1j"]
 [ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/LevelSelect/LevelSelect.gd" id="6_kyhc2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
@@ -65,3 +66,5 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("6_kyhc2")
+
+[node name="AudioManager" parent="." unique_id=554836896 instance=ExtResource("5_whr1j")]

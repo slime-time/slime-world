@@ -10,10 +10,13 @@ const levels: Array[String] = [
 	"res://levels/Level2.tscn"
 ]
 
+
 func load_level(x : int):
 	assert(0 <= x && x <= highest_level_unlocked)
 	cur_level = x
 	get_tree().call_deferred("change_scene_to_file", levels[x])
+	#start level theme after loading level
+	AudioManager.set_current_track("sgsw_theme1.wav")
 
 # Completes the current level we're on and loads next level if one was just unlocked
 func complete_level():

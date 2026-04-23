@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_8vtko"]
 [ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="3_j12p5"]
 [ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://levels/LevelSelect/LevelSelectButton.tscn" id="4_vx5hu"]
-[ext_resource type="PackedScene" uid="uid://duoa6x0tin2mn" path="res://AudioManager/AudioManager.tscn" id="6_j12p5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
 shader = ExtResource("1_dleve")
@@ -61,8 +60,5 @@ horizontal_alignment = 1
 [node name="LevelSelectButton" parent="CanvasLayer/CenterContainer/VBoxContainer" unique_id=869992264 instance=ExtResource("4_vx5hu")]
 layout_mode = 2
 toggle_mode = true
-
-[node name="AudioManager" parent="." unique_id=554836896 instance=ExtResource("6_j12p5")]
-layout_mode = 0
 
 [connection signal="pressed" from="CanvasLayer/CenterContainer/VBoxContainer/LevelSelectButton" to="." method="_on_level_select_button_pressed"]
