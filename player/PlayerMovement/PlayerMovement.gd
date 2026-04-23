@@ -119,8 +119,13 @@ func move(direction: float, delta: float) -> void:
 	if(canClimb(direction)):
 		climb(direction, delta)
 	else:
+		var run_velocity = direction * run_max_velocity
+		# If we're moving with the fluid, dampen max velocity so it doesn't get effectively doubled
+		if wetness > 0 and sign(direction) == sign(effective_fluid_velocity.x):
+			run_velocity *= (1 - wetness)
+
 		# Move towards the target velocity (plus net fluid flows)
-		var target_velocity = direction * run_max_velocity + effective_fluid_velocity.x * wetness
+		var target_velocity = run_velocity + effective_fluid_velocity.x * wetness
 		velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
 
 # To implement sliding later, we likely want to pass a delta to this function
