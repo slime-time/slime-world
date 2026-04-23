@@ -18,6 +18,10 @@ var jump_velocity: float
 var climb_max_speed: float
 var terminal_velocity: float
 var coyote_time: float
+var fluid_buoyancy: float
+var fluid_drag: Vector2
+var fluid_entry_dampening: Vector2
+var fluid_drying_time: float
 
 # Count the number of tar globs intersecting with this slime
 var tar_intersections: int
@@ -30,6 +34,12 @@ var interaction_target: InteractionTarget = null
 
 var coyote_timer: Timer = null
 var hover_timer: Timer = null
+
+# Net effects of fluid volumes we're currently in, applied in physics_process
+var wetness: float = 0
+var num_fluid_volumes: int = 0
+var net_fluid_velocity: Vector2 = Vector2.ZERO
+var effective_fluid_velocity: Vector2 = Vector2.ZERO  # Cached fluid velocity for use while we're drying
 
 # Whether this slime should have elastic collisions with static bodies (e.g. true for ice slime to bounce off walls)
 func isElastic() -> bool:
@@ -75,6 +85,18 @@ func clearInteractionTarget(target: InteractionTarget) -> void:
 func getMass() -> float:
 	return mass
 
+func enterFluidVolume(fluid_velocity: Vector2) -> void:
+	num_fluid_volumes += 1
+	net_fluid_velocity += fluid_velocity
+
+	# Dampen the incoming velocity if we are entering a volume
+	if num_fluid_volumes == 1:
+		velocity *= fluid_entry_dampening
+
+func exitFluidVolume(fluid_velocity: Vector2) -> void:
+	num_fluid_volumes -= 1
+	net_fluid_velocity -= fluid_velocity
+
 # Take an arbitrary amount of damage
 func takeDamage(damage = 1):
 	health -= damage
@@ -103,8 +125,9 @@ func move(direction: float, delta: float) -> void:
 
 # To implement sliding later, we likely want to pass a delta to this function
 func stop(delta: float) -> void:
-	# Decelerate towards zero
-	velocity.x = move_toward(velocity.x, 0, run_deceleration * delta)
+	# Decelerate towards zero (relative to the fluid velocity if we're in a fluid)
+	var target_velocity = effective_fluid_velocity.x * wetness
+	velocity.x = move_toward(velocity.x, target_velocity, run_deceleration * delta)
 
 # Make this player-controlled character jump, if it can
 func jump(delta: float) -> void:
@@ -152,13 +175,16 @@ func read_movement_data(my_name):
 	jump_velocity = config.get_value(my_name, "jump_velocity", jump_velocity)
 	terminal_velocity = config.get_value(my_name, "terminal_velocity", terminal_velocity)
 	coyote_time = config.get_value(my_name, "coyote_time", terminal_velocity)
+	fluid_buoyancy = config.get_value(my_name, "fluid_buoyancy", fluid_buoyancy)
+	fluid_drag = config.get_value(my_name, "fluid_drag", fluid_drag)
+	fluid_entry_dampening = config.get_value(my_name, "fluid_entry_dampening", fluid_entry_dampening)
+	fluid_drying_time = config.get_value(my_name, "fluid_drying_time", fluid_drying_time)
 
 
 # Modify logic here to change controls for all slimes and Penny
 func _physics_process(delta: float) -> void:
 	if not SceneManager.physics_applies:
 		return
-
 
 	# Check if player is OOB, and reset to origin if so
 	if position.x >= screen.x or position.y >= screen.y:
@@ -186,10 +212,37 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("interact") and interaction_target:
 		interaction_target.interact(self)
 
+	# Apply fluid forces
+	if num_fluid_volumes > 0:
+		wetness = 1.0
+		effective_fluid_velocity = net_fluid_velocity
+	else:
+		wetness = move_toward(wetness, 0, delta / fluid_drying_time)
+
+	if wetness > 0:
+		# Buoyancy just directly negates part of gravity
+		if not is_on_floor():
+			velocity.y -= get_gravity().y * fluid_buoyancy * delta * wetness
+
+		# Get our velocity relative to the fluid for drag calculations
+		var relative_velocity = velocity - effective_fluid_velocity
+
+		# Stokes (linear) drag for the horizontal component
+		if relative_velocity.x != 0:
+			var drag_delta = relative_velocity * fluid_drag * delta * wetness
+			velocity.x = move_toward(velocity.x, effective_fluid_velocity.x, abs(drag_delta.x))
+
+		# We only apply Newtonian (quadratic) drag to the vertical component because horizontal
+		# movement would be unevenly affected with varying max vel/accel of slimes vs Penny
+		if relative_velocity.y != 0:
+			var drag_delta = (relative_velocity * relative_velocity.abs()) * fluid_drag * delta * wetness
+			velocity.y = move_toward(velocity.y, effective_fluid_velocity.y, abs(drag_delta.y))
+
 	var pre_slide_velocity = velocity
 	move_and_slide()
 
 	# Push things
+	# var effective_fluid_velocity = net_fluid_velocity
 	for i in range(get_slide_collision_count()):
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()

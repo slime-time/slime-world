@@ -6,6 +6,7 @@ class_name FluidVolume
 @export var fluid_extent_left: int = 32										# How far, at most, the fluid extends left from the volume's origin
 @export var fluid_extent_right: int = 32									# How far, at most, the fluid extends right from the volume's origin
 @export var fluid_velocity: float = 0.0										# The horizontal velocity at which the fluid flows (±x)
+@export var visual_fluid_velocity: float = 0.0								# The horizontal velocity at which the fluid shader flows (±x)
 @export var blocking_corner_radius: int = 1;								# How far to round inside corners, to fill out pixel gaps in the tilemap blocked by a collider corner
 
 @onready var fluid_rect: ColorRect = $FluidRect								# The color rect we render the fluid shader on
@@ -23,7 +24,7 @@ func _setShaderParameters() -> void:
 	# Set primary settings
 	fluid_rect.set_instance_shader_parameter("fluid_rect_size", _fluid_rect_size)
 	fluid_rect.set_instance_shader_parameter("fluid_level", fluid_level)
-	fluid_rect.set_instance_shader_parameter("fluid_velocity", fluid_velocity)
+	fluid_rect.set_instance_shader_parameter("fluid_velocity", visual_fluid_velocity)
 
 	# Set the fluid extents
 	for i in range(0, 16, 4):
@@ -57,10 +58,12 @@ func _ready() -> void:
 	_updateFluidExtents.call_deferred()
 
 func _onBodyEntered(body: Node2D) -> void:
-	print("body entered fluid: " + str(body))
+	if body is PlayerMovement:
+		body.enterFluidVolume(Vector2(fluid_velocity, 0))
 
 func _onBodyExited(body: Node2D) -> void:
-	print("body left fluid: " + str(body))
+	if body is PlayerMovement:
+		body.exitFluidVolume(Vector2(fluid_velocity, 0))
 
 func _updateFluidExtents() -> void:
 	_origin = global_position.floor()

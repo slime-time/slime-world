@@ -171,7 +171,7 @@ void fragment() {
         // Mix in streaks
         if (streak_intensity > 0.0) {
             float displacement = get_wave_displacement(pixel_coords, qtime);
-            vec2 streak_noise_coords = (screen_pixel_coords + vec2(-qtime * streak_scroll_speed * fluid_velocity, round(displacement / 2.0))) * streak_noise_scale / 10.0;
+            vec2 streak_noise_coords = (screen_pixel_coords + vec2(-qtime * streak_scroll_speed * fluid_velocity * fluid_velocity, round(displacement / 2.0))) * streak_noise_scale / 10.0;
             // vec2 streak_noise_coords = vec2(float(col) + , round(displacement / 2.0) floor(pixel_y) - qtime * streak_scroll_speed) * streak_noise_scale;
             float streak_noise = smoothstep(streak_bias_low, streak_bias_high, snoise(vec3(streak_noise_coords, streak_noise_timescale * qtime)));
             float streak_factor = round(streak_noise * streak_steps) / streak_steps;
@@ -179,7 +179,7 @@ void fragment() {
         }
         if (streak2_intensity > 0.0) {
             float displacement = get_wave_displacement(pixel_coords, qtime);
-            vec2 streak2_noise_coords = (screen_pixel_coords * 2.0 + vec2(-qtime * streak2_scroll_speed * fluid_velocity, round(displacement / 2.0))) * streak2_noise_scale / 10.0;
+            vec2 streak2_noise_coords = (screen_pixel_coords * 2.0 + vec2(-qtime * streak2_scroll_speed * fluid_velocity * fluid_velocity, round(displacement / 2.0))) * streak2_noise_scale / 10.0;
             // vec2 streak2_noise_coords = vec2(float(col) + , round(displacement / 2.0) floor(pixel_y) - qtime * streak2_scroll_speed) * streak2_noise_scale;
             float streak2_noise = smoothstep(streak2_bias_low, streak2_bias_high, snoise(vec3(streak2_noise_coords, streak2_noise_timescale * qtime)));
             float streak2_factor = round(streak2_noise * streak2_steps) / streak2_steps;
