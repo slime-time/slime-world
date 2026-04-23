@@ -66,8 +66,7 @@ func hit():
 
 # Turn into two slimes
 func split(child_slime_type: Slime.Type = slime_type):
-	var split_blockers = split_confirm.get_overlapping_bodies()
-	if(len(split_blockers) == 1 and split_blockers[0] == self):
+	if(size >= 2):
 		var child_size = floor(size / 2)
 		size = ceili(size / 2.0)
 		position.x -= 8
@@ -76,7 +75,7 @@ func split(child_slime_type: Slime.Type = slime_type):
 		updateHitbox()
 		updateSprite()
 	else:
-		takeDamage(1)
+		die()
 	
 # Returns true iff this slime can change size to become a "merged_size" slime, false otherwise.
 func testMerge(merged_size: int, merging_with: Node) -> bool:

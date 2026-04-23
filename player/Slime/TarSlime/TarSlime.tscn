@@ -69,7 +69,7 @@ texture = ExtResource("4_p6pge")
 libraries/ = SubResource("AnimationLibrary_2wi0r")
 
 [node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_oopj3")]
-visible = false
+position = Vector2(0, -1)
 
 [node name="Size8Confirm" parent="MergeConfirm" index="0" unique_id=1131443470]
 visible = false
