@@ -4,8 +4,6 @@
 
 [sub_resource type="AudioStreamWAV" id="AudioStreamWAV_hs254"]
 
-[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_ukwy1"]
-
 [node name="AudioManager" type="Control" unique_id=554836896]
 layout_mode = 3
 anchors_preset = 0
@@ -13,7 +11,8 @@ script = ExtResource("1_ukwy1")
 
 [node name="MusicStream" type="AudioStreamPlayer" parent="." unique_id=1546351758]
 stream = SubResource("AudioStreamWAV_hs254")
-bus = &"ActiveMusicTrack"
+bus = &"ActiveMusic"
 
-[node name="SfxStream" type="AudioStreamPlayer2D" parent="." unique_id=122239951]
-stream = SubResource("AudioStreamWAV_ukwy1")
+[node name="ContinuousSfxStreams" type="Node2D" parent="." unique_id=103255929]
+
+[node name="OneShotSfxStreams" type="Node2D" parent="." unique_id=689691200]

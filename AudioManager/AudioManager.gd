@@ -5,7 +5,8 @@ var current_track : String
 var songs : PackedStringArray
 var sfx : PackedStringArray
 var music_stream : AudioStreamPlayer
-var sfx_stream : AudioStreamPlayer2D
+var continuous_sfx_streams : Node2D
+var oneshot_sfx_streams : Node2D
 
 signal song_changed
 signal sfx_changed
@@ -18,12 +19,13 @@ func _ready() -> void:
 	songs = song_directory.get_files()
 	sfx = sfx_directory.get_files()
 	music_stream = get_node("MusicStream")
-	sfx_stream = get_node("SfxStream")
+	continuous_sfx_streams = get_node("ContinuousSfxStreams")
+	oneshot_sfx_streams = get_node("OneShotSfxStreams")
 	
 	song_changed.connect(change_track_playback)
 	#looping behavior
 	music_stream.finished.connect(music_stream.play)
-	sfx_changed.connect(sfx_stream.play)
+	#sfx_changed.connect(sfx_stream.play)
 	
 
 func set_current_track(name : String):
@@ -33,16 +35,33 @@ func set_current_track(name : String):
 			song_changed.emit(current_track)
 			
 
-func play_sfx(name : String):
-	#allow for overlapping playback for sfx
-	if sfx_stream.playing:
-		sfx_stream.max_polyphony += 1
+func play_sfx(name : String, mode : int):
+	var streams
+	var busName
+	#(mode = 1) -> oneshot (mode = 0) -> continuous
+	if mode: 
+		streams = oneshot_sfx_streams.get_children()
+		busName = "OneShotSFX"
 	else: 
-		sfx_stream.max_polyphony -= 1
-	for sound in sfx:
-		if(sound.contains(name)):
-			sfx_stream.stream.load(name)
-			sfx_changed.emit()
+		streams = continuous_sfx_streams.get_children()
+		busName = "ContinuousSFX"
+	
+	if streams.is_empty():
+		var newStream = AudioStreamPlayer.new()
+		newStream.name = name
+		newStream.bus = busName
+		newStream.stream.load("res://assets/sfx/" + name)
+		
+		if mode: oneshot_sfx_streams.add_child(newStream)
+		else: continuous_sfx_streams.add_child(newStream)
+		newStream.play()
+		
+		
+	for stream in streams:
+		if stream.name == name:
+			stream.play()
+	
+	return
 			
 
 func change_track_playback(song : String):
