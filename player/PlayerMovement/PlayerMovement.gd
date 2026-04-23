@@ -183,7 +183,7 @@ func read_movement_data(my_name):
 	climb_max_speed = config.get_value(my_name, "climb_max_velocity", climb_max_speed)
 	jump_velocity = config.get_value(my_name, "jump_velocity", jump_velocity)
 	terminal_velocity = config.get_value(my_name, "terminal_velocity", terminal_velocity)
-	coyote_time = config.get_value(my_name, "coyote_time", terminal_velocity)
+	coyote_time = config.get_value(my_name, "coyote_time", coyote_time)
 	fluid_buoyancy = config.get_value(my_name, "fluid_buoyancy", fluid_buoyancy)
 	fluid_drag = config.get_value(my_name, "fluid_drag", fluid_drag)
 	fluid_entry_dampening = config.get_value(my_name, "fluid_entry_dampening", fluid_entry_dampening)
