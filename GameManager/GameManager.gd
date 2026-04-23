@@ -21,6 +21,7 @@ func completeLevel():
 	# Unlock the next level
 	if (current_state.highest_level_unlocked == current_state.cur_level):
 		current_state.highest_level_unlocked += 1
+		current_state.saveKeys(["highest_level_unlocked"])
 		nxt += 1
 
 	# Otherwise, go back to level select
