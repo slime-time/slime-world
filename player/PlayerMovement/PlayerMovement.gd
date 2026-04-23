@@ -127,7 +127,11 @@ func move(direction: float, delta: float) -> void:
 func stop(delta: float) -> void:
 	# Decelerate towards zero (relative to the fluid velocity if we're in a fluid)
 	var target_velocity = effective_fluid_velocity.x * wetness
-	velocity.x = move_toward(velocity.x, target_velocity, run_deceleration * delta)
+
+	# Deceleration is slower when in a fluid
+	var deceleration = run_deceleration * (1.0 - wetness * fluid_drag.x)
+
+	velocity.x = move_toward(velocity.x, target_velocity, deceleration * delta)
 
 # Make this player-controlled character jump, if it can
 func jump(delta: float) -> void:
@@ -229,7 +233,8 @@ func _physics_process(delta: float) -> void:
 
 		# Stokes (linear) drag for the horizontal component
 		if relative_velocity.x != 0:
-			var drag_delta = relative_velocity * fluid_drag * delta * wetness
+			var drag_ratio = run_acceleration / run_max_velocity
+			var drag_delta = relative_velocity * fluid_drag * drag_ratio * delta * wetness
 			velocity.x = move_toward(velocity.x, effective_fluid_velocity.x, abs(drag_delta.x))
 
 		# We only apply Newtonian (quadratic) drag to the vertical component because horizontal
