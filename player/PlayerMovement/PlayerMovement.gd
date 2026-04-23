@@ -119,8 +119,8 @@ func move(direction: float, delta: float) -> void:
 	if(canClimb(direction)):
 		climb(direction, delta)
 	else:
-		# Move towards the target velocity
-		var target_velocity = direction * run_max_velocity
+		# Move towards the target velocity (plus net fluid flows)
+		var target_velocity = direction * run_max_velocity + effective_fluid_velocity.x * wetness
 		velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
 
 # To implement sliding later, we likely want to pass a delta to this function
@@ -233,8 +233,7 @@ func _physics_process(delta: float) -> void:
 
 		# Stokes (linear) drag for the horizontal component
 		if relative_velocity.x != 0:
-			var drag_ratio = run_acceleration / run_max_velocity
-			var drag_delta = relative_velocity * fluid_drag * drag_ratio * delta * wetness
+			var drag_delta = relative_velocity * fluid_drag * delta * wetness
 			velocity.x = move_toward(velocity.x, effective_fluid_velocity.x, abs(drag_delta.x))
 
 		# We only apply Newtonian (quadratic) drag to the vertical component because horizontal

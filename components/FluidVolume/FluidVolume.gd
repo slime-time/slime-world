@@ -2,10 +2,12 @@ extends Node2D
 class_name FluidVolume
 
 @export var fluid_type: FluidFlow.Type = FluidFlow.Type.WATER				# The type of fluid in this volume
+@export var fluid_min_slime_size: int = 8									# The minimum slime size that can freely move through this volume
 @export var fluid_level: int = 8											# The level of the fluid
 @export var fluid_extent_left: int = 32										# How far, at most, the fluid extends left from the volume's origin
 @export var fluid_extent_right: int = 32									# How far, at most, the fluid extends right from the volume's origin
-@export var fluid_velocity: float = 0.0										# The horizontal velocity at which the fluid flows (±x)
+@export var fluid_velocity_factor_low = 0.8									# The fraction of a "large enough" character's velocity that the fluid pushes them at
+@export var fluid_velocity_factor_high = 1.2								# The fraction of smaller characters' velocities that the fluid pushes them at
 @export var visual_fluid_velocity: float = 0.0								# The horizontal velocity at which the fluid shader flows (±x)
 @export var blocking_corner_radius: int = 1;								# How far to round inside corners, to fill out pixel gaps in the tilemap blocked by a collider corner
 
@@ -58,12 +60,25 @@ func _ready() -> void:
 	_updateFluidExtents.call_deferred()
 
 func _onBodyEntered(body: Node2D) -> void:
-	if body is PlayerMovement:
-		body.enterFluidVolume(Vector2(fluid_velocity, 0))
+	if not (body is PlayerMovement):
+		return
+
+	var size = body.size if (body is Slime) else 8
+	var velocity_factor = fluid_velocity_factor_low if size >= fluid_min_slime_size else fluid_velocity_factor_high
+	var velocity = body.run_max_velocity * velocity_factor
+
+	body.enterFluidVolume(Vector2(velocity, 0))
 
 func _onBodyExited(body: Node2D) -> void:
-	if body is PlayerMovement:
-		body.exitFluidVolume(Vector2(fluid_velocity, 0))
+	if not (body is PlayerMovement):
+		return
+
+
+	var size = body.size if (body is Slime) else 8
+	var velocity_factor = fluid_velocity_factor_low if size >= fluid_min_slime_size else fluid_velocity_factor_high
+	var velocity = body.run_max_velocity * velocity_factor
+
+	body.exitFluidVolume(Vector2(velocity, 0))
 
 func _updateFluidExtents() -> void:
 	_origin = global_position.floor()
