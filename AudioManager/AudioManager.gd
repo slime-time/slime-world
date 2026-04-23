@@ -33,7 +33,12 @@ func set_current_track(name : String):
 			song_changed.emit(current_track)
 			
 
-func set_current_sfx(name : String):
+func play_sfx(name : String):
+	#allow for overlapping playback for sfx
+	if sfx_stream.playing:
+		sfx_stream.max_polyphony += 1
+	else: 
+		sfx_stream.max_polyphony -= 1
 	for sound in sfx:
 		if(sound.contains(name)):
 			sfx_stream.stream.load(name)
