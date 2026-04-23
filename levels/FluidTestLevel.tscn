@@ -3,10 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_lalpd"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_l4i6y"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="3_xks8a"]
-[ext_resource type="PackedScene" uid="uid://cmk85sf0jtw4f" path="res://components/FluidFlow/parts/IceWaterFlowPart.tscn" id="4_hfg54"]
 [ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="5_l4i6y"]
 [ext_resource type="PackedScene" uid="uid://cuvwsherd1opx" path="res://components/Background/Background.tscn" id="6_hfg54"]
+[ext_resource type="PackedScene" uid="uid://dlqrks40kpbah" path="res://components/FluidVolume/FluidVolume.tscn" id="7_hfg54"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="7_y40yl"]
+[ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="8_i3cog"]
+[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="9_ds4rs"]
+[ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="10_ofnt0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
 texture = ExtResource("2_l4i6y")
@@ -44,10 +47,14 @@ texture = ExtResource("2_l4i6y")
 3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
 
 [sub_resource type="TileSet" id="TileSet_qehkn"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 129
 sources/0 = SubResource("TileSetAtlasSource_1mo47")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6yh2b"]
+size = Vector2(8, 97)
+
 [node name="Node2D" type="Node2D" unique_id=730916531]
+position = Vector2(-2, 0)
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_lalpd")]
 position = Vector2(253, 94)
@@ -56,7 +63,7 @@ position = Vector2(253, 94)
 z_index = 2
 texture_filter = 1
 position = Vector2(249, 150)
-tile_map_data = PackedByteArray("AAD9/wEAAAABAAAAAAD+/wEAAAABAAAAAAD//wEAAAABAAAAAAAAAAEAAAABAAAAAAABAAEAAAABAAAAAAACAAEAAAABAAAAAAADAAEAAAABAAAAAAAEAAEAAAACAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAIAAAAEAAIAAAACAAIAAAADAAIAAAABAAIAAAACAAIAAAABAAIAAAAAAAIAAAABAAIAAAABAAIAAAABAAIAAAD//wIAAAABAAIAAAD+/wIAAAABAAIAAAD9/wIAAAABAAIAAAADAAQAAAABAAMAAAACAAQAAAABAAMAAAABAAQAAAABAAMAAAAAAAQAAAABAAMAAAD//wQAAAABAAMAAAD+/wQAAAABAAMAAAD9/wQAAAABAAMAAAD8/wQAAAAAAAMAAAAEAAQAAAACAAMAAAAGAAQAAAADAAMAAAAGAAIAAAADAAIAAAAGAAEAAAADAAAAAAD8//r/AAAAAAIAAAD9//r/AAABAAIAAAD+//r/AAABAAIAAAD///r/AAABAAIAAAAAAPr/AAABAAIAAAABAPr/AAABAAIAAAACAPr/AAABAAIAAAADAPr/AAABAAIAAAAEAPr/AAABAAIAAAAFAPr/AAABAAIAAAAGAPr/AAABAAIAAAAHAPr/AAABAAIAAAAIAPr/AAABAAIAAAAJAPr/AAABAAIAAAAKAPr/AAABAAIAAAALAPr/AAACAAIAAAD8//n/AAAAAAEAAAD8//j/AAAAAAEAAAD8//f/AAAAAAEAAAD8//b/AAAAAAEAAAALAPn/AAACAAEAAAALAPj/AAACAAEAAAALAPf/AAACAAEAAAALAPb/AAACAAEAAAAKAPn/AAABAAEAAAAJAPn/AAABAAEAAAAIAPn/AAABAAEAAAAHAPn/AAABAAEAAAAGAPn/AAABAAEAAAAFAPn/AAABAAEAAAAEAPn/AAABAAEAAAADAPn/AAABAAEAAAACAPn/AAABAAEAAAABAPn/AAABAAEAAAAAAPn/AAABAAEAAAD///n/AAABAAEAAAD+//n/AAABAAEAAAD9//n/AAABAAEAAAD9//j/AAABAAEAAAD9//f/AAABAAEAAAD9//b/AAABAAEAAAD+//b/AAABAAEAAAD///b/AAABAAEAAAAAAPb/AAABAAEAAAABAPb/AAABAAEAAAACAPb/AAABAAEAAAADAPb/AAABAAEAAAAEAPb/AAABAAEAAAAFAPb/AAABAAEAAAAGAPb/AAABAAEAAAAHAPb/AAABAAEAAAAIAPb/AAABAAEAAAAJAPb/AAABAAEAAAAKAPb/AAABAAEAAAAKAPf/AAABAAEAAAAJAPf/AAABAAEAAAAJAPj/AAABAAEAAAAIAPf/AAABAAEAAAAIAPj/AAABAAEAAAAKAPj/AAABAAEAAAAHAPf/AAABAAEAAAAGAPf/AAABAAEAAAAFAPf/AAABAAEAAAAGAPj/AAABAAEAAAAHAPj/AAABAAEAAAAFAPj/AAABAAEAAAAEAPj/AAABAAEAAAAEAPf/AAABAAEAAAADAPf/AAABAAEAAAACAPf/AAABAAEAAAABAPf/AAABAAEAAAAAAPf/AAABAAEAAAD///f/AAABAAEAAAD+//f/AAABAAEAAAD+//j/AAABAAEAAAD///j/AAABAAEAAAAAAPj/AAABAAEAAAABAPj/AAABAAEAAAACAPj/AAABAAEAAAADAPj/AAABAAEAAAAGAP//AAAAAAMAAAAHAP//AAABAAMAAAAIAP//AAABAAMAAAAJAP//AAABAAMAAAAKAP//AAABAAMAAAALAP//AAACAAMAAAD6////AAADAAMAAAD2////AAADAAMAAAD0//3/AAADAAMAAAD2//v/AAADAAMAAAD0//n/AAADAAMAAAD7/wAAAAADAAMAAAAMAP7/AAADAAMAAAA=")
+tile_map_data = PackedByteArray("AAD9/wEAAAABAAAAAAD+/wEAAAABAAAAAAD//wEAAAABAAAAAAAAAAEAAAABAAAAAAABAAEAAAABAAAAAAACAAEAAAABAAAAAAADAAEAAAABAAAAAAAEAAEAAAACAAAAAAD8/wEAAAAAAAAAAAAEAAIAAAACAAIAAAADAAIAAAABAAIAAAACAAIAAAABAAIAAAAAAAIAAAABAAIAAAABAAIAAAABAAIAAAD//wIAAAABAAIAAAD+/wIAAAABAAIAAAD9/wIAAAABAAIAAAADAAQAAAABAAMAAAACAAQAAAABAAMAAAABAAQAAAABAAMAAAAAAAQAAAABAAMAAAD//wQAAAABAAMAAAD+/wQAAAABAAMAAAD9/wQAAAABAAMAAAD8/wQAAAAAAAMAAAAEAAQAAAACAAMAAAAGAAQAAAADAAMAAAAGAAIAAAADAAIAAAAGAAEAAAADAAAAAAD8//r/AAAAAAIAAAD9//r/AAABAAIAAAD+//r/AAABAAIAAAD///r/AAABAAIAAAAAAPr/AAABAAIAAAABAPr/AAABAAIAAAACAPr/AAABAAIAAAADAPr/AAABAAIAAAAEAPr/AAABAAIAAAAFAPr/AAABAAIAAAAGAPr/AAABAAIAAAAHAPr/AAABAAIAAAAIAPr/AAABAAIAAAAJAPr/AAABAAIAAAAKAPr/AAABAAIAAAALAPr/AAACAAIAAAD8//n/AAAAAAEAAAD8//j/AAAAAAEAAAD8//f/AAAAAAEAAAD8//b/AAAAAAEAAAALAPn/AAACAAEAAAALAPj/AAACAAEAAAALAPf/AAACAAEAAAALAPb/AAACAAEAAAAKAPn/AAABAAEAAAAJAPn/AAABAAEAAAAIAPn/AAABAAEAAAAHAPn/AAABAAEAAAAGAPn/AAABAAEAAAAFAPn/AAABAAEAAAAEAPn/AAABAAEAAAADAPn/AAABAAEAAAACAPn/AAABAAEAAAABAPn/AAABAAEAAAAAAPn/AAABAAEAAAD///n/AAABAAEAAAD+//n/AAABAAEAAAD9//n/AAABAAEAAAD9//j/AAABAAEAAAD9//f/AAABAAEAAAD9//b/AAABAAEAAAD+//b/AAABAAEAAAD///b/AAABAAEAAAAAAPb/AAABAAEAAAABAPb/AAABAAEAAAACAPb/AAABAAEAAAADAPb/AAABAAEAAAAEAPb/AAABAAEAAAAFAPb/AAABAAEAAAAGAPb/AAABAAEAAAAHAPb/AAABAAEAAAAIAPb/AAABAAEAAAAJAPb/AAABAAEAAAAKAPb/AAABAAEAAAAKAPf/AAABAAEAAAAJAPf/AAABAAEAAAAJAPj/AAABAAEAAAAIAPf/AAABAAEAAAAIAPj/AAABAAEAAAAKAPj/AAABAAEAAAAHAPf/AAABAAEAAAAGAPf/AAABAAEAAAAFAPf/AAABAAEAAAAGAPj/AAABAAEAAAAHAPj/AAABAAEAAAAFAPj/AAABAAEAAAAEAPj/AAABAAEAAAAEAPf/AAABAAEAAAADAPf/AAABAAEAAAACAPf/AAABAAEAAAABAPf/AAABAAEAAAAAAPf/AAABAAEAAAD///f/AAABAAEAAAD+//f/AAABAAEAAAD+//j/AAABAAEAAAD///j/AAABAAEAAAAAAPj/AAABAAEAAAABAPj/AAABAAEAAAACAPj/AAABAAEAAAADAPj/AAABAAEAAAAGAP//AAAAAAMAAAAHAP//AAABAAMAAAAIAP//AAABAAMAAAAJAP//AAABAAMAAAAKAP//AAABAAMAAAALAP//AAACAAMAAAD2////AAADAAMAAAD0//3/AAADAAMAAAD2//v/AAADAAMAAAD0//n/AAADAAMAAAAMAP7/AAADAAMAAAD8/wIAAAABAAIAAAD7/wIAAAABAAMAAAD6/wIAAAABAAMAAAD5/wIAAAABAAMAAAD3/wIAAAAAAAIAAAD3/wEAAAADAAAAAAD4/wIAAAABAAMAAAA=")
 tile_set = SubResource("TileSet_qehkn")
 
 [node name="WaterFlow" parent="." unique_id=21526138 instance=ExtResource("3_xks8a")]
@@ -66,13 +73,12 @@ is_flow_enabled = false
 
 [node name="WaterFlow2" parent="." unique_id=2090323164 instance=ExtResource("3_xks8a")]
 z_index = -5
-position = Vector2(295, 107)
+position = Vector2(295, 70)
 
 [node name="WaterFlow3" parent="." unique_id=639225547 instance=ExtResource("3_xks8a")]
 z_index = -5
-position = Vector2(347, 91)
+position = Vector2(347, 70)
 flow_type = 2
-flow_part_scene = ExtResource("4_hfg54")
 
 [node name="Lever" parent="." unique_id=1864762079 instance=ExtResource("5_l4i6y")]
 position = Vector2(210, 167)
@@ -82,6 +88,35 @@ position = Vector2(210, 167)
 [node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("7_y40yl")]
 position = Vector2(65, 28)
 scale = Vector2(0.7, 1)
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=1324862011]
+z_index = 2
+texture_filter = 1
+position = Vector2(257, 142)
+tile_map_data = PackedByteArray("AAD3/wIAAAACAAAAAAA=")
+tile_set = SubResource("TileSet_qehkn")
+
+[node name="FluidVolume" parent="." unique_id=1534517962 instance=ExtResource("7_hfg54")]
+position = Vector2(153, 182)
+fluid_level = 10
+visual_fluid_velocity = 3.0
+
+[node name="Spike" type="RigidBody2D" parent="." unique_id=598144181]
+position = Vector2(272, 74)
+script = ExtResource("8_i3cog")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike" unique_id=1522893824]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike" unique_id=768931425]
+texture = ExtResource("9_ds4rs")
+
+[node name="Area2D" type="Area2D" parent="Spike" unique_id=1991308729]
+script = ExtResource("10_ofnt0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Spike/Area2D" unique_id=312434216]
+position = Vector2(0, 44.5)
+shape = SubResource("RectangleShape2D_6yh2b")
 
 [connection signal="flip_off" from="Lever" to="WaterFlow" method="disableFlow"]
 [connection signal="flip_on" from="Lever" to="WaterFlow" method="enableFlow"]

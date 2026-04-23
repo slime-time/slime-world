@@ -3,7 +3,7 @@
 
 // Directly taken from https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 // ...with some adaptations (e.g. nonnegative range)
-// TODO: eventually integrate newer implementation from https://github.com/patriciogonzalezvivo/lygia/blob/main/generative/snoise.glsl
+// TODO: eventually™ integrate newer implementation from https://github.com/patriciogonzalezvivo/lygia/blob/main/generative/snoise.glsl
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
 float snoise(vec3 v){
