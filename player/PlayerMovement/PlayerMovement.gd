@@ -251,7 +251,6 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	# Push things
-	# var effective_fluid_velocity = net_fluid_velocity
 	for i in range(get_slide_collision_count()):
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
