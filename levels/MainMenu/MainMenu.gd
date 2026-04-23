@@ -34,7 +34,10 @@ func _switchToMenuState(newState: MainMenuState):
 	mainMenuState = newState
 
 func _ready() -> void:
-	_switchToMenuState(MainMenuState.MAIN_MENU_HOME)
+	if (GameManager.current_state.save_slot == -1): # If we haven't chosen a save slot yet, open main menu home.
+		_switchToMenuState(MainMenuState.MAIN_MENU_HOME)
+	else: # Otherwise, go straight to level select
+		_switchToMenuState(MainMenuState.LEVEL_SELECT)
 
 func _onNewGamePressed() -> void:
 	_switchToMenuState(MainMenuState.NAME_INPUT)
@@ -48,5 +51,5 @@ func _onBackButtonPressed() -> void:
 
 func _onContinueButtonPressed() -> void:
 	# Now we actually create the save file and set the player name in the save data
-
+	GameManager.current_state.loadSaveSlot(-1) # This will create a new save slot and load it into the current game state, which is what we want
 	_switchToMenuState(MainMenuState.LEVEL_SELECT)
