@@ -7,11 +7,17 @@
 [ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/MainMenu/LevelSelect.gd" id="4_7onnh"]
 [ext_resource type="Script" uid="uid://bhgn4v5l4thqa" path="res://levels/MainMenu/SaveSlotSelect.gd" id="5_da0pr"]
 [ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://components/MainMenuButton/MainMenuButton.tscn" id="6_7onnh"]
+[ext_resource type="Texture2D" uid="uid://bfltqkrne68wq" path="res://assets/button/button.png" id="8_pdm73"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
 shader = ExtResource("1_pr6oe")
 shader_parameter/darkness = 0.730000034675
 shader_parameter/edge_softness = 3.30200015358512
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dvenc"]
+content_margin_left = 10.0
+content_margin_bottom = 2.0
+texture = ExtResource("8_pdm73")
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1747510423]
 layer = -100
@@ -93,6 +99,20 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Load Game"
 
+[node name="PlayerNameEdit" type="LineEdit" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=2047940142]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_da0pr")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxTexture_dvenc")
+placeholder_text = "Enter your name..."
+virtual_keyboard_enabled = false
+
+[node name="ContinueButton" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=841176052 instance=ExtResource("6_7onnh")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start New Game"
+
 [node name="BackButton" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1242364560 instance=ExtResource("6_7onnh")]
 unique_name_in_owner = true
 visible = false
@@ -101,4 +121,5 @@ text = "Back"
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/NewGame" to="." method="_onNewGamePressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/LoadGame" to="." method="_onLoadGamePressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/ContinueButton" to="." method="_onContinueButtonPressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/BackButton" to="." method="_onBackButtonPressed"]
