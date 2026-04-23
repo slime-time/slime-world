@@ -1,78 +1,15 @@
 shader_type canvas_item;
 
-#include "res://assets/shaders/includes/noise.gdshaderinc"
-#include "res://assets/shaders/includes/blending.gdshaderinc"
-
-global uniform ivec2 SCREEN_SIZE_PIXELS;
-global uniform float QUANTIZED_TIME = 0.0;
-
-uniform vec3 tar_base_color: source_color;                // Base color of the tar, with alpha controlling opacity
-uniform vec3 tar_secondary_color: source_color;           // Base color of the tar, with alpha controlling opacity
-uniform vec3 tar_highlight_color: source_color;           // Base color of the tar, with alpha controlling opacity
-uniform float posterize_steps = 6.0;                      // Number of steps to posterize the gas alpha into
-uniform int blend_mode: hint_blend_mode = 1;              // Blending mode for the tar
-uniform int blend_mode_secondary: hint_blend_mode = 1;    // Blending mode for the secondary tar layer
-uniform int blend_mode_highlight: hint_blend_mode = 1;    // Blending mode for the highlight tar layer
-
-uniform vec2 noise_scale_base = vec2(1.0, 1.0);           // Scale of the noise pattern in xyz
-uniform vec2 noise_scale_secondary = vec2(1.0, 1.0);      // Scale of the noise pattern in xyz
-uniform vec2 noise_scale_highlight = vec2(1.0, 1.0);      // Scale of the noise pattern in xyz
-uniform float noise_bias_low = 0.3;                       // Where to start fading noise from 0 to 1
-uniform float noise_bias_high = 0.7;                      // Where to stop fading noise from 0 to 1
-uniform float noise_bias_low_highlight = 0.3;             // Where to start fading noise from 0 to 1 (highlight)
-uniform float noise_bias_high_highlight = 0.7;            // Where to stop fading noise from 0 to 1 (highlight)
-uniform float intensity = 1.0;                            // Overall intensity multiplier for the tar effect
-uniform float intensity_secondary = 1.0;                  // Overall intensity multipler for secondary blending
-uniform float intensity_highlight = 1.0;                  // Overall intensity multipler for highlight blending
-uniform float tar_level_multiplier = 1.5;                 // Super fun super sensical multiplier that just made it look better I think
-
 // Buffer storing information on tar pixels
-// Red channel stores right-facing walls, with 1.0 at the wall decreasing to 1/8 at a distance of 8 pixels
+// Red channel stores right-facing walls, with 255 at the wall decreasing to a distance of 8 pixels (255-7 at the 8th pixel away)
 // Green channel stores this for left-facing walls
 // Blue, if used, stores this for up-facing "walls" (i.e. the ground)
 // This is only set for pixels away from the normal, as such:
 //    -8 -7 -6 -5 -4 -3 -2 -1 -0 |
 //    -8 -7 -6 -5 -4 -3 -2 -1 -0 | -> (wall normal)
 //    -8 -7 -6 -5 -4 -3 -2 -1 -0 |
-uniform sampler2D tar_buffer : filter_nearest;
-
-vec4 getTar(vec2 screen_pixel_coords) {
-    return texelFetch(tar_buffer, ivec2(screen_pixel_coords), 0);
-}
+uniform isampler2D tar_buffer : source_color, filter_nearest;
 
 void fragment() {
-    vec2 screen_pixel_coords = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS));   // Quantized screen coordinates of the pixel we're drawing
-    vec2 screen_pixel_uv = screen_pixel_coords / vec2(SCREEN_SIZE_PIXELS);    // UV coordinates of the pixel we're drawing, with v=0 at the bottom and v=1 at the top
-
-    // Get the original texture color and tar buffer value for this pixel
-    vec4 tex_color = texture(TEXTURE, UV);
-    vec4 tar = getTar(screen_pixel_coords);
-
-    if (tex_color.a == 0.0) {
-        // If there is no tile here, don't draw anything
-        discard;
-    }
-
-    float noise_base = snoise(vec3(screen_pixel_uv * noise_scale_base, 0.0));
-    float noise_secondary = snoise(vec3(screen_pixel_uv * noise_scale_secondary, 0.0) + vec3(1000.0));
-    float noise_highlight = snoise(vec3(screen_pixel_uv * noise_scale_highlight, 0.0) + vec3(-1000.0));
-
-    float tar_level = tar_level_multiplier * pow(max(tar.r, tar.g), 1.0);
-
-    float smoothed_base = smoothstep(noise_bias_low, noise_bias_high, noise_base * tar_level);
-    float blend_base = floor(posterize_steps * smoothed_base) / posterize_steps;
-
-    float smoothed_secondary = smoothstep(noise_bias_low, noise_bias_high, noise_secondary * tar_level);
-    float blend_secondary = floor(posterize_steps * smoothed_secondary) / posterize_steps;
-
-    float smoothed_highlight = smoothstep(noise_bias_low_highlight, noise_bias_high_highlight, noise_highlight * tar_level);
-    float blend_highlight = floor(posterize_steps * smoothed_highlight) / posterize_steps;
-
-    tex_color.rgb = blend(blend_mode, tex_color.rgb, tar_base_color, blend_base * intensity);
-    tex_color.rgb = blend(blend_mode_secondary, tex_color.rgb, tar_secondary_color, blend_secondary * intensity_secondary);
-    tex_color.rgb = blend(blend_mode_highlight, tex_color.rgb, tar_highlight_color, blend_highlight * intensity_highlight);
-
-    COLOR = tex_color;
-
-    // COLOR.xy = screen_pixel_uv;
+    COLOR = texture(tar_buffer, UV);
 }
