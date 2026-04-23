@@ -1,0 +1,38 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://ci635lgafmwsl"]
+
+[ext_resource type="Shader" uid="uid://cqkh1sojdrmw" path="res://assets/shaders/FluidVolume.gdshader" id="1_ddu72"]
+
+[resource]
+shader = ExtResource("1_ddu72")
+shader_parameter/base_color = Color(0.23, 0.34116662, 0.46, 0.80784315)
+shader_parameter/outline_color = Color(0.16862746, 0.16862746, 0.27058825, 1)
+shader_parameter/framerate = 12
+shader_parameter/wave_octave0 = Vector2(2, 0.2)
+shader_parameter/wave_octave1 = Vector2(1, 0.5)
+shader_parameter/wave_octave2 = Vector2(0, 0.9)
+shader_parameter/wave_envelope = Vector2(0.3, 0.05)
+shader_parameter/wave_envelope_range = Vector2(0, 1)
+shader_parameter/wave_amplitude = 1.1
+shader_parameter/wave_timescale = 12.0
+shader_parameter/wave_row_offset = 0.2
+shader_parameter/streak_noise_scale = Vector2(0.2, 0.5)
+shader_parameter/streak_noise_timescale = 0.0
+shader_parameter/streak_scroll_speed = 5.0
+shader_parameter/streak_blend = 10
+shader_parameter/streak_color = Color(0.87058824, 0.87058824, 0.78039217, 1)
+shader_parameter/streak_bias_low = 0.0
+shader_parameter/streak_bias_high = 0.8
+shader_parameter/streak_steps = 6.0
+shader_parameter/streak_intensity = 0.2
+shader_parameter/streak2_noise_scale = Vector2(0.03, 0.3)
+shader_parameter/streak2_noise_timescale = 0.0
+shader_parameter/streak2_scroll_speed = 8.0
+shader_parameter/streak2_blend = 10
+shader_parameter/streak2_color = Color(0.23921569, 0.6313726, 0.8, 1)
+shader_parameter/streak2_bias_low = 0.0
+shader_parameter/streak2_bias_high = 0.8
+shader_parameter/streak2_steps = 5.0
+shader_parameter/streak2_intensity = 0.3
+shader_parameter/refract_strength = 1.2
+shader_parameter/refract_frequency = 0.25
+shader_parameter/refract_timescale = 2.0
