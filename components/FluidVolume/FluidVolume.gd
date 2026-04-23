@@ -2,12 +2,12 @@ extends Node2D
 class_name FluidVolume
 
 @export var fluid_type: FluidFlow.Type = FluidFlow.Type.WATER				# The type of fluid in this volume
-@export var fluid_min_slime_size: int = 8									# The minimum slime size that can freely move through this volume
-@export var fluid_level: int = 8											# The level of the fluid
+@export_range(1, 8) var fluid_min_slime_size: int = 8						# The minimum slime size that can freely move through this volume
+@export_range(0, 16) var fluid_level: int = 8								# The level of the fluid
 @export var fluid_extent_left: int = 32										# How far, at most, the fluid extends left from the volume's origin
 @export var fluid_extent_right: int = 32									# How far, at most, the fluid extends right from the volume's origin
-@export var fluid_velocity_factor_low = 0.8									# The fraction of a "large enough" character's velocity that the fluid pushes them at
-@export var fluid_velocity_factor_high = 1.2								# The fraction of smaller characters' velocities that the fluid pushes them at
+@export var fluid_velocity_factor_low: float = 0.8							# The fraction of a "large enough" character's velocity that the fluid pushes them at
+@export var fluid_velocity_factor_high: float = 1.2							# The fraction of smaller characters' velocities that the fluid pushes them at
 @export var visual_fluid_velocity: float = 0.0								# The horizontal velocity at which the fluid shader flows (±x)
 @export var blocking_corner_radius: int = 1;								# How far to round inside corners, to fill out pixel gaps in the tilemap blocked by a collider corner
 
@@ -121,9 +121,12 @@ func _updateFluidExtents() -> void:
 	fluid_rect.offset_right = _max_right_extent
 
 	# Set the collider extents to match
+	# We duplicate the collider shape to avoid modifying the original resource
 	var width = _max_right_extent - _min_left_extent
 	var height = fluid_level
-	fluid_collider.shape.size = Vector2(width, height)
+	var collider_shape = fluid_collider.shape.duplicate() as RectangleShape2D
+	collider_shape.size = Vector2(width, height)
+	fluid_collider.shape = collider_shape
 
 	# CollisionShape2D position is based on its center
 	fluid_collider.position.x = (_min_left_extent + _max_right_extent) / 2.0
