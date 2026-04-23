@@ -15,7 +15,7 @@ var last_death
 # Reset the scene
 func resetScene():
 	var tree = get_tree()
-	if(tree.get_frame() != last_death and GameManager.cur_level != 0):
+	if(tree.get_frame() != last_death and GameManager.current_state.cur_level != 0):
 		last_death = tree.get_frame()
 		TarManager.resetTar()
 		tree.call_deferred("reload_current_scene")
