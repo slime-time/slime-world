@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://yca8b2k8wq6x"]
+
+[ext_resource type="Texture2D" uid="uid://dhvqn2n1fdqk7" path="res://assets/skeleton.png" id="1_yyiac"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2foi4"]
+
+[node name="ToxicGas" type="Area2D" unique_id=1311772067]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=98686393]
+position = Vector2(-4.7683716e-07, -3.427267e-07)
+scale = Vector2(1.25, 1.0526315)
+texture = ExtResource("1_yyiac")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=999086715]
+shape = SubResource("RectangleShape2D_2foi4")
