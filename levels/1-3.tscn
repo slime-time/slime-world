@@ -1,0 +1,148 @@
+[gd_scene format=4 uid="uid://66654ipd72pi"]
+
+[ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_r0rnf"]
+[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_q3571"]
+[ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="3_jfhb2"]
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="4_cb71d"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="5_3muuk"]
+[ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="6_mrw8f"]
+[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="7_8yiqi"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
+texture = ExtResource("2_q3571")
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+
+[sub_resource type="TileSet" id="TileSet_qehkn"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_1mo47")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
+shader = ExtResource("4_cb71d")
+shader_parameter/darkness = 0.730000034675
+shader_parameter/edge_softness = 3.30200015358512
+
+[node name="Node2D2" type="Node2D" unique_id=730916531]
+
+[node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_r0rnf")]
+position = Vector2(28, 77.99)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
+z_index = 2
+texture_filter = 1
+position = Vector2(250, 150)
+tile_map_data = PackedByteArray("AADw//z/AAABAAAAAADx//z/AAABAAAAAADy//z/AAABAAAAAADz//z/AAABAAAAAAD0//z/AAABAAAAAAD1//z/AAABAAAAAAD2//z/AAABAAAAAAD3//z/AAABAAAAAAD4//z/AAABAAAAAAD5//z/AAABAAAAAAD6//z/AAACAAAAAAD6//3/AAACAAEAAAD6//7/AAACAAIAAAD8//z/AAAAAAAAAAD8//3/AAAAAAEAAAD8//7/AAAAAAIAAAD9//z/AAABAAAAAAD+//v/AAAAAAAAAAD///r/AAAAAAEAAAD///n/AAAAAAAAAAAAAPj/AAAAAAEAAAAAAPf/AAAAAAEAAAAAAPb/AAAAAAEAAAD7/wEAAAADAAAAAADz//v/AAADAAAAAAA=")
+tile_set = SubResource("TileSet_qehkn")
+
+[node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("3_jfhb2")]
+position = Vector2(501, 204)
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=997475926]
+layer = -100
+
+[node name="BackgroundTexture" type="TextureRect" parent="Background" unique_id=745744311]
+material = SubResource("ShaderMaterial_qehkn")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_3muuk")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Spike" type="RigidBody2D" parent="." unique_id=598144181]
+position = Vector2(178, 163)
+rotation = 3.1415927
+script = ExtResource("6_mrw8f")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike" unique_id=1522893824]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike" unique_id=768931425]
+texture = ExtResource("7_8yiqi")
+
+[node name="Spike2" type="RigidBody2D" parent="." unique_id=1758072841]
+position = Vector2(78, 83)
+rotation = 3.1415927
+script = ExtResource("6_mrw8f")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike2" unique_id=1564053044]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike2" unique_id=467672798]
+texture = ExtResource("7_8yiqi")
+
+[node name="Spike3" type="RigidBody2D" parent="." unique_id=641568634]
+position = Vector2(95, 83)
+rotation = 3.1415927
+script = ExtResource("6_mrw8f")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike3" unique_id=1537242632]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike3" unique_id=1884993796]
+texture = ExtResource("7_8yiqi")
+
+[node name="Spike4" type="RigidBody2D" parent="." unique_id=1167273922]
+position = Vector2(115, 83)
+rotation = 3.1415927
+script = ExtResource("6_mrw8f")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike4" unique_id=1334954615]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike4" unique_id=1664680561]
+texture = ExtResource("7_8yiqi")
+
+[node name="Spike5" type="RigidBody2D" parent="." unique_id=1838854759]
+position = Vector2(134, 83)
+rotation = 3.1415927
+script = ExtResource("6_mrw8f")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike5" unique_id=1378199297]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike5" unique_id=269812540]
+texture = ExtResource("7_8yiqi")
+
+[node name="Spike6" type="RigidBody2D" parent="." unique_id=1906767925]
+position = Vector2(156, 83)
+rotation = 3.1415927
+script = ExtResource("6_mrw8f")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike6" unique_id=1512586551]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike6" unique_id=301224548]
+texture = ExtResource("7_8yiqi")

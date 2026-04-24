@@ -74,6 +74,12 @@ position = Vector2(0, -1)
 [node name="Size8Body" parent="MergeConfirm/Size8Confirm" parent_id_path=PackedInt32Array(488681826, 1131443470) index="0" unique_id=1742504448]
 rotation = 1.5707964
 
+[node name="Size8Confirm" parent="MergeConfirm" index="0" unique_id=1131443470]
+visible = true
+
+[node name="Size4Confirm" parent="MergeConfirm" index="1" unique_id=758554775]
+visible = true
+
 [node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_po2r2")]
 visible = false
 
