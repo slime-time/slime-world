@@ -13,6 +13,7 @@ platform_floor_layers = 2
 script = ExtResource("1_o24qj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2028633091]
+visible = false
 texture_filter = 1
 position = Vector2(0.5, 0.5)
 shape = ExtResource("2_yucds")
@@ -24,6 +25,7 @@ texture = SubResource("CompressedTexture2D_1fj7d")
 offset = Vector2(0, 0.5)
 
 [node name="TransformChecker" type="Area2D" parent="." unique_id=1828918931]
+visible = false
 
 [node name="SlimeBody" type="CollisionShape2D" parent="TransformChecker" unique_id=637362726]
 shape = ExtResource("3_yo5c4")
