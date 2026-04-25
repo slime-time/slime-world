@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var save_slot_select = %SaveSlotSelect
 @onready var player_name_edit = %PlayerNameEdit
 @onready var continue_button = %ContinueButton
+@onready var title_label = %TitleLabel
 
 enum MainMenuState {
 	MAIN_MENU_HOME,
@@ -16,6 +17,8 @@ enum MainMenuState {
 }
 
 var mainMenuState: MainMenuState
+
+var player_name: String = ""
 
 func _switchToMenuState(newState: MainMenuState):
 	new_game_button.visible = (newState == MainMenuState.MAIN_MENU_HOME)
@@ -30,7 +33,21 @@ func _switchToMenuState(newState: MainMenuState):
 
 	player_name_edit.visible = (newState == MainMenuState.NAME_INPUT)
 	continue_button.visible = (newState == MainMenuState.NAME_INPUT)
+
+	# Always reset local player name when changing states
+	player_name = ""
+	if (newState == MainMenuState.NAME_INPUT):
+		continue_button.disabled = true # Disable the continue button until the player has entered a name
 	
+	# If on level select screen, will change title to include player name
+	if (newState == MainMenuState.LEVEL_SELECT):
+		if (GameManager.current_state.player_name.length() <= 10):
+			title_label.text = "Slime " + GameManager.current_state.player_name + ", Slime World"
+		else:
+			title_label.text = "Slime " + GameManager.current_state.player_name + ",\nSlime World"
+	else:
+		title_label.text = "Slime Girl, Slime World"
+
 	mainMenuState = newState
 
 func _ready() -> void:
@@ -50,6 +67,22 @@ func _onBackButtonPressed() -> void:
 	_switchToMenuState(MainMenuState.MAIN_MENU_HOME)
 
 func _onContinueButtonPressed() -> void:
+	if (player_name == ""):
+		# For now, we'll just return without doing anything.
+		return
+
 	# Now we actually create the save file and set the player name in the save data
-	GameManager.current_state.loadSaveSlot(-1) # This will create a new save slot and load it into the current game state, which is what we want
+	GameManager.current_state.loadSaveSlot(-1)
+	GameManager.current_state.player_name = player_name # Set the player name in the current game state
+	GameManager.current_state.saveKeys(["player_name"]) # Save to file
 	_switchToMenuState(MainMenuState.LEVEL_SELECT)
+
+func _onPlayerNameEntered(new_text: String) -> void:
+	player_name = new_text.strip_edges() # Remove leading and trailing whitespace from the player name
+	
+	# Don't accept names that are too long
+	if (player_name.length() > 23):
+		player_name = ""
+	
+	# Enable connected button if player name is not empty
+	continue_button.disabled = (player_name == "")

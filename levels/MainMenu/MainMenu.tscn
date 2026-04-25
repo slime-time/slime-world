@@ -48,7 +48,8 @@ layout_mode = 2
 mouse_filter = 2
 alignment = 1
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=640242093]
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=640242093]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.29999998, 0.75, 0.43499994, 1)
 theme_override_colors/font_shadow_color = Color(0.38, 1, 0.566, 1)
@@ -121,5 +122,6 @@ text = "Back"
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/NewGame" to="." method="_onNewGamePressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/LoadGame" to="." method="_onLoadGamePressed"]
+[connection signal="text_submitted" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/PlayerNameEdit" to="." method="_onPlayerNameEntered"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/ContinueButton" to="." method="_onContinueButtonPressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/BackButton" to="." method="_onBackButtonPressed"]
