@@ -5,6 +5,7 @@ shader_type canvas_item;
 
 // Globals
 global uniform ivec2 SCREEN_SIZE_PIXELS;
+global uniform float QUANTIZED_TIME = 0.0;
 
 // Basic settings
 group_uniforms BasicSettings;
@@ -218,7 +219,7 @@ void fragment() {
     float pixel_y = UV.y * float(flow_extent);
 
     // Time quantized to animation framerate
-    float qtime = round(TIME * float(framerate)) / float(framerate);
+    float qtime = QUANTIZED_TIME;
 
     // If this pixel is not in the flow area, draw nothing
     if (col < 0 || col > 15 || pixel_y < flow_start || pixel_y > dist + flow_falloff_bottom) {
@@ -280,7 +281,7 @@ void fragment() {
 
     // Apply screen refraction
     if (COLOR.a > 0.0 && !is_outline) {
-        float wave = sin(TIME * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
+        float wave = sin(qtime * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
         vec2 pixel_offset = vec2(float(wave * refract_strength * COLOR.a), 0.0); // Include a factor of alpha to fade smoothly at the falloff
 
         // Include the displacement in the refraction offset
