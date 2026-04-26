@@ -12,7 +12,6 @@ group_uniforms BasicSettings;
 uniform sampler2D fluid_tex : filter_nearest, repeat_enable;          // The fluid texture to sample
 uniform float base_opacity = 0.8;                                     // The base opacity of the fluid, before applying flow distance falloff
 uniform int flow_extent = 256;                                        // The extent of the flow texture in pixels, for calculating pixel UVs
-uniform int framerate = 12;                                           // The framerate of the fluid animation (frames per second)
 uniform int frame_count = 16;                                         // The total number of frames in the texture
 uniform float outline_threshold = 0.0;                                // Max value of max(r,g,b) to be considered outline (no refraction)
 uniform float flow_falloff_top = 8.0;                                 // How many pixels from the top to start fading out

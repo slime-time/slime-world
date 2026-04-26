@@ -11,7 +11,6 @@ global uniform float QUANTIZED_TIME = 0.0;
 group_uniforms BasicSettings;
 uniform vec4 base_color: source_color = vec4(0.2, 0.4, 0.8, 0.8);   // The base color of the fluid, before applying flow texture or lighting
 uniform vec4 outline_color: source_color = vec4(0.0);               // The color to use for the outline
-uniform int framerate = 12;                                         // The framerate of the fluid animation (frames per second)
 
 // Wave settings
 group_uniforms Waves;
