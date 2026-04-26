@@ -10,7 +10,7 @@ height = 22.222223
 [node name="RangedSkeleton" type="CharacterBody2D" unique_id=1779289937]
 script = ExtResource("1_822so")
 
-[node name="SkeletonHitbox" type="CollisionShape2D" parent="." unique_id=1660895399]
+[node name="SkeletonHurtbox" type="CollisionShape2D" parent="." unique_id=1660895399]
 position = Vector2(1, 0)
 scale = Vector2(0.9, 0.9)
 shape = SubResource("CapsuleShape2D_822so")

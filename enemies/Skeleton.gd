@@ -8,6 +8,8 @@ var walk_speed: float
 var stop : int
 var sprite
 
+var hurtbox : CollisionShape2D
+
 var los_area : Area2D
 var los_cone_deg: float
 var los_distance: int
@@ -22,6 +24,7 @@ var is_patroling: bool
 func _ready():
 	combat_state= false
 	
+	hurtbox = get_node("SkeletonHurtbox")
 	los_area = get_node("SkeletonLoS")
 	los_area.body_entered.connect(detect)
 	los_area.body_exited.connect(deaggro)
@@ -62,6 +65,9 @@ func _physics_process(_delta : float):
 
 	return
 
+
+func hit():
+	self.queue_free()
 	
 func detect(target : Node2D ):
 	if target is PlayerMovement:
