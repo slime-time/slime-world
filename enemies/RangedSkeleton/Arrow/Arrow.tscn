@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cy816b085ednk"]
+
+[ext_resource type="Script" path="res://enemies/RangedSkeleton/Arrow/Arrow.gd" id="1_733ra"]
+
+[node name="Arrow" type="RigidBody2D" unique_id=1697300432]
+script = ExtResource("1_733ra")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1802362018]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1683975223]
