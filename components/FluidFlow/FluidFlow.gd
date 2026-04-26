@@ -5,6 +5,7 @@ enum Type {
 	UNSET,
 	WATER,
 	ICE_WATER,
+	TAR,
 }
 
 const FLUID_BLOCKING_COLLISION_LAYER = 8;
@@ -13,6 +14,7 @@ const FLUID_BLOCKING_COLLISION_LAYER = 8;
 const FLOW_MATERIALS: Dictionary[Type, ShaderMaterial] = {
 	Type.WATER: preload("res://assets/materials/water_flow.tres"),
 	Type.ICE_WATER: preload("res://assets/materials/ice_water_flow.tres"),
+	Type.TAR: preload("res://assets/materials/tar_flow.tres"),
 }
 
 @onready var flow_rect: ColorRect = $FlowRect	# The color rect with the fluid flow shader

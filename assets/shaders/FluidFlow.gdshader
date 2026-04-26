@@ -57,6 +57,7 @@ uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen 
 uniform float refract_strength = 0.8;                                 // Strength of the refraction effect (offset in pixels)
 uniform float refract_frequency = 0.5;                                // Frequency of the vertical refraction waves
 uniform float refract_timescale = 2.0;                                // Timescale for the refraction animation
+uniform int refract_blend : hint_blend_mode = 2;                      // Blend mode to use for refraction
 
 // Foam settings
 group_uniforms Foam;
@@ -66,6 +67,7 @@ uniform float foam_timescale = 5.0;                                   // Foam no
 uniform float foam_distance = 6.0;                                    // How many pixels (Δy) around the flow end are affected by foam
 uniform float foam_steps = 4.0;                                       // Minimum noise value to show foam
 uniform float foam_intensity = 2.5;                                   // Intensity of the foam effect, from 0 to 1
+uniform int foam_blend : hint_blend_mode = 2;                         // Blend mode to use for foam
 
 // Voronoi (ice shard) settings
 group_uniforms Voronoi;
@@ -200,8 +202,8 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
 
         float foam_stepped = round(foam_amount * foam_steps) / foam_steps; // Step the foam amount to create more distinct patches
         float foam_alpha = (0.5 + (tex_color.a / 2.0)) * clamp((round(pixel_y) - round(flow_start)) / flow_falloff_bottom, 0.0, 1.0);
-        vec4 foam_blend = vec4(foam_color, foam_alpha);
-        tex_color = blend(BLEND_SCREEN, tex_color, foam_blend, foam_stepped);
+        vec4 foam_blend_color = vec4(foam_color, foam_alpha);
+        tex_color = blend(foam_blend, tex_color, foam_blend_color, foam_stepped);
     }
 
     return tex_color;
@@ -299,7 +301,7 @@ void fragment() {
         vec4 refract_color = texture(screen_tex, refract_uv);
 
         // Blend in the refracted color
-        COLOR = blend(BLEND_SCREEN, refract_color, COLOR, COLOR.a);
+        COLOR = blend(refract_blend, refract_color, COLOR, COLOR.a);
         COLOR.a = 1.0; // We render the refracted background, so don't allow the original background to show through
     }
 }

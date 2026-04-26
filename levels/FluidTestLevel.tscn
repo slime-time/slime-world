@@ -2,7 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_lalpd"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_l4i6y"]
+[ext_resource type="Script" uid="uid://dw23x5pynkluq" path="res://components/FluidFlow/FluidFlow.gd" id="3_frr26"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="3_xks8a"]
+[ext_resource type="Texture2D" uid="uid://kfehjyrcrjdi" path="res://assets/components/wide-vent.png" id="4_fkluh"]
+[ext_resource type="Material" uid="uid://b11gwhl5l11ee" path="res://assets/materials/tar_flow.tres" id="5_frr26"]
 [ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="5_l4i6y"]
 [ext_resource type="PackedScene" uid="uid://cuvwsherd1opx" path="res://components/Background/Background.tscn" id="6_hfg54"]
 [ext_resource type="PackedScene" uid="uid://dlqrks40kpbah" path="res://components/FluidVolume/FluidVolume.tscn" id="7_hfg54"]
@@ -66,10 +69,28 @@ position = Vector2(249, 150)
 tile_map_data = PackedByteArray("AAD9/wEAAAABAAAAAAD+/wEAAAABAAAAAAD//wEAAAABAAAAAAAAAAEAAAABAAAAAAABAAEAAAABAAAAAAACAAEAAAABAAAAAAADAAEAAAABAAAAAAAEAAEAAAACAAAAAAD8/wEAAAAAAAAAAAAEAAIAAAACAAIAAAADAAIAAAABAAIAAAACAAIAAAABAAIAAAAAAAIAAAABAAIAAAABAAIAAAABAAIAAAD//wIAAAABAAIAAAD+/wIAAAABAAIAAAD9/wIAAAABAAIAAAADAAQAAAABAAMAAAACAAQAAAABAAMAAAABAAQAAAABAAMAAAAAAAQAAAABAAMAAAD//wQAAAABAAMAAAD+/wQAAAABAAMAAAD9/wQAAAABAAMAAAD8/wQAAAAAAAMAAAAEAAQAAAACAAMAAAAGAAQAAAADAAMAAAAGAAIAAAADAAIAAAAGAAEAAAADAAAAAAD8//r/AAAAAAIAAAD9//r/AAABAAIAAAD+//r/AAABAAIAAAD///r/AAABAAIAAAAAAPr/AAABAAIAAAABAPr/AAABAAIAAAACAPr/AAABAAIAAAADAPr/AAABAAIAAAAEAPr/AAABAAIAAAAFAPr/AAABAAIAAAAGAPr/AAABAAIAAAAHAPr/AAABAAIAAAAIAPr/AAABAAIAAAAJAPr/AAABAAIAAAAKAPr/AAABAAIAAAALAPr/AAACAAIAAAD8//n/AAAAAAEAAAD8//j/AAAAAAEAAAD8//f/AAAAAAEAAAD8//b/AAAAAAEAAAALAPn/AAACAAEAAAALAPj/AAACAAEAAAALAPf/AAACAAEAAAALAPb/AAACAAEAAAAKAPn/AAABAAEAAAAJAPn/AAABAAEAAAAIAPn/AAABAAEAAAAHAPn/AAABAAEAAAAGAPn/AAABAAEAAAAFAPn/AAABAAEAAAAEAPn/AAABAAEAAAADAPn/AAABAAEAAAACAPn/AAABAAEAAAABAPn/AAABAAEAAAAAAPn/AAABAAEAAAD///n/AAABAAEAAAD+//n/AAABAAEAAAD9//n/AAABAAEAAAD9//j/AAABAAEAAAD9//f/AAABAAEAAAD9//b/AAABAAEAAAD+//b/AAABAAEAAAD///b/AAABAAEAAAAAAPb/AAABAAEAAAABAPb/AAABAAEAAAACAPb/AAABAAEAAAADAPb/AAABAAEAAAAEAPb/AAABAAEAAAAFAPb/AAABAAEAAAAGAPb/AAABAAEAAAAHAPb/AAABAAEAAAAIAPb/AAABAAEAAAAJAPb/AAABAAEAAAAKAPb/AAABAAEAAAAKAPf/AAABAAEAAAAJAPf/AAABAAEAAAAJAPj/AAABAAEAAAAIAPf/AAABAAEAAAAIAPj/AAABAAEAAAAKAPj/AAABAAEAAAAHAPf/AAABAAEAAAAGAPf/AAABAAEAAAAFAPf/AAABAAEAAAAGAPj/AAABAAEAAAAHAPj/AAABAAEAAAAFAPj/AAABAAEAAAAEAPj/AAABAAEAAAAEAPf/AAABAAEAAAADAPf/AAABAAEAAAACAPf/AAABAAEAAAABAPf/AAABAAEAAAAAAPf/AAABAAEAAAD///f/AAABAAEAAAD+//f/AAABAAEAAAD+//j/AAABAAEAAAD///j/AAABAAEAAAAAAPj/AAABAAEAAAABAPj/AAABAAEAAAACAPj/AAABAAEAAAADAPj/AAABAAEAAAAGAP//AAAAAAMAAAAHAP//AAABAAMAAAAIAP//AAABAAMAAAAJAP//AAABAAMAAAAKAP//AAABAAMAAAALAP//AAACAAMAAAD2////AAADAAMAAAD0//3/AAADAAMAAAD2//v/AAADAAMAAAD0//n/AAADAAMAAAAMAP7/AAADAAMAAAD8/wIAAAABAAIAAAD7/wIAAAABAAMAAAD6/wIAAAABAAMAAAD5/wIAAAABAAMAAAD3/wIAAAAAAAIAAAD3/wEAAAADAAAAAAD4/wIAAAABAAMAAAA=")
 tile_set = SubResource("TileSet_qehkn")
 
-[node name="WaterFlow" parent="." unique_id=21526138 instance=ExtResource("3_xks8a")]
+[node name="WaterFlow" type="Node2D" parent="." unique_id=21526138]
 z_index = -5
 position = Vector2(201, 70)
+script = ExtResource("3_frr26")
+flow_type = 3
 is_flow_enabled = false
+flow_retract_speed = 256
+
+[node name="WideVent" type="Sprite2D" parent="WaterFlow" unique_id=1639393941]
+z_index = 2
+z_as_relative = false
+position = Vector2(0, 8)
+texture = ExtResource("4_fkluh")
+
+[node name="FlowRect" type="ColorRect" parent="WaterFlow" unique_id=321912715]
+z_index = -1
+z_as_relative = false
+material = ExtResource("5_frr26")
+instance_shader_parameters/flow_distances_0 = Vector4i(256, 256, 256, 256)
+offset_left = -10.0
+offset_right = 10.0
+offset_bottom = 256.0
 
 [node name="WaterFlow2" parent="." unique_id=2090323164 instance=ExtResource("3_xks8a")]
 z_index = -5
