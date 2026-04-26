@@ -6,9 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="4_o0qj8"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="5_tqdee"]
 [ext_resource type="Script" uid="uid://drxkpiyewqrnl" path="res://player/Slime/GreenSlime/GreenSlime.gd" id="6_1y6o6"]
-[ext_resource type="Shape2D" uid="uid://1o1mbtqimmp2" path="res://player/Slime/IceSlime/Hitboxes/IceSlime-4/IceSlime-Base-4.tres" id="7_1y6o6"]
-[ext_resource type="Shape2D" uid="uid://b727ki2sxv27w" path="res://player/Slime/IceSlime/Hitboxes/IceSlime-4/IceSlime-Body-4.tres" id="8_ujexn"]
-[ext_resource type="Texture2D" uid="uid://dhhoby7mahn6l" path="res://assets/ice-slime/ice-slime-4.png" id="9_7ftcw"]
+[ext_resource type="Shape2D" uid="uid://d4gve2vqvum7t" path="res://player/Slime/EnergizedSlime/Hitboxes/EnergizedSlime-1/EnergizedSlime-Base-1.tres" id="7_1y6o6"]
+[ext_resource type="Shape2D" uid="uid://ubiednyddspf" path="res://player/Slime/EnergizedSlime/Hitboxes/EnergizedSlime-1/EnergizedSlime-Body-1.tres" id="8_ujexn"]
+[ext_resource type="Texture2D" uid="uid://ca14qvoxdbbsr" path="res://assets/energized-slime/energized-slime-1.png" id="9_7ftcw"]
 [ext_resource type="PackedScene" uid="uid://ck71hvloai78m" path="res://player/Slime/TransformConfirmers/MergeConfirm.tscn" id="10_a48kt"]
 [ext_resource type="PackedScene" uid="uid://6g8tm78kme6l" path="res://player/Slime/TransformConfirmers/SplitConfirm.tscn" id="11_afyat"]
 [ext_resource type="Shape2D" uid="uid://c0a4xjya8dw6g" path="res://player/Penny/Hitboxes/PennyHitbox.tres" id="12_y8ix5"]
@@ -133,6 +133,7 @@ position = Vector2(0, 6.5)
 shape = ExtResource("7_1y6o6")
 
 [node name="SlimeBody" type="CollisionShape2D" parent="GreenSlime" unique_id=32116123]
+position = Vector2(0, 5)
 rotation = 1.5707964
 shape = ExtResource("8_ujexn")
 
