@@ -19,6 +19,9 @@ func _ready():
 		FluidFlow.Type.ICE_WATER:
 			#load ice water bucket sprite
 			print("placeholder")
+		FluidFlow.Type.TAR:
+			#load ice water bucket sprite
+			print("placeholder")
 
 	attack_hitbox = get_node("AttackHitbox")
 	attack_hitbox.body_entered.connect(attack)
