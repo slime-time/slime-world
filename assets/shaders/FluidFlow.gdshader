@@ -137,7 +137,7 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
         return vec4(0.0);
     }
 
-    int frame_index = int(TIME * float(framerate)) % frame_count;
+    int frame_index = 0;  // TODO: remove frame count shenanigans; we don't actually use this anymore
 
     float frame_v = float(frame_index) / float(frame_count);
     float local_v = fract(pixel_y / 16.0) / float(frame_count);

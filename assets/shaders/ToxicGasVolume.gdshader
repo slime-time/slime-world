@@ -32,14 +32,12 @@ vec2 get_pixel_uv(vec2 uv) {
 }
 
 void fragment() {
-    vec2 screen_pixel_coords = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS));   // Quantized screen coordinates of the pixel we're drawing
-    vec2 screen_pixel_uv = screen_pixel_coords / vec2(SCREEN_SIZE_PIXELS);    // Quantized screen UV
-    vec2 pixel_coords = get_pixel_coords(UV);                                 // Pixel coordinates of the pixel we're drawing
-    vec2 pixel_uv = get_pixel_uv(UV);                                         // UV coordinates of the pixel we're drawing, with v=0 at the bottom and v=1 at the top
+    vec2 pixel_coords = get_pixel_coords(UV);   // Pixel coordinates of the pixel we're drawing
+    vec2 pixel_uv = get_pixel_uv(UV);           // UV coordinates of the pixel we're drawing, with v=0 at the bottom and v=1 at the top
 
     vec2 inverse_edge_distance = vec2(
-        1.0 - min(min(pixel_coords.x, area_size.x - pixel_coords.x), falloff_pixels) / falloff_pixels,
-        1.0 - min(min(pixel_coords.y, area_size.y - pixel_coords.y), falloff_pixels) / falloff_pixels);
+        1.0 - min(min(pixel_coords.x, area_size.x - 1.0 - pixel_coords.x), falloff_pixels) / falloff_pixels,
+        1.0 - min(min(pixel_coords.y, area_size.y - 1.0 - pixel_coords.y), falloff_pixels) / falloff_pixels);
     float edge_falloff = max(0.0, 1.0 - length(inverse_edge_distance));
 
     vec3 noise_uv = vec3(pixel_uv * noise_scale, 0.0) + (noise_time_factors * QUANTIZED_TIME);
@@ -48,4 +46,5 @@ void fragment() {
     vec4 screen_color = texture(screen_tex, SCREEN_UV);
     vec4 gas_color = vec4(base_color.rgb, base_color.a * noise_value * edge_falloff);        // Modulate alpha by noise value
     COLOR.rgb = blend(blend_mode, screen_color.rgb, gas_color.rgb, floor(gas_color.a * posterize_steps) / posterize_steps * intensity);
+    COLOR.a = 1.0;
 }

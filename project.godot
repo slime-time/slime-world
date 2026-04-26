@@ -92,10 +92,6 @@ SCREEN_SIZE_PIXELS={
 "type": "ivec2",
 "value": Vector2i(512, 288)
 }
-FRAMERATE={
-"type": "int",
-"value": 12
-}
 QUANTIZED_TIME={
 "type": "float",
 "value": 0.0
