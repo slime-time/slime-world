@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c5x7akkuwxm75"]
 
-[ext_resource type="Script" uid="uid://cgcwdxqyhxsly" path="res://enemies/MeleeSkeleton/MeleeSkeleton.gd" id="1_gop5g"]
+[ext_resource type="Script" uid="uid://h168jqdfkqkl" path="res://enemies/MeleeSkeleton/MeleeSkeleton.gd" id="1_gop5g"]
 [ext_resource type="Texture2D" uid="uid://dhvqn2n1fdqk7" path="res://assets/skeleton.png" id="2_oju2m"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_oju2m"]

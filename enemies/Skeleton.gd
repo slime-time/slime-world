@@ -27,7 +27,6 @@ func _ready():
 	los_area.body_exited.connect(deaggro)
 	
 	read_enemy_data("generic_enemy_parameters")
-	set_los_cone()
 	#establish if enemy will patrol or stay put until player is encountered
 	if (patrol.size() > 0):
 		is_patroling = true
@@ -72,7 +71,7 @@ func detect(target : Node2D ):
 	return
 	
 func deaggro(target : Node2D ):
-	if target is PlayerMovement:
+	if patrol.size() > 0 and target is PlayerMovement:
 		combat_target = null
 		combat_state = false
 		is_patroling = true
@@ -80,6 +79,10 @@ func deaggro(target : Node2D ):
 		#reorient sprite and hitbox if necessary
 		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
 			await turnaround()
+			
+	elif target is PlayerMovement:
+		combat_target = null
+		combat_state = false
 	return
 	
 func read_enemy_data(sectionName):

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cy816b085ednk"]
 
-[ext_resource type="Script" path="res://enemies/RangedSkeleton/Arrow/Arrow.gd" id="1_733ra"]
+[ext_resource type="Script" uid="uid://d32jfntuvtq2u" path="res://enemies/RangedSkeleton/Arrow/Arrow.gd" id="1_733ra"]
 
 [node name="Arrow" type="RigidBody2D" unique_id=1697300432]
 script = ExtResource("1_733ra")

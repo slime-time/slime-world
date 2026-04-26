@@ -5,10 +5,11 @@ extends Skeleton
 var attack_hitbox: Area2D
 
 func _ready():
+	super()
+	set_los_cone()
 	sprite = get_node("MeleeSprite")
 	attack_hitbox = get_node("AttackHitbox")
 	attack_hitbox.body_entered.connect(attack)
-	super()
 	read_melee_data("melee_parameters")
 	
 
@@ -28,9 +29,12 @@ func combat_behavior():
 func turnaround():
 	if !sprite.flip_h:
 		sprite.flip_h = true
+		los_area.scale.x = -1
 	else:
 		sprite.flip_h = false
+		los_area.scale.x = 1
 	attack_hitbox.position.x = -attack_hitbox.position.x
+	
 	return
 
 func attack(target : Node2D):

@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c76osvgo4hqkn"]
 
+[ext_resource type="Script" uid="uid://5fwf7gvvxkdw" path="res://enemies/RangedSkeleton/RangedSkeleton.gd" id="1_822so"]
 [ext_resource type="Texture2D" uid="uid://dhvqn2n1fdqk7" path="res://assets/skeleton.png" id="1_vvdek"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_822so"]
@@ -7,6 +8,7 @@ radius = 7.777778
 height = 22.222223
 
 [node name="RangedSkeleton" type="CharacterBody2D" unique_id=1779289937]
+script = ExtResource("1_822so")
 
 [node name="SkeletonHitbox" type="CollisionShape2D" parent="." unique_id=1660895399]
 position = Vector2(1, 0)
@@ -20,4 +22,6 @@ texture = ExtResource("1_vvdek")
 offset = Vector2(0, 0.5)
 
 [node name="SkeletonLoS" type="Area2D" parent="." unique_id=883142025]
+visible = false
+top_level = true
 position = Vector2(5, -4)
