@@ -13,6 +13,7 @@ func _ready():
 	super()
 	read_ranged_data("ranged_parameters")
 	set_los_cone()
+	sprite = get_node("RangedSprite")
 	attack_timer = Timer.new()
 	attack_timer.timeout.connect(attack_timer.stop)
 	add_child(attack_timer)

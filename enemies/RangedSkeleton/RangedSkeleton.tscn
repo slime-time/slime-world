@@ -22,6 +22,5 @@ texture = ExtResource("1_vvdek")
 offset = Vector2(0, 0.5)
 
 [node name="SkeletonLoS" type="Area2D" parent="." unique_id=883142025]
-visible = false
 top_level = true
 position = Vector2(5, -4)
