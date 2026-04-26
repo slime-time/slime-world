@@ -75,8 +75,8 @@ func split(child_slime_type: Slime.Type = slime_type):
 		updateHitbox()
 		updateSprite()
 	else:
-		die()
-	
+		takeDamage(1)
+
 # Returns true iff this slime can change size to become a "merged_size" slime, false otherwise.
 func testMerge(merged_size: int, merging_with: Node) -> bool:
 	var relevant_hitbox = merge_confirm.get_node("Size" + str(merged_size) + "Confirm")
@@ -100,6 +100,9 @@ func onFluidHit(fluid_type: FluidFlow.Type) -> void:
 		FluidFlow.Type.ICE_WATER:
 			if slime_type == Type.ICE_SLIME: return
 			slime_type_changed.emit(self, Type.ICE_SLIME)
+		FluidFlow.Type.TAR:
+			if slime_type == Type.TAR_SLIME: return
+			slime_type_changed.emit(self, Type.TAR_SLIME)
 
 # Attempt to change from slime form to human form
 func becomePenny():
