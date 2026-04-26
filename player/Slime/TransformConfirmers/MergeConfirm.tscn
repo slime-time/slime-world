@@ -16,10 +16,12 @@
 [ext_resource type="Shape2D" uid="uid://byw20a8tfqk4y" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-7/GreenSlime-Base-7.tres" id="14_gqfnc"]
 
 [node name="MergeConfirm" type="Node2D" unique_id=488681826]
+position = Vector2(0, -0.5)
 
 [node name="Size8Confirm" type="Area2D" parent="." unique_id=1131443470]
 
 [node name="Size8Body" type="CollisionShape2D" parent="Size8Confirm" unique_id=1742504448]
+rotation = 1.5707964
 shape = ExtResource("1_k11mb")
 
 [node name="Size8Base" type="CollisionShape2D" parent="Size8Confirm" unique_id=942952145]
