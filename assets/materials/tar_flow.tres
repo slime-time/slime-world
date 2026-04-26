@@ -1,23 +1,23 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://d2rxla01f7bnr"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b11gwhl5l11ee"]
 
-[ext_resource type="Shader" uid="uid://bxlv0tdefxyhg" path="res://assets/shaders/FluidFlow.gdshader" id="1_l6mhd"]
-[ext_resource type="Texture2D" uid="uid://dynac6jsesg4q" path="res://assets/fluids/water.png" id="2_n5j1n"]
+[ext_resource type="Shader" uid="uid://bxlv0tdefxyhg" path="res://assets/shaders/FluidFlow.gdshader" id="1_sg6ge"]
+[ext_resource type="Texture2D" uid="uid://conxdhqr3kpnq" path="res://assets/fluids/tar.png" id="2_sg6ge"]
 
 [resource]
-shader = ExtResource("1_l6mhd")
-shader_parameter/fluid_tex = ExtResource("2_n5j1n")
+shader = ExtResource("1_sg6ge")
+shader_parameter/fluid_tex = ExtResource("2_sg6ge")
 shader_parameter/base_opacity = 0.8
 shader_parameter/flow_extent = 256
 shader_parameter/framerate = 12
 shader_parameter/frame_count = 16
 shader_parameter/outline_threshold = 0.0
 shader_parameter/flow_falloff_top = 8.0
-shader_parameter/flow_falloff_bottom = 8.0
-shader_parameter/displacement_octave0 = Vector2(0.6, 0.1)
+shader_parameter/flow_falloff_bottom = 4.0
+shader_parameter/displacement_octave0 = Vector2(0.8, 0.1)
 shader_parameter/displacement_octave1 = Vector2(0.4, 0.3)
-shader_parameter/displacement_octave2 = Vector2(0.2, 0.7)
-shader_parameter/displacement_timescale = 24.0
-shader_parameter/displacement_column_offset = 0.2
+shader_parameter/displacement_octave2 = Vector2(0.1, 0.7)
+shader_parameter/displacement_timescale = 10.0
+shader_parameter/displacement_column_offset = 500.0
 shader_parameter/cascade_coefficients = Vector3(-4, -0.4, 0.2)
 shader_parameter/cascade_noise_timescale = 0.2
 shader_parameter/cascade_noise_scale = 1.0
@@ -25,45 +25,46 @@ shader_parameter/cascade_noise_strength = 10.0
 shader_parameter/cascade_steps = 8.0
 shader_parameter/cascade_distance = 72.0
 shader_parameter/cascade_blend = 11
-shader_parameter/cascade_color = Color(0.24000001, 0.6319999, 0.8, 1)
+shader_parameter/cascade_color = Color(0.40008923, 0.28077832, 0, 1)
 shader_parameter/cascade_mix = 0.7
 shader_parameter/streak_noise_scale = Vector2(0.07, 0.01)
-shader_parameter/streak_noise_timescale = 0.0
-shader_parameter/streak_scroll_speed = 36.0
-shader_parameter/streak_blend = 11
-shader_parameter/streak_color = Color(0.8701316, 0.87229216, 0.7819539, 1)
+shader_parameter/streak_noise_timescale = 0.01
+shader_parameter/streak_scroll_speed = 20.0
+shader_parameter/streak_blend = 13
+shader_parameter/streak_color = Color(0.21000002, 0.30100012, 0.6, 1)
 shader_parameter/streak_bias_low = 0.2
-shader_parameter/streak_bias_high = 1.0
+shader_parameter/streak_bias_high = 0.8
 shader_parameter/streak_steps = 5.0
 shader_parameter/streak_intensity = 0.15
 shader_parameter/refract_strength = 0.8
 shader_parameter/refract_frequency = 0.2
 shader_parameter/refract_timescale = 2.0
-shader_parameter/refract_blend = 2
-shader_parameter/foam_color = Color(1, 1, 1, 1)
-shader_parameter/foam_noise_scale = 120.0
-shader_parameter/foam_timescale = 8.0
-shader_parameter/foam_distance = 6.0
+shader_parameter/refract_blend = 5
+shader_parameter/foam_color = Color(0.20480242, 0.1364631, 0, 1)
+shader_parameter/foam_noise_scale = 60.0
+shader_parameter/foam_timescale = 0.2
+shader_parameter/foam_distance = 8.0
 shader_parameter/foam_steps = 4.0
 shader_parameter/foam_intensity = 2.5
+shader_parameter/foam_blend = 8
 shader_parameter/do_voronoi = false
-shader_parameter/voronoi_cell_size = Vector2(8, 8)
-shader_parameter/voronoi_scroll_speed = 48.0
+shader_parameter/voronoi_cell_size = Vector2(80, 50)
+shader_parameter/voronoi_scroll_speed = 28.0
 shader_parameter/voronoi_refraction_strength = Vector2(1.5, 1.5)
 shader_parameter/voronoi_value_bias_low = 0.5
 shader_parameter/voronoi_value_bias_high = 0.5
 shader_parameter/voronoi_perturb_amplitude = Vector2(1, 1)
 shader_parameter/voronoi_perturb_frequency = Vector2(1, 1)
 shader_parameter/voronoi_perturb_spread = 20.0
-shader_parameter/voronoi_color_blend = 2
+shader_parameter/voronoi_color_blend = 3
 shader_parameter/voronoi_color_fac = Vector3(1, 1, 1)
 shader_parameter/voronoi_color_mix = 0.5
-shader_parameter/voronoi_lightness_blend = 2
+shader_parameter/voronoi_lightness_blend = 3
 shader_parameter/voronoi_lightness_strength = 0.5
 shader_parameter/voronoi_border_blend = 2
-shader_parameter/voronoi_border_color = Color(1, 1, 1, 1)
+shader_parameter/voronoi_border_color = Color(0.5161495, 0.40063277, 0.1496205, 1)
 shader_parameter/voronoi_border_vanish = 1.0
 shader_parameter/voronoi_border_spread = 1.0
-shader_parameter/voronoi_border_exponent = 2.0
+shader_parameter/voronoi_border_exponent = 5.0
 shader_parameter/voronoi_border_steps = 3.0
 shader_parameter/voronoi_border_mix = 0.5
