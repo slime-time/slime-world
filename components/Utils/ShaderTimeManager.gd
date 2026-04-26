@@ -3,6 +3,9 @@ extends Node2D
 var FRAMERATE: float = 12.0
 var _time_offset: float = 0
 
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 func _process(delta: float) -> void:
 	# Update QUANTIZED_TIME for all shaders that need frame time
 
