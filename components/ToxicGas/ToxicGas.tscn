@@ -5,17 +5,21 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2foi4"]
 resource_local_to_scene = true
-size = Vector2(32, 32)
+size = Vector2(64, 64)
 
 [node name="ToxicGas" type="Area2D" unique_id=1311772067]
 script = ExtResource("1_2foi4")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="." unique_id=205028649]
+copy_mode = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=999086715]
 shape = SubResource("RectangleShape2D_2foi4")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=938840937]
 material = ExtResource("2_2foi4")
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+instance_shader_parameters/area_size = Vector2(64, 64)
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
