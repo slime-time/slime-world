@@ -1,8 +1,12 @@
 extends Node
 @warning_ignore_start("integer_division")
 
+const TAR_LAYER_SCENE = preload("res://components/TarLayer/TarLayer.tscn")
+var tar_layer: TarLayer = null
+
 # Each bit is 1 if there is a tar glob at the cooresponding location, otherwise 0
 var tar_globs: PackedByteArray
+
 
 const GLOB_SIZE: int = 4
 
@@ -14,13 +18,39 @@ func _ready():
 	window_width = window_size.x
 	tar_globs.resize((window_height * window_width) / 8)
 	resetTar()
-	
+
+	# Connect tar layer loading and do it now for the first scene (doesn't matter if it's instantiated in menus)
+	get_tree().root.child_entered_tree.connect(_onRootChildAdded)
+	call_deferred("_onSceneLoaded", get_tree().current_scene)
+
+# Runs when a direct child of the root node is added so we can detect when a new scene is loaded
+func _onRootChildAdded(node : Node2D) -> void:
+	_onSceneLoaded.call_deferred(node)
+
+# Runs on the next update after a direct child node of the root is added (potentially a new scene loaded)
+func _onSceneLoaded(node : Node2D) -> void:
+	# Don't do anything if the node that was added isn't the current scene
+	if node != get_tree().get_current_scene():
+		return
+
+	# If the scene isn't ready yet, wait for it to be ready
+	if node.is_node_ready():
+		_onSceneReady()
+	else:
+		node.ready.connect(_onSceneReady)
+
+# Runs when a newly loaded scene becomes ready
+func _onSceneReady() -> void:
+	# Instantiate the tar layer and add it to the scene
+	tar_layer = TAR_LAYER_SCENE.instantiate()
+	get_tree().get_current_scene().add_child(tar_layer)
+
 # Get the coordinates that the slime glob object should be placed at
 func convertToCoordinates(x: float, y: float) -> Vector2i:
 	var round_x: int = GLOB_SIZE * (min(max(0, roundi(x)), window_width) / GLOB_SIZE)
 	var round_y: int = GLOB_SIZE * (min(max(0, roundi(y)), window_height) / GLOB_SIZE)
 	return Vector2i(round_x, round_y)
-	
+
 # Get the index in the array that cooresponds to the location (Assuming a perfect bit array)
 func convertLocation(coordinates: Vector2i) -> int:
 	# The offset in the array to get to the column that we care about
@@ -35,7 +65,7 @@ func checkLocation(true_index: int) -> bool:
 	if((tar_byte & (1 << (true_index % 8))) > 0):
 		return false
 	return true
-	
+
 # Store the fact that we've placed a tar glob at this location
 func setLocation(true_index: int):
 	var tar_byte = tar_globs.decode_u8(true_index / 8)
