@@ -1,0 +1,100 @@
+[gd_scene format=4 uid="uid://2stue0n45k5h"]
+
+[ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_w1lk6"]
+[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_syfgr"]
+[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="3_26hyh"]
+[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="4_prqex"]
+[ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="5_1qyev"]
+[ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="6_syfgr"]
+[ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="8_prqex"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
+texture = ExtResource("2_syfgr")
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+
+[sub_resource type="TileSet" id="TileSet_qehkn"]
+physics_layer_0/collision_layer = 1
+physics_layer_1/collision_layer = 5
+sources/0 = SubResource("TileSetAtlasSource_1mo47")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
+shader = ExtResource("3_26hyh")
+shader_parameter/darkness = 0.730000034675
+shader_parameter/edge_softness = 3.30200015358512
+
+[node name="Node2D" type="Node2D" unique_id=730916531]
+
+[node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_w1lk6")]
+position = Vector2(77, 221.99)
+
+[node name="WaterFlow3" parent="." unique_id=21526138 instance=ExtResource("6_syfgr")]
+position = Vector2(138, 55)
+flow_type = 3
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
+texture_filter = 1
+position = Vector2(250, 150)
+tile_map_data = PackedByteArray("AAD9/wEAAAABAAAAAAD+/wEAAAABAAAAAAD//wEAAAABAAAAAAAAAAEAAAABAAAAAAD8/wEAAAAAAAAAAAD8/wIAAAAAAAIAAAAEAAIAAAACAAIAAAADAAIAAAABAAIAAAACAAIAAAABAAIAAAAAAAIAAAABAAIAAAABAAIAAAABAAIAAAD//wIAAAABAAIAAAD+/wIAAAABAAIAAAD9/wIAAAABAAIAAAADAAQAAAABAAMAAAACAAQAAAABAAMAAAABAAQAAAABAAMAAAAAAAQAAAABAAMAAAD//wQAAAABAAMAAAD+/wQAAAABAAMAAAD9/wQAAAABAAMAAAD8/wQAAAAAAAEAAAAEAAQAAAACAAMAAAAGAAQAAAABAAAAAAAGAAIAAAADAAIAAAAGAAEAAAADAAAAAAABAP3/AAAAAAAAAAABAP7/AAAAAAEAAAABAP//AAAAAAEAAAABAAAAAAAAAAEAAAABAAEAAAABAAEAAAACAP3/AAABAAAAAAADAP3/AAABAAAAAAAEAP3/AAABAAAAAAAEAAEAAAABAAEAAAADAAEAAAABAAEAAAACAAEAAAABAAEAAAD8/wMAAAAAAAEAAAD8/wUAAAAAAAEAAAD7/wUAAAABAAAAAAD6/wUAAAABAAAAAAD5/wUAAAABAAAAAAD4/wUAAAABAAAAAAD3/wUAAAABAAAAAAD2/wUAAAABAAAAAAD1/wUAAAABAAAAAAD0/wUAAAABAAAAAADy/wUAAAABAAAAAADx/wUAAAABAAAAAADy/wYAAAACAAEAAADy/wcAAAACAAEAAADy/wgAAAACAAEAAADz/wgAAAABAAAAAAD0/wgAAAABAAAAAAD1/wgAAAABAAAAAAD2/wgAAAABAAAAAAD3/wgAAAABAAAAAAD4/wgAAAABAAAAAAD5/wgAAAABAAAAAAD6/wgAAAABAAAAAAD7/wgAAAABAAAAAAD8/wgAAAABAAAAAAD9/wgAAAABAAAAAAD+/wgAAAABAAAAAAD//wgAAAABAAAAAAAAAAgAAAABAAAAAAABAAgAAAABAAAAAAACAAgAAAABAAAAAAADAAgAAAABAAAAAAAEAAgAAAABAAAAAAAFAAgAAAABAAAAAAAGAAgAAAABAAAAAAAGAAcAAAABAAAAAAAGAAYAAAABAAAAAAAGAAUAAAABAAAAAAAEAAMAAAABAAAAAAAEAAYAAAABAAAAAAAEAAUAAAABAAAAAAAGAAMAAAABAAAAAAAGAAAAAAABAAAAAAAGAP//AAABAAAAAAAGAP7/AAABAAAAAAAGAP3/AAABAAAAAAAGAPz/AAABAAAAAAAGAPv/AAABAAAAAAAGAPr/AAABAAAAAAAFAPr/AAABAAAAAAAEAPr/AAABAAAAAAADAPr/AAABAAAAAAACAPr/AAABAAAAAAABAPr/AAAAAAEAAAABAPv/AAAAAAEAAAABAPz/AAAAAAEAAAA=")
+tile_set = SubResource("TileSet_qehkn")
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=1386845488]
+layer = -100
+
+[node name="BackgroundTexture" type="TextureRect" parent="Background" unique_id=1173638536]
+material = SubResource("ShaderMaterial_qehkn")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_prqex")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("5_1qyev")]
+position = Vector2(321, 93)
+
+[node name="WaterFlow2" parent="." unique_id=1753673323 instance=ExtResource("6_syfgr")]
+position = Vector2(29, 55)
+is_flow_enabled = false
+
+[node name="Lever" parent="." unique_id=1864762079 instance=ExtResource("8_prqex")]
+position = Vector2(236, 166)
+
+[node name="WaterFlow" parent="." unique_id=1404058937 instance=ExtResource("6_syfgr")]
+position = Vector2(200, 55)
+flow_type = 3
+
+[connection signal="flip_off" from="Lever" to="WaterFlow2" method="disableFlow"]
+[connection signal="flip_on" from="Lever" to="WaterFlow2" method="enableFlow"]
