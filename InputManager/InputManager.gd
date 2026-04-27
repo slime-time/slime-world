@@ -6,6 +6,9 @@ signal penny_became_slime
 # Sent when Penny goes from slime form to human form
 signal slime_became_penny
 
+# Sent when Penny attacks
+signal penny_attack
+
 # True iff Penny is currently in human form
 var is_human = true
 
@@ -67,6 +70,11 @@ func _input(event):
 		if (can_unpause and SceneManager.is_paused):
 			SceneManager.unpauseGame()
 		SceneManager.resetScene()
+		
+	if event.is_action_pressed("transform") : 
+		if(!is_human):
+			penny_attack.emit()
+			# If this is sucessful, Penny.gd will emit an attack hitbox
 
 # Stop slime from listening to player input - this can be for many reasons such as cutscenes,
 # dialogue, etc, user pausing is just one of the reasons
