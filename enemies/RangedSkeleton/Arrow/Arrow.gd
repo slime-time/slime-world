@@ -6,10 +6,11 @@ var speed
 func entityEntered(_trigger: Node2D):
 	# Ensure the arrow only hits the player once
 	if not is_queued_for_deletion():
-		# After hitting anything, delete the arrow.
-		queue_free()
+		
 		for entity in get_colliding_bodies():
 			if(entity is PlayerMovement):
+				# After hitting anything, delete the arrow.
+				queue_free()
 				entity.hit()
 			
 	
