@@ -16,7 +16,6 @@ func _ready():
 
 
 func _input(event):
-	print_debug(event)
 	# If the player has just started pressing down on the pause button then:
 	if event.is_action_pressed("quick_pause"):
 		# If the game can be paused, pause the game and wait until the button is released to listen for
