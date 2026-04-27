@@ -23,4 +23,9 @@ func _ready():
 	body_entered.connect(entityEntered)
 
 func _physics_process(delta: float):
-	global_position.x = move_toward(global_position.x, target.x, speed)
+	var mulitplier
+	if target.x > global_position.x:
+		mulitplier = 1
+	else:
+		mulitplier = -1
+	linear_velocity = Vector2(speed * mulitplier, 0)

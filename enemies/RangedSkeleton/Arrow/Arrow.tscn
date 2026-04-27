@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cy816b085ednk"]
 
 [ext_resource type="Script" uid="uid://d32jfntuvtq2u" path="res://enemies/RangedSkeleton/Arrow/Arrow.gd" id="1_733ra"]
+[ext_resource type="Texture2D" uid="uid://3e51eumu63ft" path="res://assets/icon.svg" id="2_py8v3"]
 
 [node name="Arrow" type="RigidBody2D" unique_id=1697300432]
 script = ExtResource("1_733ra")
@@ -8,3 +9,4 @@ script = ExtResource("1_733ra")
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1802362018]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1683975223]
+texture = ExtResource("2_py8v3")

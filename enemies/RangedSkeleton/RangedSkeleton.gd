@@ -33,7 +33,7 @@ func attack(target : Node2D):
 		var projectile = Arrow.instantiate()
 		projectile.target = target.global_position
 		projectile.speed = projectile_speed
-		projectile.position.x = position.x + offset
+		projectile.global_position= Vector2(global_position.x + offset, global_position.y - 6)
 		get_parent().add_child(projectile)
 		
 	return
