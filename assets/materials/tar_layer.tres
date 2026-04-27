@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bpqv2nqi07xwl"]
+
+[ext_resource type="Shader" uid="uid://mgwjv0c76aad" path="res://assets/shaders/TarLayer.gdshader" id="1_btvg0"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_btvg0"]
+
+[resource]
+shader = ExtResource("1_btvg0")
+shader_parameter/tar_base_color = Color(0, 0, 0, 1)
+shader_parameter/tar_buffer = SubResource("ImageTexture_btvg0")

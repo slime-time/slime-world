@@ -10,3 +10,9 @@ script = ExtResource("1_ujtv7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1935844539]
 shape = SubResource("RectangleShape2D_sgldl")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2102060907]
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0

@@ -1,19 +1,19 @@
 extends Slime
 
-	
+
 # Since we override the move function, once we call the generic
 # move function we already know that this slime cannot climb in its current state, so save some
-# time by not even bothering to calculate the wall normal again 
+# time by not even bothering to calculate the wall normal again
 func canClimb(_direction: float):
 	return false
-	
+
 const GLOB_TEMPLATE = preload("res://Tar/TarGlob/TarGlob.tscn")
 func move(direction: float, delta: float):
 	if(is_on_wall()):
 		var wall_direction = get_wall_normal()
 		if(wall_direction.x * direction < 0):
 			var wallFinder = PhysicsRayQueryParameters2D.create(global_position, global_position - 20 * wall_direction)
-			
+
 			# The location the tar glob wants to go, without any coordinate smushing for the tar grid
 			# Also useful information about whether or not the tar slime is actually touching a wall or
 			# something else
@@ -22,24 +22,29 @@ func move(direction: float, delta: float):
 				# round slime globs away from the colliding wall to maximize collision with other slimes
 				if(wall_direction.x > 0):
 					tarGlobLocationRaw.position.x += TarManager.GLOB_SIZE
-				
+
 				var tarGlobLocation: Vector2i = TarManager.convertToCoordinates(tarGlobLocationRaw.position.x, global_position.y)
 				var tarGlobIndex: int = TarManager.convertLocation(tarGlobLocation)
+
+				TarManager.tar_layer.setGlob(tarGlobLocation, wall_direction)
+				# if wall_direction.x < 0:
+					# Tarmanager.tar_layer.
+
 				# If there is no tar at that location, set the tar and make the tar object
 				if(TarManager.checkLocation(tarGlobIndex)):
 					TarManager.setLocation(tarGlobIndex)
 					var tarGlob = GLOB_TEMPLATE.instantiate()
 					tarGlob.set_global_position(Vector2(tarGlobLocation))
 					get_tree().get_current_scene().add_child(tarGlob)
-				
-				
+
+
 			climb(direction, delta)
 		else:
 			super(direction, delta)
 	else:
 		super(direction, delta)
-		
-	
+
+
 
 
 func read_movement_data(my_name):
