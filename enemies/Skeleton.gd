@@ -20,6 +20,8 @@ var combat_state: bool
 # 0:static  1:patrolling
 var is_patroling: bool	
 
+var reanimation_time: float
+var death_timer: Timer
 
 func _ready():
 	combat_state= false
@@ -28,6 +30,11 @@ func _ready():
 	los_area = get_node("SkeletonLoS")
 	los_area.body_entered.connect(detect)
 	los_area.body_exited.connect(deaggro)
+	
+	death_timer = Timer.new()
+	death_timer.wait_time = reanimation_time
+	death_timer.timeout.connect(reanimate)
+	add_child(death_timer)
 	
 	read_enemy_data("generic_enemy_parameters")
 	#establish if enemy will patrol or stay put until player is encountered
@@ -65,10 +72,25 @@ func _physics_process(_delta : float):
 
 	return
 
+func reanimate():
+	death_timer.stop()
+	#play reanimation animation
+	
+	#reset to default
+	is_patroling = true
+	los_area.monitoring = true
+	hurtbox.disabled = false
+	
 
 func hit():
-	#TODO: change to reanimate anfter n seconds
-	queue_free()
+	#effectively forces enemy to freeze
+	combat_state = false
+	is_patroling = false
+	los_area.monitoring = false
+	hurtbox.disabled = true
+	
+	#play death animation
+	death_timer.start()
 	
 func detect(target : Node2D ):
 	if target is PlayerMovement:
@@ -103,6 +125,7 @@ func read_enemy_data(sectionName):
 	walk_speed = config.get_value(sectionName, "walk_speed", walk_speed)
 	los_cone_deg = config.get_value(sectionName, "los_cone_deg", los_cone_deg)
 	los_distance = config.get_value(sectionName, "los_distance", los_distance)
+	reanimation_time = config.get_value(sectionName, "reanimation_time", reanimation_time)
 
 func set_los_cone():
 	var cone = CollisionPolygon2D.new() 
