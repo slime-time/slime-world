@@ -46,6 +46,7 @@ shader_parameter/foam_timescale = 8.0
 shader_parameter/foam_distance = 6.0
 shader_parameter/foam_steps = 4.0
 shader_parameter/foam_intensity = 2.5
+shader_parameter/foam_blend = 2
 shader_parameter/do_voronoi = false
 shader_parameter/voronoi_cell_size = Vector2(8, 8)
 shader_parameter/voronoi_scroll_speed = 48.0

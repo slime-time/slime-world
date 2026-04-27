@@ -26,13 +26,11 @@ func combat_behavior():
 
 func attack(target : Node2D):
 	if (target is PlayerMovement) and combat_state:
-		print("raagh!")
 		var offset
 		if facingRight: offset = 10
 		else: offset = -10
 		
 		var projectile = Arrow.instantiate()
-		print(target.global_position)
 		projectile.target = target.global_position
 		projectile.speed = projectile_speed
 		projectile.position.x = position.x + offset
