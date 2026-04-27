@@ -19,6 +19,7 @@ var combat_target: Node2D
 var combat_state: bool
 # 0:static  1:patrolling
 var is_patroling: bool	
+var is_dead: bool
 
 var reanimation_time: float
 var death_timer: Timer
@@ -31,12 +32,13 @@ func _ready():
 	los_area.body_entered.connect(detect)
 	los_area.body_exited.connect(deaggro)
 	
+	read_enemy_data("generic_enemy_parameters")
+	#set death clock
 	death_timer = Timer.new()
 	death_timer.wait_time = reanimation_time
 	death_timer.timeout.connect(reanimate)
 	add_child(death_timer)
 	
-	read_enemy_data("generic_enemy_parameters")
 	#establish if enemy will patrol or stay put until player is encountered
 	if (patrol.size() > 0):
 		is_patroling = true
@@ -50,6 +52,9 @@ func _ready():
 	stop = 0
 
 func _physics_process(_delta : float):
+	if is_dead:
+		return
+	
 	if stop:
 		stop -= 1
 		return
@@ -77,15 +82,14 @@ func reanimate():
 	#play reanimation animation
 	
 	#reset to default
-	is_patroling = true
+	is_dead = false
 	los_area.monitoring = true
 	hurtbox.disabled = false
 	
 
 func hit():
 	#effectively forces enemy to freeze
-	combat_state = false
-	is_patroling = false
+	is_dead = true
 	los_area.monitoring = false
 	hurtbox.disabled = true
 	

@@ -71,8 +71,8 @@ func _input(event):
 			SceneManager.unpauseGame()
 		SceneManager.resetScene()
 		
-	if event.is_action_pressed("transform") : 
-		if(!is_human):
+	if event.is_action_pressed("attack") : 
+		if(is_human):
 			penny_attack.emit()
 			# If this is sucessful, Penny.gd will emit an attack hitbox
 

@@ -17,7 +17,7 @@ func attack():
 	#play animation
 	var bodies = attack_hitbox.get_overlapping_bodies()
 	for body in bodies:
-		if body.name == "SkeletonHurtbox":
+		if (body is MeleeSkeleton) or (body is RangedSkeleton) or (body is SpecialSkeleton):
 			body.hit()  
 	
 	
