@@ -1,16 +1,14 @@
 extends Node2D
 @warning_ignore_start("integer_division")
 
-# const TAR_LAYER_SCENE = preload("res://components/TarLayer/TarLayer.tscn")
-const TAR_LAYER_MATERIAL = preload("res://assets/materials/tar_layer.tres")
+const TAR_LAYER_SCENE = preload("res://components/TarLayer/TarLayer.tscn")
+var tar_layer: TarLayer = null
 
-const GLOB_SIZE: int = 4				# Resolution of the tar grid
-const MAX_WALL_DIST: int = 8			# Max distance from the wall to write to the tar buffer for a given pixel
+# Each bit is 1 if there is a tar glob at the cooresponding location, otherwise 0
+var tar_globs: PackedByteArray
 
-var tar_globs: PackedByteArray			# Each bit is 1 if there is a tar glob at the cooresponding location, otherwise 0
-var tar_buffer: Image					# Buffer with tar pixel data for rendering tar layers
-var tar_buffer_tex: ImageTexture		# Tar buffer texture provided to the shader for tar layers
-var _is_buffer_dirty: bool = false		# Whether the tar buffer has been updated this frame
+
+const GLOB_SIZE: int = 4
 
 var window_height: int
 var window_width: int
@@ -43,18 +41,9 @@ func _onSceneLoaded(node : Node2D) -> void:
 
 # Runs when a newly loaded scene becomes ready
 func _onSceneReady() -> void:
-	# Initialize the tar buffer
-	var viewport_size = get_viewport_rect().size
-	tar_buffer = Image.create(int(viewport_size.x), int(viewport_size.y), false, Image.FORMAT_RGBA8)
-	tar_buffer.fill(Color(0, 0, 0, 0))
-	tar_buffer_tex = ImageTexture.create_from_image(tar_buffer)
-
-	# Instantiate a tar layer for each tilemap layer
-	var tilemaps = get_tree().get_current_scene().find_children("*", "TileMapLayer")
-	for tilemap in tilemaps:
-		var mat = TAR_LAYER_MATERIAL.duplicate()
-		mat.set_shader_parameter("tar_buffer", tar_buffer_tex)
-		tilemap.material = mat
+	# Instantiate the tar layer and add it to the scene
+	tar_layer = TAR_LAYER_SCENE.instantiate()
+	get_tree().get_current_scene().add_child(tar_layer)
 
 # Get the coordinates that the slime glob object should be placed at
 func convertToCoordinates(x: float, y: float) -> Vector2i:

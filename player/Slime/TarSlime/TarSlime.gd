@@ -7,10 +7,6 @@ extends Slime
 func canClimb(_direction: float):
 	return false
 
-# Returns the distance from the center of the slime to the bottom of its hitbox
-func getHalfHeight() -> float:
-	return 4 + $SlimeBase.shape.get_rect().size.y / 2.0
-
 const GLOB_TEMPLATE = preload("res://Tar/TarGlob/TarGlob.tscn")
 func move(direction: float, delta: float):
 
@@ -21,8 +17,7 @@ func move(direction: float, delta: float):
 	if(is_on_wall()):
 		var wall_direction = get_wall_normal()
 		if(wall_direction.x * direction < 0):
-			var feet_position = global_position + Vector2(0, getHalfHeight())
-			var wallFinder = PhysicsRayQueryParameters2D.create(feet_position, feet_position - 20 * wall_direction)
+			var wallFinder = PhysicsRayQueryParameters2D.create(global_position, global_position - 20 * wall_direction)
 
 			# The location the tar glob wants to go, without any coordinate smushing for the tar grid
 			# Also useful information about whether or not the tar slime is actually touching a wall or
@@ -33,10 +28,12 @@ func move(direction: float, delta: float):
 				if(wall_direction.x > 0):
 					tarGlobLocationRaw.position.x += TarManager.GLOB_SIZE
 
-				var tarGlobLocation: Vector2i = TarManager.convertToCoordinates(tarGlobLocationRaw.position.x, feet_position.y)
+				var tarGlobLocation: Vector2i = TarManager.convertToCoordinates(tarGlobLocationRaw.position.x, global_position.y)
 				var tarGlobIndex: int = TarManager.convertLocation(tarGlobLocation)
 
-				TarManager.setBufferGlob(tarGlobLocation, wall_direction)
+				TarManager.tar_layer.setGlob(tarGlobLocation, wall_direction)
+				# if wall_direction.x < 0:
+					# Tarmanager.tar_layer.
 
 				# If there is no tar at that location, set the tar and make the tar object
 				if(TarManager.checkLocation(tarGlobIndex)):
