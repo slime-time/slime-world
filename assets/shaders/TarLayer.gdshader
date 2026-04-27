@@ -26,8 +26,16 @@ void fragment() {
     vec2 screen_pixel_coords = floor(SCREEN_UV * vec2(SCREEN_SIZE_PIXELS));   // Quantized screen coordinates of the pixel we're drawing
     vec2 screen_pixel_uv = screen_pixel_coords / vec2(SCREEN_SIZE_PIXELS);    // UV coordinates of the pixel we're drawing, with v=0 at the bottom and v=1 at the top
 
-    // Get the tar buffer value for this pixel
-    COLOR = getTar(screen_pixel_coords);
+    // Get the original texture color and tar buffer value for this pixel
+    vec4 tex_color = texture(TEXTURE, UV);
+    vec4 tar = getTar(screen_pixel_coords);
+
+    if (tex_color.a == 0.0) {
+        // If there is no tile here, don't draw anything
+        discard;
+    }
+
+    COLOR = blend(BLEND_MIX, tex_color, tar, tar.a);
 
     // COLOR.xy = screen_pixel_uv;
 }
