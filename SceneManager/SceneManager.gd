@@ -26,7 +26,9 @@ func resetScene():
 func pauseGame():
 	# ToDo: show settings / pause menu UI
 	get_tree().paused = true
+	is_paused = true
 	
 func unpauseGame():
 	# ToDo: hide settings / pause menu UI
 	get_tree().paused = false
+	is_paused = false
