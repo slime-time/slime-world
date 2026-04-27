@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://1vxylgai44t5"]
+
+[ext_resource type="Script" uid="uid://hxpbhcpajr12" path="res://components/RedSpike/RedSpike.gd" id="1_xv7qw"]
+[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="2_j1kxx"]
+[ext_resource type="Script" uid="uid://baf3mj44o7g13" path="res://components/RedSpike/SpikeCollider/SpikeCollider.gd" id="3_ftvo8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6yh2b"]
+size = Vector2(8, 8)
+
+[node name="Spike" type="RigidBody2D" unique_id=598144181]
+script = ExtResource("1_xv7qw")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1522893824]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=768931425]
+texture = ExtResource("2_j1kxx")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1991308729]
+script = ExtResource("3_ftvo8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=312434216]
+shape = SubResource("RectangleShape2D_6yh2b")
