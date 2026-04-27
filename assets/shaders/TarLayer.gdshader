@@ -6,7 +6,13 @@ shader_type canvas_item;
 global uniform ivec2 SCREEN_SIZE_PIXELS;
 global uniform float QUANTIZED_TIME = 0.0;
 
-uniform vec3 tar_base_color: source_color;   // Base color of the tar, with alpha controlling opacity
+uniform vec3 tar_base_color: source_color;      // Base color of the tar, with alpha controlling opacity
+uniform float posterize_steps = 6.0;            // Number of steps to posterize the gas alpha into
+uniform int blend_mode: hint_blend_mode = 1;    // Blending mode for the tar
+
+uniform vec2 noise_scale = vec2(1.0, 1.0);      // Scale of the noise pattern in xyz
+uniform float noise_bias_low = 0.3;             // Where to start fading noise from 0 to 1
+uniform float noise_bias_high = 0.7;            // Where to stop fading noise from 0 to 1
 
 // Buffer storing information on tar pixels
 // Red channel stores right-facing walls, with 1.0 at the wall decreasing to 1/8 at a distance of 8 pixels
@@ -35,7 +41,14 @@ void fragment() {
         discard;
     }
 
-    COLOR = blend(BLEND_MIX, tex_color, tar, tar.a);
+    vec3 noise_uvw = vec3(screen_pixel_uv * noise_scale, 0.0);
+    float noise_value = smoothstep(noise_bias_low, noise_bias_high, snoise(noise_uvw));
+
+    float tar_level = pow(max(tar.r, tar.g), 2.0);   // Opacity of the tar at this pixel, based on how close it is to a wall pixel
+    float blend_amount = floor(posterize_steps * noise_value * tar_level) / posterize_steps;   // Posterized blend amount based on tar level and noise value
+
+    COLOR.rgb = blend(blend_mode, tex_color.rgb, tar_base_color, blend_amount);
+    COLOR.a = tex_color.a;
 
     // COLOR.xy = screen_pixel_uv;
 }

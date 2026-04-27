@@ -71,7 +71,7 @@ tile_set = SubResource("TileSet_qehkn")
 
 [node name="WaterFlow" type="Node2D" parent="." unique_id=21526138]
 z_index = -5
-position = Vector2(194, 64)
+position = Vector2(187, 64)
 script = ExtResource("3_frr26")
 flow_type = 3
 is_flow_enabled = false
