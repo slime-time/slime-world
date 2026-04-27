@@ -26,9 +26,7 @@ func move(direction: float, delta: float):
 				var tarGlobLocation: Vector2i = TarManager.convertToCoordinates(tarGlobLocationRaw.position.x, global_position.y)
 				var tarGlobIndex: int = TarManager.convertLocation(tarGlobLocation)
 
-				TarManager.tar_layer.setGlob(tarGlobLocation, wall_direction)
-				# if wall_direction.x < 0:
-					# Tarmanager.tar_layer.
+				TarManager.setBufferGlob(tarGlobLocation, wall_direction)
 
 				# If there is no tar at that location, set the tar and make the tar object
 				if(TarManager.checkLocation(tarGlobIndex)):
