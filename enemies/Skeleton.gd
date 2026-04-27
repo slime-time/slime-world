@@ -67,7 +67,8 @@ func _physics_process(_delta : float):
 
 
 func hit():
-	self.queue_free()
+	#TODO: change to reanimate anfter n seconds
+	queue_free()
 	
 func detect(target : Node2D ):
 	if target is PlayerMovement:
