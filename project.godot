@@ -20,6 +20,7 @@ config/icon="uid://3e51eumu63ft"
 SceneManager="*uid://clwcou0lvoqt0"
 InputManager="*uid://bxqq0x5x18kd8"
 GameManager="*uid://dms3mbn4e8xh7"
+ShaderTimeManager="*uid://cwk203l2hosxx"
 TarManager="*uid://bi4gn4y2dllxn"
 
 [display]
@@ -90,4 +91,8 @@ textures/vram_compression/import_etc2_astc=true
 SCREEN_SIZE_PIXELS={
 "type": "ivec2",
 "value": Vector2i(512, 288)
+}
+QUANTIZED_TIME={
+"type": "float",
+"value": 0.0
 }

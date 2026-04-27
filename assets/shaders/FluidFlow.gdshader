@@ -5,13 +5,13 @@ shader_type canvas_item;
 
 // Globals
 global uniform ivec2 SCREEN_SIZE_PIXELS;
+global uniform float QUANTIZED_TIME = 0.0;
 
 // Basic settings
 group_uniforms BasicSettings;
 uniform sampler2D fluid_tex : filter_nearest, repeat_enable;          // The fluid texture to sample
 uniform float base_opacity = 0.8;                                     // The base opacity of the fluid, before applying flow distance falloff
 uniform int flow_extent = 256;                                        // The extent of the flow texture in pixels, for calculating pixel UVs
-uniform int framerate = 12;                                           // The framerate of the fluid animation (frames per second)
 uniform int frame_count = 16;                                         // The total number of frames in the texture
 uniform float outline_threshold = 0.0;                                // Max value of max(r,g,b) to be considered outline (no refraction)
 uniform float flow_falloff_top = 8.0;                                 // How many pixels from the top to start fading out
@@ -137,7 +137,7 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
         return vec4(0.0);
     }
 
-    int frame_index = int(TIME * float(framerate)) % frame_count;
+    int frame_index = 0;  // TODO: remove frame count shenanigans; we don't actually use this anymore
 
     float frame_v = float(frame_index) / float(frame_count);
     float local_v = fract(pixel_y / 16.0) / float(frame_count);
@@ -218,7 +218,7 @@ void fragment() {
     float pixel_y = UV.y * float(flow_extent);
 
     // Time quantized to animation framerate
-    float qtime = round(TIME * float(framerate)) / float(framerate);
+    float qtime = QUANTIZED_TIME;
 
     // If this pixel is not in the flow area, draw nothing
     if (col < 0 || col > 15 || pixel_y < flow_start || pixel_y > dist + flow_falloff_bottom) {
@@ -280,7 +280,7 @@ void fragment() {
 
     // Apply screen refraction
     if (COLOR.a > 0.0 && !is_outline) {
-        float wave = sin(TIME * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
+        float wave = sin(qtime * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
         vec2 pixel_offset = vec2(float(wave * refract_strength * COLOR.a), 0.0); // Include a factor of alpha to fade smoothly at the falloff
 
         // Include the displacement in the refraction offset
