@@ -190,7 +190,7 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
         vec2 streak_noise_uv = vec2(float(col) + round(displacement_2 / 2.0), floor(pixel_y) - qtime * streak_scroll_speed) * streak_noise_scale;
         float streak_noise = smoothstep(streak_bias_low, streak_bias_high, snoise(vec3(streak_noise_uv, streak_noise_timescale * qtime)));
         float streak_factor = round(streak_noise * streak_steps) / streak_steps;
-        tex_color = blend(streak_blend, tex_color, vec4(streak_color, tex_color.a), streak_factor * streak_intensity);
+        tex_color.rgb = blend(streak_blend, tex_color.rgb, streak_color, streak_factor * streak_intensity);
     }
 
     // Mix in fluoride
