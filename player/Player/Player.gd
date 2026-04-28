@@ -56,7 +56,7 @@ func mergeSlimes(requester_id: int):
 				# within a set radius of each other, and there are no solid objects between them
 				if(start_slime != target_slime and my_merge[target_slime] == -1 and my_merge[start_slime] == -1 and
 				local_slimes[start_slime].slime_type == local_slimes[target_slime].slime_type and 
-				local_slimes[start_slime].slime_type != Slime.Type.ENERGIZED_SLIME and
+				local_slimes[start_slime].slime_type != Slime.Type.ICE_SLIME and
 				local_slimes[start_slime].position.distance_to(local_slimes[target_slime].position) < merge_distance and
 				local_slimes[start_slime].testMerge(sizes[start_slime] + local_slimes[target_slime].size, local_slimes[target_slime])):
 					
