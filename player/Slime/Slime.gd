@@ -103,6 +103,9 @@ func onFluidHit(fluid_type: FluidFlow.Type) -> void:
 		FluidFlow.Type.TAR:
 			if slime_type == Type.TAR_SLIME: return
 			slime_type_changed.emit(self, Type.TAR_SLIME)
+		FluidFlow.Type.ENERGIZED:
+			if slime_type == Type.ENERGIZED_SLIME: return
+			slime_type_changed.emit(self, Type.ENERGIZED_SLIME)
 
 # Attempt to change from slime form to human form
 func becomePenny():

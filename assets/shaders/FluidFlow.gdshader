@@ -93,6 +93,14 @@ uniform float voronoi_border_exponent = 2.0;                          // Exponen
 uniform float voronoi_border_steps = 3.0;                             // Number of steps to quantize the voronoi border effect into
 uniform float voronoi_border_mix = 0.5;                               // Strength of the voronoi border effect
 
+// Woke settings
+group_uniforms Woke;
+uniform bool has_fluoride = false;                                    // Whether the water has fluoride (woke)
+uniform vec2 fluoride_coordinate_factors = vec2(0.1, 0.5);            // Scale factors for the coordinates used in the fluoride sine wave
+uniform float fluoride_timescale = 2.0;                               // Timescale of the fluoride animation
+uniform float fluoride_strength = 0.5;                                // Strength of the fluoride effect, from 0 to 1
+uniform int fluoride_blend : hint_blend_mode = 1;                     // Blend mode to use for fluoride
+
 instance uniform float flow_start = 0.0;                              // How far down flow starts, in pixels from the top of the texture
 
 // Instance uniforms don't support arrays, so we split flow distances into int vectors
@@ -127,6 +135,13 @@ float get_displacement(int col, float pixel_y, float qtime) {
     displacement = round(displacement); // Quantize displacement
 
     return displacement;
+}
+
+// Converts HSV to RGB for fluoride
+vec3 hsv(vec3 c) {
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
 // Gets the UV coordinates for sampling a certain pixel column and y coordinate
@@ -176,6 +191,13 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
         float streak_noise = smoothstep(streak_bias_low, streak_bias_high, snoise(vec3(streak_noise_uv, streak_noise_timescale * qtime)));
         float streak_factor = round(streak_noise * streak_steps) / streak_steps;
         tex_color = blend(streak_blend, tex_color, vec4(streak_color, tex_color.a), streak_factor * streak_intensity);
+    }
+
+    // Mix in fluoride
+    if (has_fluoride) {
+        float wave_t = qtime * fluoride_timescale + floor(pixel_y) * fluoride_coordinate_factors.y + float(col) * fluoride_coordinate_factors.x;
+        vec3 fluoride_color = hsv(vec3(fract(wave_t), 1.0, 1.0));
+        tex_color = blend(fluoride_blend, tex_color, vec4(fluoride_color, tex_color.a), fluoride_strength);
     }
 
     // Handle fade out at the bottom
