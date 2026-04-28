@@ -7,7 +7,12 @@ var attack_hitbox: Area2D
 func _ready():
 	super()
 	set_los_cone()
+	
 	sprite = get_node("MeleeSprite")
+	sprite.set_autoplay("idle")
+	sprite.play()
+	sprite.animation_changed.connect(sprite.play)
+	
 	attack_hitbox = get_node("AttackHitbox")
 	attack_hitbox.body_entered.connect(attack)
 	read_melee_data("melee_parameters")
@@ -24,7 +29,7 @@ func read_melee_data(sectionName):
 	return
 
 func combat_behavior():
-	position.x = move_toward(position.x, combat_target.global_position.x, walk_speed)
+	velocity.x =  move_toward(velocity.x, walk_speed * ((combat_target.global_position.x - position.x ) / abs(combat_target.global_position.x - position.x)), 1)
 
 func turnaround():
 	if !sprite.flip_h:
@@ -38,8 +43,11 @@ func turnaround():
 	return
 
 func attack(target : Node2D):
+	#stop
+	velocity.x = 0
+	
 	if (target is PlayerMovement) and combat_state:
-		#play animation and confirm hit
+		sprite.set_animation("attack")
 		target.hit()
 		
 		

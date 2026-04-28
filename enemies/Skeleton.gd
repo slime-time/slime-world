@@ -6,7 +6,7 @@ extends CharacterBody2D
 var patrol_index: int
 var walk_speed: float
 var stop : int
-var sprite
+var sprite : AnimatedSprite2D
 
 var hurtbox : CollisionShape2D
 
@@ -23,6 +23,8 @@ var is_dead: bool
 
 var reanimation_time: float
 var death_timer: Timer
+var stop_time: float
+var stop_timer: Timer
 
 func _ready():
 	combat_state= false
@@ -38,6 +40,12 @@ func _ready():
 	death_timer.wait_time = reanimation_time
 	death_timer.timeout.connect(reanimate)
 	add_child(death_timer)
+	
+	#set stop clock
+	stop_timer = Timer.new()
+	stop_timer.wait_time = stop_time
+	stop_timer.timeout.connect(stop_timer.stop)
+	add_child(stop_timer)
 	
 	#establish if enemy will patrol or stay put until player is encountered
 	if (patrol.size() > 0):
@@ -55,22 +63,28 @@ func _physics_process(_delta : float):
 	if is_dead:
 		return
 	
-	if stop:
-		stop -= 1
+	if velocity.x == 0 and !combat_state:
+		sprite.set_animation("idle")
+	elif !combat_state:
+		sprite.set_animation("walk")
+	
+	if !stop_timer.is_stopped():
 		return
+	
+	move_and_slide()
 	
 	if is_patroling:
 		var next = float(patrol[patrol_index].position.x)
 		#reorient sprite and hitbox if necessary
 		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
 			await turnaround()
-		position.x = move_toward(position.x, next, walk_speed)
+		velocity.x = move_toward(velocity.x, walk_speed * ((next - position.x ) / abs(next - position.x)), 1)
 		
-		if position.x == next:
+		if ceil(position.x + get_position_delta().x) == next:
 			velocity.x = 0
 			patrol_index = (patrol_index + 1) % patrol.size()
-			#wait 10 frames
-			stop = 10
+			#wait ? frames
+			stop_timer.start()
 			
 	elif combat_state:
 		combat_behavior()
@@ -80,7 +94,7 @@ func _physics_process(_delta : float):
 func reanimate():
 	death_timer.stop()
 	#play reanimation animation
-	
+	sprite.set_animation("reanimation")
 	#reset to default
 	is_dead = false
 	los_area.monitoring = true
@@ -93,7 +107,7 @@ func hit():
 	los_area.monitoring = false
 	hurtbox.disabled = true
 	
-	#play death animation
+	sprite.set_animation("death")
 	death_timer.start()
 	
 func detect(target : Node2D ):
@@ -130,6 +144,7 @@ func read_enemy_data(sectionName):
 	los_cone_deg = config.get_value(sectionName, "los_cone_deg", los_cone_deg)
 	los_distance = config.get_value(sectionName, "los_distance", los_distance)
 	reanimation_time = config.get_value(sectionName, "reanimation_time", reanimation_time)
+	stop_time = config.get_value(sectionName, "stop_time", stop_time)
 
 func set_los_cone():
 	var cone = CollisionPolygon2D.new() 

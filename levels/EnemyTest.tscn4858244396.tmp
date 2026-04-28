@@ -93,5 +93,5 @@ position = Vector2(236, 157)
 position = Vector2(290, 158)
 
 [node name="MeleeSkeleton" parent="." unique_id=1999367218 node_paths=PackedStringArray("patrol") instance=ExtResource("5_23275")]
-position = Vector2(200, 151)
+position = Vector2(200, 152)
 patrol = [NodePath("../PatrolPoint1"), NodePath("../PatrolPoint2")]

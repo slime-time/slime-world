@@ -10,7 +10,15 @@ var attack_hitbox : Area2D
 func _ready():
 	super()
 	set_los_cone()
+	
 	sprite = get_node("SpecialSprite")
+	sprite.set_autoplay("idle")
+	sprite.play()
+	sprite.animation_changed.connect(sprite.play)
+	
+	attack_hitbox = get_node("AttackHitbox")
+	attack_hitbox.body_entered.connect(attack)
+	
 	match fluid_type:
 		#add more types
 		FluidFlow.Type.WATER:
@@ -22,9 +30,6 @@ func _ready():
 		FluidFlow.Type.TAR:
 			#load ice water bucket sprite
 			print("placeholder")
-
-	attack_hitbox = get_node("AttackHitbox")
-	attack_hitbox.body_entered.connect(attack)
 
 func attack(target : Node2D):
 	#play animation and confirm hit
@@ -38,7 +43,7 @@ func attack(target : Node2D):
 	
 
 func combat_behavior():
-	position.x = move_toward(position.x, combat_target.global_position.x, walk_speed)
+	velocity.x =  move_toward(velocity.x, walk_speed * ((combat_target.global_position.x - position.x ) / abs(combat_target.global_position.x - position.x)), 1)
 	
 
 func turnaround():
