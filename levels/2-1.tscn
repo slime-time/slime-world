@@ -86,7 +86,7 @@ tile_set = SubResource("TileSet_qehkn")
 [node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=2094922977]
 z_index = 2
 texture_filter = 1
-position = Vector2(250, 156)
+position = Vector2(250, 155)
 tile_map_data = PackedByteArray("AAD7/wIAAAABAAAAAAD8/wIAAAABAAAAAAA=")
 tile_set = SubResource("TileSet_qehkn")
 
