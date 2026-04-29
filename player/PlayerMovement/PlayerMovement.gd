@@ -116,6 +116,8 @@ func onFluidHit(_fluid_type: FluidFlow.Type) -> void:
 
 # Move along the ground or in the air
 func move(direction: float, delta: float) -> void:
+	#regular footstep by default
+	var desired_step_sfx : String = "footstep"
 	if(canClimb(direction)):
 		climb(direction, delta)
 	else:
@@ -123,10 +125,13 @@ func move(direction: float, delta: float) -> void:
 		# If we're moving with the fluid, dampen max velocity so it doesn't get effectively doubled
 		if wetness > 0 and sign(direction) == sign(effective_fluid_velocity.x):
 			run_velocity *= (1 - wetness)
+			desired_step_sfx = "fluid_footstep"
 
 		# Move towards the target velocity (plus net fluid flows)
 		var target_velocity = run_velocity + effective_fluid_velocity.x * wetness
 		velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
+		if InputManager.get_is_human():
+			AudioManager.play_sfx(desired_step_sfx, 1)
 
 # To implement sliding later, we likely want to pass a delta to this function
 func stop(delta: float) -> void:

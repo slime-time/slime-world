@@ -82,8 +82,15 @@ func play_sfx(sfxName : String, mode : int):
 			#looping
 			continuous_sfx_streams.add_child(newStream)
 		newStream.play()
+		
+		
+	for stream in streams:
+		#make sure we dont have sound effects from the same source cutting themself off 
+		if stream.name == sfxName and !stream.playing:
+			stream.play()
 	
 	return
+			
 
 func change_track_playback(song):
 	music_stream.stop()
