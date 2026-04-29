@@ -79,6 +79,7 @@ func set_hitbox_state():
 		attack_hitbox.set_monitoring(true)
 		attack_hitbox.set_visible(true)
 		chunk1.set_visible(true)
+		AudioManager.play_sfx("waterdump", 1)
 	elif sprite.animation == "attack" and sprite.frame == 12:
 		chunk1.set_visible(false)
 		chunk2.set_visible(true)
