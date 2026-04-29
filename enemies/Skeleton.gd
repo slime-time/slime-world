@@ -5,7 +5,6 @@ extends CharacterBody2D
 @export var patrol: Array[Node2D]
 var patrol_index: int
 var walk_speed: float
-var stop : int
 var sprite : AnimatedSprite2D
 
 var hurtbox : CollisionShape2D
@@ -57,24 +56,24 @@ func _ready():
 		origin.position = position
 		patrol.push_front(origin)
 	else: is_patroling = false
-	stop = 0
 
 func _physics_process(_delta : float):
 	if is_dead:
 		return
 	
-	if velocity.x == 0 and !combat_state:
+	if !stop_timer.is_stopped() and !combat_state:
+		velocity.x = 0
 		sprite.set_animation("idle")
-	elif !combat_state:
+		return	
+
+	elif get_position_delta().x != 0:
 		sprite.set_animation("walk")
-	
-	if !stop_timer.is_stopped():
-		return
-	
+		
 	move_and_slide()
 	
 	if is_patroling:
 		var next = float(patrol[patrol_index].position.x)
+		
 		#reorient sprite and hitbox if necessary
 		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
 			await turnaround()
@@ -95,6 +94,7 @@ func reanimate():
 	death_timer.stop()
 	#play reanimation animation
 	sprite.set_animation("reanimation")
+	await sprite.animation_finished
 	#reset to default
 	is_dead = false
 	los_area.monitoring = true
@@ -118,6 +118,9 @@ func detect(target : Node2D ):
 	return
 	
 func deaggro(target : Node2D ):
+	if(sprite.is_playing()):
+		await sprite.animation_finished
+	
 	if patrol.size() > 0 and target is PlayerMovement:
 		combat_target = null
 		combat_state = false
@@ -130,6 +133,7 @@ func deaggro(target : Node2D ):
 	elif target is PlayerMovement:
 		combat_target = null
 		combat_state = false
+		sprite.set_animation("idle")
 	return
 	
 func read_enemy_data(sectionName):
@@ -148,7 +152,9 @@ func read_enemy_data(sectionName):
 
 func set_los_cone():
 	var cone = CollisionPolygon2D.new() 
-	var origin : Vector2 = Vector2(los_area.position.x, los_area.position.y)
+	cone.position = los_area.position
+	print_debug(cone.position, " ", position, " ", los_area.position)
+	var origin : Vector2 = Vector2(self.los_area.position.x, self.los_area.position.y)
 	var y_offset : int = int(tan(los_cone_deg * (PI/180)) * los_distance)
 	cone.polygon= PackedVector2Array([origin, Vector2(origin.x + los_distance, origin.y + y_offset), 
 	Vector2(origin.x + los_distance, origin.y -y_offset)])

@@ -19,13 +19,16 @@ texture_filter = 1
 position = Vector2(0.5, 0.5)
 shape = ExtResource("2_yucds")
 
-[node name="AttackArea" type="Area2D" parent="." unique_id=326706524]
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=326706524]
+visible = false
 collision_layer = 2
+monitoring = false
 
-[node name="AttackHitbox" type="CollisionShape2D" parent="AttackArea" unique_id=2135257963]
+[node name="AttackArea" type="CollisionShape2D" parent="AttackHitbox" unique_id=2135257963]
 position = Vector2(12, 1.0000001)
 scale = Vector2(0.4, 0.8)
 shape = SubResource("CircleShape2D_yucds")
+debug_color = Color(0.9191829, 0.2530212, 0.33755493, 0.41960785)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=25029721]
 z_index = -2
