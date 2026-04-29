@@ -121,6 +121,12 @@ func deaggro(target : Node2D ):
 	if(sprite.is_playing()):
 		await sprite.animation_finished
 	
+	if(!target):
+		combat_target = null
+		combat_state = false
+		is_patroling = true
+		return
+	
 	if patrol.size() > 0 and target is PlayerMovement:
 		combat_target = null
 		combat_state = false
