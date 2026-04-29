@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="9_3tse3"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="10_qijr3"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="11_npnk2"]
-[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="12_ww84j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
 shader = ExtResource("10_qijr3")
@@ -140,21 +139,6 @@ tile_set = SubResource("TileSet_atv1j")
 position = Vector2(198, 182)
 starts_on = true
 can_slimes_interact = true
-
-[node name="ControlCheatSheet" type="Label" parent="." unique_id=1329297895]
-offset_left = 296.0
-offset_top = 196.0
-offset_right = 778.0
-offset_bottom = 313.0
-theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
-theme_override_fonts/font = ExtResource("12_ww84j")
-theme_override_font_sizes/font_size = 8
-text = "controls
-WASD/arrow keys/space: move and jump
-v:	  transform
-e:	  Interact with objects
-q:	  pause
-r:	  reset"
 
 [connection signal="flip_off" from="Lever" to="WaterFlow3" method="disableFlow"]
 [connection signal="flip_on" from="Lever" to="WaterFlow3" method="enableFlow"]
