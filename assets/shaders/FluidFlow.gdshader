@@ -5,13 +5,13 @@ shader_type canvas_item;
 
 // Globals
 global uniform ivec2 SCREEN_SIZE_PIXELS;
+global uniform float QUANTIZED_TIME = 0.0;
 
 // Basic settings
 group_uniforms BasicSettings;
 uniform sampler2D fluid_tex : filter_nearest, repeat_enable;          // The fluid texture to sample
 uniform float base_opacity = 0.8;                                     // The base opacity of the fluid, before applying flow distance falloff
 uniform int flow_extent = 256;                                        // The extent of the flow texture in pixels, for calculating pixel UVs
-uniform int framerate = 12;                                           // The framerate of the fluid animation (frames per second)
 uniform int frame_count = 16;                                         // The total number of frames in the texture
 uniform float outline_threshold = 0.0;                                // Max value of max(r,g,b) to be considered outline (no refraction)
 uniform float flow_falloff_top = 8.0;                                 // How many pixels from the top to start fading out
@@ -57,6 +57,7 @@ uniform sampler2D screen_tex : hint_screen_texture, filter_nearest;   // Screen 
 uniform float refract_strength = 0.8;                                 // Strength of the refraction effect (offset in pixels)
 uniform float refract_frequency = 0.5;                                // Frequency of the vertical refraction waves
 uniform float refract_timescale = 2.0;                                // Timescale for the refraction animation
+uniform int refract_blend : hint_blend_mode = 2;                      // Blend mode to use for refraction
 
 // Foam settings
 group_uniforms Foam;
@@ -66,6 +67,7 @@ uniform float foam_timescale = 5.0;                                   // Foam no
 uniform float foam_distance = 6.0;                                    // How many pixels (Δy) around the flow end are affected by foam
 uniform float foam_steps = 4.0;                                       // Minimum noise value to show foam
 uniform float foam_intensity = 2.5;                                   // Intensity of the foam effect, from 0 to 1
+uniform int foam_blend : hint_blend_mode = 2;                         // Blend mode to use for foam
 
 // Voronoi (ice shard) settings
 group_uniforms Voronoi;
@@ -90,6 +92,14 @@ uniform float voronoi_border_spread = 1.0;                            // How far
 uniform float voronoi_border_exponent = 2.0;                          // Exponent for the voronoi border spread effect
 uniform float voronoi_border_steps = 3.0;                             // Number of steps to quantize the voronoi border effect into
 uniform float voronoi_border_mix = 0.5;                               // Strength of the voronoi border effect
+
+// Woke settings
+group_uniforms Woke;
+uniform bool has_fluoride = false;                                    // Whether the water has fluoride (woke)
+uniform vec2 fluoride_coordinate_factors = vec2(0.1, 0.5);            // Scale factors for the coordinates used in the fluoride sine wave
+uniform float fluoride_timescale = 2.0;                               // Timescale of the fluoride animation
+uniform float fluoride_strength = 0.5;                                // Strength of the fluoride effect, from 0 to 1
+uniform int fluoride_blend : hint_blend_mode = 1;                     // Blend mode to use for fluoride
 
 instance uniform float flow_start = 0.0;                              // How far down flow starts, in pixels from the top of the texture
 
@@ -127,6 +137,13 @@ float get_displacement(int col, float pixel_y, float qtime) {
     return displacement;
 }
 
+// Converts HSV to RGB for fluoride
+vec3 hsv(vec3 c) {
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
 // Gets the UV coordinates for sampling a certain pixel column and y coordinate
 // col is 0-16 if a regular flow part, or -1/-2/16/17 for border parts
 vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qtime) {
@@ -135,7 +152,7 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
         return vec4(0.0);
     }
 
-    int frame_index = int(TIME * float(framerate)) % frame_count;
+    int frame_index = 0;  // TODO: remove frame count shenanigans; we don't actually use this anymore
 
     float frame_v = float(frame_index) / float(frame_count);
     float local_v = fract(pixel_y / 16.0) / float(frame_count);
@@ -173,7 +190,14 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
         vec2 streak_noise_uv = vec2(float(col) + round(displacement_2 / 2.0), floor(pixel_y) - qtime * streak_scroll_speed) * streak_noise_scale;
         float streak_noise = smoothstep(streak_bias_low, streak_bias_high, snoise(vec3(streak_noise_uv, streak_noise_timescale * qtime)));
         float streak_factor = round(streak_noise * streak_steps) / streak_steps;
-        tex_color = blend(streak_blend, tex_color, vec4(streak_color, tex_color.a), streak_factor * streak_intensity);
+        tex_color.rgb = blend(streak_blend, tex_color.rgb, streak_color, streak_factor * streak_intensity);
+    }
+
+    // Mix in fluoride
+    if (has_fluoride) {
+        float wave_t = qtime * fluoride_timescale + floor(pixel_y) * fluoride_coordinate_factors.y + float(col) * fluoride_coordinate_factors.x;
+        vec3 fluoride_color = hsv(vec3(fract(wave_t), 1.0, 1.0));
+        tex_color = blend(fluoride_blend, tex_color, vec4(fluoride_color, tex_color.a), fluoride_strength);
     }
 
     // Handle fade out at the bottom
@@ -200,8 +224,8 @@ vec4 get_part_color(int col, float pixel_y, float dist, vec2 screen_uv, float qt
 
         float foam_stepped = round(foam_amount * foam_steps) / foam_steps; // Step the foam amount to create more distinct patches
         float foam_alpha = (0.5 + (tex_color.a / 2.0)) * clamp((round(pixel_y) - round(flow_start)) / flow_falloff_bottom, 0.0, 1.0);
-        vec4 foam_blend = vec4(foam_color, foam_alpha);
-        tex_color = blend(BLEND_SCREEN, tex_color, foam_blend, foam_stepped);
+        vec4 foam_blend_color = vec4(foam_color, foam_alpha);
+        tex_color = blend(foam_blend, tex_color, foam_blend_color, foam_stepped);
     }
 
     return tex_color;
@@ -216,7 +240,7 @@ void fragment() {
     float pixel_y = UV.y * float(flow_extent);
 
     // Time quantized to animation framerate
-    float qtime = round(TIME * float(framerate)) / float(framerate);
+    float qtime = QUANTIZED_TIME;
 
     // If this pixel is not in the flow area, draw nothing
     if (col < 0 || col > 15 || pixel_y < flow_start || pixel_y > dist + flow_falloff_bottom) {
@@ -278,7 +302,7 @@ void fragment() {
 
     // Apply screen refraction
     if (COLOR.a > 0.0 && !is_outline) {
-        float wave = sin(TIME * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
+        float wave = sin(qtime * refract_timescale + round(pixel_y + 0.5) * refract_frequency);
         vec2 pixel_offset = vec2(float(wave * refract_strength * COLOR.a), 0.0); // Include a factor of alpha to fade smoothly at the falloff
 
         // Include the displacement in the refraction offset
@@ -299,7 +323,7 @@ void fragment() {
         vec4 refract_color = texture(screen_tex, refract_uv);
 
         // Blend in the refracted color
-        COLOR = blend(BLEND_SCREEN, refract_color, COLOR, COLOR.a);
+        COLOR = blend(refract_blend, refract_color, COLOR, COLOR.a);
         COLOR.a = 1.0; // We render the refracted background, so don't allow the original background to show through
     }
 }

@@ -41,24 +41,26 @@ vec4 linear_dodge(vec4 base, vec4 blend) { return base + blend; }
 vec4 color_burn(vec4 base, vec4 blend) { return 1.0 - (1.0 - base) / blend; }
 vec4 linear_burn (vec4 base, vec4 blend) { return base + blend - 1.0; }
 
-const int BLEND_MULTIPLY = 0;
-const int BLEND_SCREEN = 1;
-const int BLEND_DARKEN = 2;
-const int BLEND_LIGHTEN = 3;
-const int BLEND_DIFFERENCE = 4;
-const int BLEND_EXCLUSION = 5;
-const int BLEND_OVERLAY = 6;
-const int BLEND_HARD_LIGHT = 7;
-const int BLEND_SOFT_LIGHT = 8;
-const int BLEND_COLOR_DODGE = 9;
-const int BLEND_LINEAR_DODGE = 10;
-const int BLEND_COLOR_BURN = 11;
-const int BLEND_LINEAR_BURN = 12;
+const int BLEND_MIX = 0;
+const int BLEND_MULTIPLY = 1;
+const int BLEND_SCREEN = 2;
+const int BLEND_DARKEN = 3;
+const int BLEND_LIGHTEN = 4;
+const int BLEND_DIFFERENCE = 5;
+const int BLEND_EXCLUSION = 6;
+const int BLEND_OVERLAY = 7;
+const int BLEND_HARD_LIGHT = 8;
+const int BLEND_SOFT_LIGHT = 9;
+const int BLEND_COLOR_DODGE = 10;
+const int BLEND_LINEAR_DODGE = 11;
+const int BLEND_COLOR_BURN = 12;
+const int BLEND_LINEAR_BURN = 13;
 
 vec3 blend(int MODE, vec3 base3, vec3 over3, float factor) {
     vec4 base = vec4(base3, 1.0);
     vec4 over = vec4(over3, 1.0);
     switch (MODE) {
+        case BLEND_MIX: return mix(base, over, factor).rgb;
         case BLEND_MULTIPLY: return mix(base, multiply(base, over), factor).rgb;
         case BLEND_SCREEN: return mix(base, screen(base, over), factor).rgb;
         case BLEND_DARKEN: return mix(base, darken(base, over), factor).rgb;
@@ -78,6 +80,7 @@ vec3 blend(int MODE, vec3 base3, vec3 over3, float factor) {
 
 vec4 blend(int MODE, vec4 base, vec4 over, float factor) {
     switch (MODE) {
+        case BLEND_MIX: return mix(base, over, factor);
         case BLEND_MULTIPLY: return mix(base, multiply(base, over), factor);
         case BLEND_SCREEN: return mix(base, screen(base, over), factor);
         case BLEND_DARKEN: return mix(base, darken(base, over), factor);
@@ -96,6 +99,7 @@ vec4 blend(int MODE, vec4 base, vec4 over, float factor) {
 }
 
 #define hint_blend_mode hint_enum(  \
+    "MIX",                          \
     "MULTIPLY",                     \
     "SCREEN",                       \
     "DARKEN",                       \

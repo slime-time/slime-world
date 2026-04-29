@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://d2n5hnnnf8678"]
+
+[ext_resource type="Script" uid="uid://dxkyxq3lw2wit" path="res://levels/MainMenu/LevelSelect.gd" id="1_8vtko"]
+[ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://components/MainMenuButton/MainMenuButton.tscn" id="4_vx5hu"]
+
+[node name="VBoxContainer" type="VBoxContainer" unique_id=568300695]
+offset_left = 175.0
+offset_top = 135.0
+offset_right = 335.0
+offset_bottom = 153.0
+mouse_filter = 2
+script = ExtResource("1_8vtko")
+
+[node name="LevelSelectButton" parent="." unique_id=869992264 instance=ExtResource("4_vx5hu")]
+layout_mode = 2
+toggle_mode = true
