@@ -2,14 +2,23 @@
 
 [ext_resource type="Shader" uid="uid://mgwjv0c76aad" path="res://assets/shaders/TarLayer.gdshader" id="1_btvg0"]
 
-[sub_resource type="ImageTexture" id="ImageTexture_btvg0"]
-
 [resource]
 shader = ExtResource("1_btvg0")
-shader_parameter/tar_base_color = Color(0.4618454, 0.24748686, 0, 1)
-shader_parameter/posterize_steps = 6.0
-shader_parameter/blend_mode = 11
-shader_parameter/noise_scale = Vector2(160, 90)
+shader_parameter/tar_base_color = Color(0.3828971, 0.16759798, 0.44277614, 1)
+shader_parameter/tar_secondary_color = Color(0.14117648, 0.09803922, 0.050980393, 1)
+shader_parameter/tar_highlight_color = Color(0.86556745, 0.4878605, 0.2328915, 1)
+shader_parameter/posterize_steps = 3.0
+shader_parameter/blend_mode = 0
+shader_parameter/blend_mode_secondary = 0
+shader_parameter/blend_mode_highlight = 2
+shader_parameter/noise_scale_base = Vector2(80, 45)
+shader_parameter/noise_scale_secondary = Vector2(80, 45)
+shader_parameter/noise_scale_highlight = Vector2(600, 600)
 shader_parameter/noise_bias_low = 0.0
 shader_parameter/noise_bias_high = 0.6
-shader_parameter/tar_buffer = SubResource("ImageTexture_btvg0")
+shader_parameter/noise_bias_low_highlight = 0.9
+shader_parameter/noise_bias_high_highlight = 1.0
+shader_parameter/intensity = 1.0
+shader_parameter/intensity_secondary = 1.0
+shader_parameter/intensity_highlight = 0.1
+shader_parameter/tar_level_multiplier = 1.5

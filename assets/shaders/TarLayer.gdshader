@@ -6,13 +6,25 @@ shader_type canvas_item;
 global uniform ivec2 SCREEN_SIZE_PIXELS;
 global uniform float QUANTIZED_TIME = 0.0;
 
-uniform vec3 tar_base_color: source_color;      // Base color of the tar, with alpha controlling opacity
-uniform float posterize_steps = 6.0;            // Number of steps to posterize the gas alpha into
-uniform int blend_mode: hint_blend_mode = 1;    // Blending mode for the tar
+uniform vec3 tar_base_color: source_color;                // Base color of the tar, with alpha controlling opacity
+uniform vec3 tar_secondary_color: source_color;           // Base color of the tar, with alpha controlling opacity
+uniform vec3 tar_highlight_color: source_color;           // Base color of the tar, with alpha controlling opacity
+uniform float posterize_steps = 6.0;                      // Number of steps to posterize the gas alpha into
+uniform int blend_mode: hint_blend_mode = 1;              // Blending mode for the tar
+uniform int blend_mode_secondary: hint_blend_mode = 1;    // Blending mode for the secondary tar layer
+uniform int blend_mode_highlight: hint_blend_mode = 1;    // Blending mode for the highlight tar layer
 
-uniform vec2 noise_scale = vec2(1.0, 1.0);      // Scale of the noise pattern in xyz
-uniform float noise_bias_low = 0.3;             // Where to start fading noise from 0 to 1
-uniform float noise_bias_high = 0.7;            // Where to stop fading noise from 0 to 1
+uniform vec2 noise_scale_base = vec2(1.0, 1.0);           // Scale of the noise pattern in xyz
+uniform vec2 noise_scale_secondary = vec2(1.0, 1.0);      // Scale of the noise pattern in xyz
+uniform vec2 noise_scale_highlight = vec2(1.0, 1.0);      // Scale of the noise pattern in xyz
+uniform float noise_bias_low = 0.3;                       // Where to start fading noise from 0 to 1
+uniform float noise_bias_high = 0.7;                      // Where to stop fading noise from 0 to 1
+uniform float noise_bias_low_highlight = 0.3;             // Where to start fading noise from 0 to 1 (highlight)
+uniform float noise_bias_high_highlight = 0.7;            // Where to stop fading noise from 0 to 1 (highlight)
+uniform float intensity = 1.0;                            // Overall intensity multiplier for the tar effect
+uniform float intensity_secondary = 1.0;                  // Overall intensity multipler for secondary blending
+uniform float intensity_highlight = 1.0;                  // Overall intensity multipler for highlight blending
+uniform float tar_level_multiplier = 1.5;                 // Super fun super sensical multiplier that just made it look better I think
 
 // Buffer storing information on tar pixels
 // Red channel stores right-facing walls, with 1.0 at the wall decreasing to 1/8 at a distance of 8 pixels
@@ -41,14 +53,26 @@ void fragment() {
         discard;
     }
 
-    vec3 noise_uvw = vec3(screen_pixel_uv * noise_scale, 0.0);
-    float noise_value = smoothstep(noise_bias_low, noise_bias_high, snoise(noise_uvw));
+    float noise_base = snoise(vec3(screen_pixel_uv * noise_scale_base, 0.0));
+    float noise_secondary = snoise(vec3(screen_pixel_uv * noise_scale_secondary, 0.0) + vec3(1000.0));
+    float noise_highlight = snoise(vec3(screen_pixel_uv * noise_scale_highlight, 0.0) + vec3(-1000.0));
 
-    float tar_level = pow(max(tar.r, tar.g), 2.0);   // Opacity of the tar at this pixel, based on how close it is to a wall pixel
-    float blend_amount = floor(posterize_steps * noise_value * tar_level) / posterize_steps;   // Posterized blend amount based on tar level and noise value
+    float tar_level = tar_level_multiplier * pow(max(tar.r, tar.g), 1.0);
 
-    COLOR.rgb = blend(blend_mode, tex_color.rgb, tar_base_color, blend_amount);
-    COLOR.a = tex_color.a;
+    float smoothed_base = smoothstep(noise_bias_low, noise_bias_high, noise_base * tar_level);
+    float blend_base = floor(posterize_steps * smoothed_base) / posterize_steps;
+
+    float smoothed_secondary = smoothstep(noise_bias_low, noise_bias_high, noise_secondary * tar_level);
+    float blend_secondary = floor(posterize_steps * smoothed_secondary) / posterize_steps;
+
+    float smoothed_highlight = smoothstep(noise_bias_low_highlight, noise_bias_high_highlight, noise_highlight * tar_level);
+    float blend_highlight = floor(posterize_steps * smoothed_highlight) / posterize_steps;
+
+    tex_color.rgb = blend(blend_mode, tex_color.rgb, tar_base_color, blend_base * intensity);
+    tex_color.rgb = blend(blend_mode_secondary, tex_color.rgb, tar_secondary_color, blend_secondary * intensity_secondary);
+    tex_color.rgb = blend(blend_mode_highlight, tex_color.rgb, tar_highlight_color, blend_highlight * intensity_highlight);
+
+    COLOR = tex_color;
 
     // COLOR.xy = screen_pixel_uv;
 }
