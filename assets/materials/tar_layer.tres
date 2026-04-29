@@ -21,3 +21,4 @@ shader_parameter/noise_bias_high_highlight = 1.0
 shader_parameter/intensity = 1.0
 shader_parameter/intensity_secondary = 1.0
 shader_parameter/intensity_highlight = 0.1
+shader_parameter/tar_level_multiplier = 1.5

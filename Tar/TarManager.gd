@@ -89,17 +89,10 @@ func resetTar():
 
 # Updates the value at a single pixel in the tar buffer
 func _setBufferPixel(x: int, y: int, right_wall_dist: int, left_wall_dist: int) -> void:
-<<<<<<< tar-rendering
 	var r = 1.0 - float(right_wall_dist) / float(MAX_WALL_DIST)
 	var g = 1.0 - float(left_wall_dist) / float(MAX_WALL_DIST)
 	var old_tex = tar_buffer.get_pixel(x, y)
 	tar_buffer.set_pixel(x, y, Color(max(r, old_tex.r), max(g, old_tex.g), 0, 1))
-=======
-	# FIXME: min distances with existing values
-	var r = 1.0 - float(right_wall_dist) / float(MAX_WALL_DIST)
-	var g = 1.0 - float(left_wall_dist) / float(MAX_WALL_DIST)
-	tar_buffer.set_pixel(x, y, Color(r, g, 0, 1))
->>>>>>> main
 
 # Sets a glob for the given direction at the given position (in glob coordinates i.e. pixel/4)
 func setBufferGlob(glob_position: Vector2i, wall_normal: Vector2):
