@@ -27,7 +27,7 @@ position = Vector2(12, 1.0000001)
 scale = Vector2(0.4, 0.8)
 shape = SubResource("CircleShape2D_yucds")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=25029721]
+[node name="PennySprite" type="Sprite2D" parent="." unique_id=25029721]
 z_index = -2
 texture_filter = 1
 texture = SubResource("CompressedTexture2D_1fj7d")
