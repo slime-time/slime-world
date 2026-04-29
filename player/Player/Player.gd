@@ -56,7 +56,7 @@ func mergeSlimes(requester_id: int):
 				# within a set radius of each other, and there are no solid objects between them
 				if(start_slime != target_slime and my_merge[target_slime] == -1 and my_merge[start_slime] == -1 and
 				local_slimes[start_slime].slime_type == local_slimes[target_slime].slime_type and 
-				local_slimes[start_slime].slime_type != Slime.Type.ENERGIZED_SLIME and
+				local_slimes[start_slime].slime_type != Slime.Type.ICE_SLIME and
 				local_slimes[start_slime].position.distance_to(local_slimes[target_slime].position) < merge_distance and
 				local_slimes[start_slime].testMerge(sizes[start_slime] + local_slimes[target_slime].size, local_slimes[target_slime])):
 					
@@ -116,18 +116,14 @@ func makeSlime(starting_location: Vector2, starting_velocity: Vector2, size: int
 
 # Make Penny invisible and take away her physics, then add a max size slime (size 8) in her place
 func makePennyIntoSlime():
-	# Make sure that Penny can actually change
-	var overlaps = penny.get_node("TransformChecker").get_overlapping_bodies()
-	if(len(overlaps) == 1 and overlaps[0] == penny):
-		var old_velocity = penny.velocity;
-		penny.set_visible(false)
-		# Make a slime at Penny's position
-		makeSlime(penny.position, Vector2.ZERO, 8, Slime.Type.GREEN_SLIME)
-		penny.set_process_mode(Node.PROCESS_MODE_DISABLED)
-		slimes[0].velocity = old_velocity
-		InputManager.is_human = false
-	else:
-		print_debug("To Do: make some indication to the player that the transformation failed")
+	# Assume Penny can actually change, let godot engine handle intersections
+	var old_velocity = penny.velocity;
+	penny.set_visible(false)
+	# Make a slime at Penny's position
+	makeSlime(penny.position, Vector2.ZERO, 8, Slime.Type.GREEN_SLIME)
+	penny.set_process_mode(Node.PROCESS_MODE_DISABLED)
+	slimes[0].velocity = old_velocity
+	InputManager.is_human = false
 
 
 # If a large slime turned into Penny, add back Penny
