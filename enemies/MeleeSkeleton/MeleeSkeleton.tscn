@@ -8,7 +8,6 @@ radius = 6.666667
 height = 22.222223
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_oju2m"]
-radius = 8.888889
 
 [node name="MeleeSkeleton" type="CharacterBody2D" unique_id=1999367218]
 floor_stop_on_slope = false
@@ -29,10 +28,10 @@ animation = &"idle"
 offset = Vector2(0, 0.5)
 
 [node name="SkeletonLoS" type="Area2D" parent="." unique_id=848074523]
-position = Vector2(3, 0)
+position = Vector2(3, 1)
 
 [node name="AttackTrigger" type="Area2D" parent="." unique_id=699947950]
-position = Vector2(13, 6)
+position = Vector2(16, 6)
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackTrigger" unique_id=1993008067]

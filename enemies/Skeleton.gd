@@ -19,6 +19,8 @@ var combat_target: Node2D
 var combat_state: bool
 # 0:static  1:patrolling
 var is_patroling: bool
+var is_patroling: bool	
+var is_static: bool
 var is_dead: bool
 
 var noticed_players: Array[Node2D]
@@ -28,8 +30,11 @@ var death_timer: Timer
 var stop_time: float
 var stop_timer: Timer
 
+var did_collide : bool
+
 func _ready():
-	combat_state= false
+	combat_state = false
+	combat_target = null
 	
 	hurtbox = get_node("SkeletonHurtbox")
 	los_area = get_node("SkeletonLoS")
@@ -52,6 +57,7 @@ func _ready():
 	
 	#establish if enemy will patrol or stay put until player is encountered
 	if (patrol.size() > 0):
+		is_static = false
 		is_patroling = true
 		patrol_index = 1
 		
@@ -59,7 +65,9 @@ func _ready():
 		var origin = Node2D.new()
 		origin.position = position
 		patrol.push_front(origin)
-	else: is_patroling = false
+	else: 
+		is_patroling = false
+		is_static = true
 
 func _physics_process(delta : float):
 	if(not is_on_floor()):
