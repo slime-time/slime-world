@@ -25,8 +25,6 @@ func _physics_process(delta: float):
 func _ready():
 	super()
 	sprite = get_node("SpecialSprite")
-	sprite.animation_changed.connect(sprite.play)
-	sprite.set_animation("idle")
 	
 	attack_trigger = get_node("AttackTrigger")
 	attack_hitbox = get_node("AttackHitbox")
@@ -35,7 +33,6 @@ func _ready():
 	attack_hitbox.body_entered.connect(throw_water)
 	
 	match fluid_type:
-		#add more types
 		FluidFlow.Type.WATER:
 			sprite.set_sprite_frames(SPRITE_SHEET[2])
 			#load water bucket sprite
@@ -48,6 +45,10 @@ func _ready():
 			sprite.set_sprite_frmaes(SPRITE_SHEET[1])
 		FluidFlow.Type.ENERGIZED:
 			sprite.set_sprite_frames(SPRITE_SHEET[3])
+	
+	sprite.animation_changed.connect(sprite.play)
+	sprite.frame_changed.connect(set_hitbox_state)
+	sprite.set_animation("idle")
 	set_los_cone()
 
 func targetForAttack(target: Node2D):
@@ -81,7 +82,7 @@ func attack(_target = null):
 	
 func throw_water(target : Node2D):
 	if (target is PlayerMovement) and combat_state:
-		var bodies = attack_trigger.get_overlapping_bodies()
+		var bodies = attack_hitbox.get_overlapping_bodies()
 		for body in bodies:
 			if body.has_method("onFluidHit"):
 				body.onFluidHit(fluid_type)
@@ -134,8 +135,6 @@ func set_hitbox_state():
 		chunk2.set_deferred("disabled", false)
 	elif sprite.animation == "attack" and sprite.frame == 12:
 		attack_hitbox.set_monitoring(false)
-		attack_hitbox.set_visible(false)
-		chunk1.set_visible(false)
 		chunk2.set_visible(false)
 		chunk2.set_deferred("disabled", true)
 		return
