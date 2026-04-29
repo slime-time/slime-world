@@ -30,14 +30,8 @@ func _ready() -> void:
 	tree.root.add_child.call_deferred(continuous_sfx_streams)
 	tree.root.add_child.call_deferred(oneshot_sfx_streams)
 	
-	tree.scene_changed.connect(func(node: Node) : 
-		for child in node.get_children():
-			if (child is FluidFlow) or (child is FluidVolume):
-				play_sfx("looping_waterfall", 0)
-		)
-	
 	#can refactor to change theme based on level later
-	GameManager.level_changed.connect(func() : set_current_track("sgsw_theme1"))
+	GameManager.level_changed.connect(on_scene_change)
 
 func set_current_track(songName : String):
 	for song in songs:
@@ -47,6 +41,18 @@ func set_current_track(songName : String):
 		else:
 			print_debug("no song found with that name")
 			
+
+func on_scene_change():
+	#ensure active scene is always the newly loaded one
+	var tree = get_tree()
+	await tree.scene_changed
+	
+	var activeScene = get_tree().current_scene
+	
+	set_current_track("sgsw_theme1")
+	for child in activeScene.get_children():
+			if (child is FluidFlow):
+				play_sfx("looping_waterfall", 0)
 
 func play_sfx(sfxName : String, mode : int):
 	var streams
@@ -63,7 +69,8 @@ func play_sfx(sfxName : String, mode : int):
 		var newStream = AudioStreamPlayer.new()
 		newStream.name = sfxName
 		newStream.bus = busName
-		newStream.stream.load("res://assets/sfx/" + sfxName +".wav")
+		var sound = load("res://assets/sfx/" + sfxName +".wav")
+		newStream.set_stream(sound)
 		
 		if mode: 
 			newStream.finished.connect(newStream.queue_free)
@@ -72,16 +79,11 @@ func play_sfx(sfxName : String, mode : int):
 			
 		else: 
 			newStream.finished.connect(newStream.play)
+			#looping
 			continuous_sfx_streams.add_child(newStream)
 		newStream.play()
-		
-		
-	for stream in streams:
-		if stream.name == sfxName:
-			stream.play()
 	
 	return
-			
 
 func change_track_playback(song):
 	music_stream.stop()

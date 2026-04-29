@@ -14,7 +14,9 @@ var current_state : GameState = GameState.new()
 func loadLevel(x : int):
 	assert(0 <= x && x <= current_state.highest_level_unlocked)
 	current_state.cur_level = x
-	level_changed.emit()
+	#avoid playing level themes on title
+	if x != 0:
+		level_changed.emit()
 	get_tree().call_deferred("change_scene_to_file", levels[x])
 	
 
