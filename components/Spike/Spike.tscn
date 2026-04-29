@@ -11,6 +11,7 @@ size = Vector2(8, 8)
 script = ExtResource("1_6yh2b")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1522893824]
+position = Vector2(0, -1)
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=768931425]

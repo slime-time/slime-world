@@ -11,7 +11,7 @@ size = Vector2(8, 8)
 script = ExtResource("1_xv7qw")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1522893824]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+polygon = PackedVector2Array(-4, -4, 4, -4, 0, 3)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=768931425]
 modulate = Color(1, 0, 0, 1)
