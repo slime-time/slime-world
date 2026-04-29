@@ -4,12 +4,12 @@ const levels: Array[String] = [
 	"res://levels/MainMenu/MainMenu.tscn",
 	"res://levels/Tutorial3.tscn",
 	"res://levels/Tutorial1.tscn",
-    "res://levels/1-1.tscn",
-    "res://levels/Level1.tscn",
-    "res://levels/3-1.tscn",
-    "res://levels/4-Platformer1.tscn",
-    "res://levels/3-2.tscn",
-    "res://levels/1-4.tscn",
+	"res://levels/1-1.tscn",
+	"res://levels/Level1.tscn",
+	"res://levels/3-1.tscn",
+	"res://levels/4-Platformer1.tscn",
+	"res://levels/3-2.tscn",
+	"res://levels/1-4.tscn",
 	"res://levels/Level2.tscn"
 ]
 
