@@ -10,8 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="8_70ey0"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="9_u3smu"]
 [ext_resource type="PackedScene" uid="uid://yca8b2k8wq6x" path="res://components/ToxicGas/ToxicGas.tscn" id="10_4xi2o"]
-[ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="11_kgphi"]
 [ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="12_2l2qi"]
+[ext_resource type="Script" uid="uid://hxpbhcpajr12" path="res://components/RedSpike/RedSpike.gd" id="13_8b8e1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
 shader = ExtResource("1_8p8s7")
@@ -214,304 +214,332 @@ area_size = Vector2i(65, 32)
 position = Vector2(419, 224)
 area_size = Vector2i(50, 32)
 
-[node name="Spike5" type="RigidBody2D" parent="." unique_id=875274135]
-position = Vector2(120, 97)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
+[node name="Spike" type="RigidBody2D" parent="." unique_id=598144181]
+position = Vector2(414, 253)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike5" unique_id=1874051816]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike" unique_id=1522893824]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike5" unique_id=720865199]
+[node name="Sprite2D" type="Sprite2D" parent="Spike" unique_id=768931425]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike6" type="RigidBody2D" parent="." unique_id=1717584457]
-position = Vector2(128, 97)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
+[node name="Spike2" type="RigidBody2D" parent="." unique_id=1647827804]
+position = Vector2(406, 253)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike6" unique_id=1234235689]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike2" unique_id=448382183]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike6" unique_id=152410707]
+[node name="Sprite2D" type="Sprite2D" parent="Spike2" unique_id=1002543742]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike7" type="RigidBody2D" parent="." unique_id=1286848368]
-position = Vector2(136, 97)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
+[node name="Spike3" type="RigidBody2D" parent="." unique_id=1884562874]
+position = Vector2(398, 253)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike7" unique_id=1636916573]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike3" unique_id=1562843783]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike7" unique_id=1807544863]
+[node name="Sprite2D" type="Sprite2D" parent="Spike3" unique_id=1143858132]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike8" type="RigidBody2D" parent="." unique_id=1799626561]
-position = Vector2(144, 97)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
+[node name="Spike27" type="RigidBody2D" parent="." unique_id=521976712]
+position = Vector2(232, 257)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike8" unique_id=291742856]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike27" unique_id=2047327267]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike8" unique_id=1268064408]
+[node name="Sprite2D" type="Sprite2D" parent="Spike27" unique_id=87801251]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike9" type="RigidBody2D" parent="." unique_id=1568209237]
+[node name="Spike28" type="RigidBody2D" parent="." unique_id=792362013]
+position = Vector2(224, 257)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike28" unique_id=1153948732]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike28" unique_id=489849324]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike31" type="RigidBody2D" parent="." unique_id=565652363]
+position = Vector2(216, 257)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike31" unique_id=1983230153]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike31" unique_id=2096352944]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike35" type="RigidBody2D" parent="." unique_id=2012113962]
+position = Vector2(232, 211)
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike35" unique_id=783189057]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike35" unique_id=1204122750]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike36" type="RigidBody2D" parent="." unique_id=1273070291]
+position = Vector2(224, 211)
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike36" unique_id=1441488620]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike36" unique_id=554575717]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike37" type="RigidBody2D" parent="." unique_id=1966440014]
+position = Vector2(216, 211)
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike37" unique_id=1995105991]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike37" unique_id=1445681028]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike38" type="RigidBody2D" parent="." unique_id=1388172395]
+position = Vector2(232, 52)
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike38" unique_id=1404626299]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike38" unique_id=2097249894]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike39" type="RigidBody2D" parent="." unique_id=1700932103]
+position = Vector2(224, 52)
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike39" unique_id=2053449155]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike39" unique_id=859656176]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike40" type="RigidBody2D" parent="." unique_id=1255786968]
+position = Vector2(216, 52)
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike40" unique_id=561935109]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike40" unique_id=2108369245]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike41" type="RigidBody2D" parent="." unique_id=2003716006]
 position = Vector2(152, 97)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike9" unique_id=2020365849]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike41" unique_id=1562272253]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike9" unique_id=1406511442]
+[node name="Sprite2D" type="Sprite2D" parent="Spike41" unique_id=1530719314]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike10" type="RigidBody2D" parent="." unique_id=1572850817]
-position = Vector2(120, 257)
+[node name="Spike42" type="RigidBody2D" parent="." unique_id=1524439527]
+position = Vector2(144, 97)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike10" unique_id=2093903164]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike42" unique_id=1693875034]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike10" unique_id=165884577]
+[node name="Sprite2D" type="Sprite2D" parent="Spike42" unique_id=1298828010]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike11" type="RigidBody2D" parent="." unique_id=531708201]
-position = Vector2(128, 257)
+[node name="Spike43" type="RigidBody2D" parent="." unique_id=1980358607]
+position = Vector2(136, 97)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike11" unique_id=1797363879]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike43" unique_id=587344136]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike11" unique_id=142256514]
+[node name="Sprite2D" type="Sprite2D" parent="Spike43" unique_id=1009618550]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike12" type="RigidBody2D" parent="." unique_id=1450801860]
-position = Vector2(136, 257)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike12" unique_id=1527169873]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike12" unique_id=1934759955]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike13" type="RigidBody2D" parent="." unique_id=1722775117]
-position = Vector2(144, 257)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike13" unique_id=1553093182]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike13" unique_id=1630098652]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike14" type="RigidBody2D" parent="." unique_id=580641919]
+[node name="Spike44" type="RigidBody2D" parent="." unique_id=1304095515]
 position = Vector2(152, 257)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike14" unique_id=1025644581]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike44" unique_id=1174095680]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike14" unique_id=186224160]
+[node name="Sprite2D" type="Sprite2D" parent="Spike44" unique_id=446049145]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike15" type="RigidBody2D" parent="." unique_id=1602207391]
-position = Vector2(216, 257)
+[node name="Spike45" type="RigidBody2D" parent="." unique_id=1980325095]
+position = Vector2(144, 257)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike15" unique_id=1000279812]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike45" unique_id=1731064265]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike15" unique_id=1009829290]
+[node name="Sprite2D" type="Sprite2D" parent="Spike45" unique_id=181415152]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike16" type="RigidBody2D" parent="." unique_id=505489128]
-position = Vector2(224, 257)
+[node name="Spike47" type="RigidBody2D" parent="." unique_id=425973302]
+position = Vector2(128, 257)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike16" unique_id=1778242545]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike47" unique_id=1094746463]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike16" unique_id=361663025]
+[node name="Sprite2D" type="Sprite2D" parent="Spike47" unique_id=1663147684]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike17" type="RigidBody2D" parent="." unique_id=2088711929]
-position = Vector2(232, 257)
+[node name="Spike48" type="RigidBody2D" parent="." unique_id=379941216]
+position = Vector2(120, 257)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike17" unique_id=879332991]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike48" unique_id=1537098275]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike17" unique_id=469167832]
+[node name="Sprite2D" type="Sprite2D" parent="Spike48" unique_id=893817428]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike18" type="RigidBody2D" parent="." unique_id=1660640837]
-position = Vector2(216, 97)
+[node name="Spike49" type="RigidBody2D" parent="." unique_id=1797203928]
+position = Vector2(128, 97)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike18" unique_id=1659529534]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike49" unique_id=369431658]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike18" unique_id=1972112090]
+[node name="Sprite2D" type="Sprite2D" parent="Spike49" unique_id=337157617]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike19" type="RigidBody2D" parent="." unique_id=174337192]
-position = Vector2(224, 97)
+[node name="Spike50" type="RigidBody2D" parent="." unique_id=645539474]
+position = Vector2(120, 97)
 rotation = 3.1415927
-script = ExtResource("11_kgphi")
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike19" unique_id=1168127092]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike50" unique_id=747674793]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike19" unique_id=1980200551]
+[node name="Sprite2D" type="Sprite2D" parent="Spike50" unique_id=134106533]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike20" type="RigidBody2D" parent="." unique_id=1873007308]
+[node name="Spike46" type="RigidBody2D" parent="." unique_id=973298112]
+position = Vector2(136, 257)
+rotation = 3.1415927
+script = ExtResource("13_8b8e1")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike46" unique_id=1314606331]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike46" unique_id=1692832068]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("12_2l2qi")
+
+[node name="Spike32" type="RigidBody2D" parent="." unique_id=1943560436]
 position = Vector2(232, 97)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike20" unique_id=688468459]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike32" unique_id=580090143]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike20" unique_id=2139471306]
+[node name="Sprite2D" type="Sprite2D" parent="Spike32" unique_id=1799677358]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike21" type="RigidBody2D" parent="." unique_id=251168827]
-position = Vector2(216, 211)
-script = ExtResource("11_kgphi")
+[node name="Spike33" type="RigidBody2D" parent="." unique_id=535160203]
+position = Vector2(224, 97)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike21" unique_id=648324356]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike33" unique_id=1940281368]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike21" unique_id=1276506979]
+[node name="Sprite2D" type="Sprite2D" parent="Spike33" unique_id=745302134]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike22" type="RigidBody2D" parent="." unique_id=1400077150]
-position = Vector2(224, 211)
-script = ExtResource("11_kgphi")
+[node name="Spike34" type="RigidBody2D" parent="." unique_id=679323081]
+position = Vector2(216, 97)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike22" unique_id=1726798221]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike34" unique_id=876790413]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike22" unique_id=1176746622]
+[node name="Sprite2D" type="Sprite2D" parent="Spike34" unique_id=91986290]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike23" type="RigidBody2D" parent="." unique_id=952181757]
-position = Vector2(232, 211)
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike23" unique_id=1680442973]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike23" unique_id=1594069857]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike24" type="RigidBody2D" parent="." unique_id=1660958724]
-position = Vector2(216, 51)
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike24" unique_id=306403836]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike24" unique_id=628405743]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike25" type="RigidBody2D" parent="." unique_id=1579241857]
-position = Vector2(224, 51)
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike25" unique_id=2090702089]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike25" unique_id=1428824236]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike26" type="RigidBody2D" parent="." unique_id=1397814642]
-position = Vector2(232, 51)
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike26" unique_id=373118665]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike26" unique_id=1275942735]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike27" type="RigidBody2D" parent="." unique_id=443202895]
-position = Vector2(374, 253)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike27" unique_id=843562969]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike27" unique_id=1329796284]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike28" type="RigidBody2D" parent="." unique_id=1953763783]
-position = Vector2(382, 253)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike28" unique_id=1586366020]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike28" unique_id=1683920084]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike29" type="RigidBody2D" parent="." unique_id=1238662843]
+[node name="Spike4" type="RigidBody2D" parent="." unique_id=978654404]
 position = Vector2(390, 253)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike29" unique_id=534389039]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike4" unique_id=513125762]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike29" unique_id=691002712]
+[node name="Sprite2D" type="Sprite2D" parent="Spike4" unique_id=70294179]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike30" type="RigidBody2D" parent="." unique_id=1662294816]
-position = Vector2(398, 253)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
+[node name="Spike29" type="RigidBody2D" parent="." unique_id=1550739800]
+position = Vector2(382, 253)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike30" unique_id=914753643]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike29" unique_id=75193862]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike30" unique_id=189364629]
+[node name="Sprite2D" type="Sprite2D" parent="Spike29" unique_id=862010381]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
 
-[node name="Spike31" type="RigidBody2D" parent="." unique_id=1585357664]
-position = Vector2(406, 253)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
+[node name="Spike30" type="RigidBody2D" parent="." unique_id=1771922321]
+position = Vector2(374, 253)
+rotation = -3.1415925
+script = ExtResource("13_8b8e1")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike31" unique_id=1772333356]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike30" unique_id=1227770370]
 polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="Spike31" unique_id=1679443366]
-texture = ExtResource("12_2l2qi")
-
-[node name="Spike32" type="RigidBody2D" parent="." unique_id=1459290213]
-position = Vector2(414, 253)
-rotation = 3.1415927
-script = ExtResource("11_kgphi")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike32" unique_id=1889583787]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike32" unique_id=1145335880]
+[node name="Sprite2D" type="Sprite2D" parent="Spike30" unique_id=1056203134]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("12_2l2qi")
