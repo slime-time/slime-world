@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://c0invejq586ow"]
+
+[node name="SpikeCollider" type="Area2D" unique_id=238359269]

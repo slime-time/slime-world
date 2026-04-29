@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://yca8b2k8wq6x"]
+
+[ext_resource type="Script" uid="uid://p1puvwlpd7gg" path="res://components/ToxicGas/ToxicGas.gd" id="1_2foi4"]
+[ext_resource type="Material" uid="uid://c0mg78cg1eirn" path="res://assets/materials/toxic_gas_volume.tres" id="2_2foi4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2foi4"]
+resource_local_to_scene = true
+size = Vector2(64, 64)
+
+[node name="ToxicGas" type="Area2D" unique_id=1311772067]
+script = ExtResource("1_2foi4")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="." unique_id=205028649]
+copy_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=999086715]
+shape = SubResource("RectangleShape2D_2foi4")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=938840937]
+material = ExtResource("2_2foi4")
+instance_shader_parameters/area_size = Vector2(64, 64)
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0

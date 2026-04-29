@@ -65,6 +65,7 @@ func interact(interactor: PlayerMovement) -> void:
 		sprite.play("flip_on")
 		active_sprite.play("flip_on_active")
 		timer.timeout.connect(flipOn, ConnectFlags.CONNECT_ONE_SHOT)
+	AudioManager.play_sfx("switch_click", 1)
 	timer.start()
 
 func flipOn() -> void:

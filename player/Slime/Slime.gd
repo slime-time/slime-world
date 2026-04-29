@@ -66,18 +66,19 @@ func hit():
 
 # Turn into two slimes
 func split(child_slime_type: Slime.Type = slime_type):
-	var split_blockers = split_confirm.get_overlapping_bodies()
-	if(len(split_blockers) == 1 and split_blockers[0] == self):
+	if(size >= 2):
 		var child_size = floor(size / 2)
 		size = ceili(size / 2.0)
 		position.x -= 8
-		has_split.emit(position + Vector2(16, 0), velocity, child_size, child_slime_type)
+		var old_random_offset = randf_range(3, 5)
+		position.y -= old_random_offset
+		has_split.emit(position + Vector2(16, old_random_offset - randf_range(3, 5)), velocity, child_size, child_slime_type)
 		getMovementAbility()
 		updateHitbox()
 		updateSprite()
 	else:
 		takeDamage(1)
-	
+
 # Returns true iff this slime can change size to become a "merged_size" slime, false otherwise.
 func testMerge(merged_size: int, merging_with: Node) -> bool:
 	var relevant_hitbox = merge_confirm.get_node("Size" + str(merged_size) + "Confirm")
@@ -101,6 +102,12 @@ func onFluidHit(fluid_type: FluidFlow.Type) -> void:
 		FluidFlow.Type.ICE_WATER:
 			if slime_type == Type.ICE_SLIME: return
 			slime_type_changed.emit(self, Type.ICE_SLIME)
+		FluidFlow.Type.TAR:
+			if slime_type == Type.TAR_SLIME: return
+			slime_type_changed.emit(self, Type.TAR_SLIME)
+		FluidFlow.Type.ENERGIZED:
+			if slime_type == Type.ENERGIZED_SLIME: return
+			slime_type_changed.emit(self, Type.ENERGIZED_SLIME)
 
 # Attempt to change from slime form to human form
 func becomePenny():

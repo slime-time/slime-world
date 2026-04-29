@@ -69,7 +69,10 @@ hframes = 4
 libraries/ = SubResource("AnimationLibrary_2wi0r")
 
 [node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_po2r2")]
-visible = false
+position = Vector2(0, -1)
+
+[node name="Size8Body" parent="MergeConfirm/Size8Confirm" parent_id_path=PackedInt32Array(488681826, 1131443470) index="0" unique_id=1742504448]
+rotation = 1.5707964
 
 [node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_po2r2")]
 visible = false

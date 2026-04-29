@@ -1,30 +1,33 @@
 extends Node
 
-var cur_level: int = 0 # Level 0 is the level select screen
-var highest_level_unlocked: int = 1
-
 const levels: Array[String] = [
-	"res://levels/LevelSelect/LevelSelectScreen.tscn",
+	"res://levels/MainMenu/MainMenu.tscn",
 	"res://levels/Tutorial1.tscn",
 	"res://levels/Level1.tscn",
 	"res://levels/Level2.tscn"
 ]
 
+signal level_changed
 
-func load_level(x : int):
-	assert(0 <= x && x <= highest_level_unlocked)
-	cur_level = x
+var current_state : GameState = GameState.new()
+
+func loadLevel(x : int):
+	assert(0 <= x && x <= current_state.highest_level_unlocked)
+	current_state.cur_level = x
+	#avoid playing level themes on title
+	if x != 0:
+		level_changed.emit()
 	get_tree().call_deferred("change_scene_to_file", levels[x])
-	#start level theme after loading level
-	AudioManager.set_current_track("sgsw_theme1.wav")
+	
 
-# Completes the current level we're on and loads next level if one was just unlocked
-func complete_level():
-	var nxt : int = cur_level
+## Completes the current level we're on and loads next level if one was just unlocked
+func completeLevel():
+	var nxt : int = current_state.cur_level
 
 	# Unlock the next level
-	if (highest_level_unlocked == cur_level):
-		highest_level_unlocked += 1
+	if (current_state.highest_level_unlocked == current_state.cur_level):
+		current_state.highest_level_unlocked += 1
+		current_state.saveKeys(["highest_level_unlocked"])
 		nxt += 1
 
 	# Otherwise, go back to level select
@@ -35,4 +38,4 @@ func complete_level():
 	if (nxt == levels.size()):
 		nxt = 0
 
-	load_level(nxt)
+	loadLevel(nxt)
