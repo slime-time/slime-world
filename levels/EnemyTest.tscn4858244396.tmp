@@ -4,7 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/tiles/ground-tile.png" id="2_12p0m"]
 [ext_resource type="PackedScene" uid="uid://cuvwsherd1opx" path="res://components/Background/Background.tscn" id="3_6at2k"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="4_pc5vb"]
-[ext_resource type="PackedScene" uid="uid://t53w0nou0jxp" path="res://enemies/SpecialSkeleton/SpecialSkeleton.tscn" id="9_23275"]
+[ext_resource type="PackedScene" uid="uid://c5x7akkuwxm75" path="res://enemies/MeleeSkeleton/MeleeSkeleton.tscn" id="5_23275"]
+[ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="6_pc5vb"]
+[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="7_23275"]
+[ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="8_cepy0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cepy0"]
 texture = ExtResource("2_12p0m")
@@ -45,6 +48,9 @@ texture = ExtResource("2_12p0m")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_cepy0")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ps7ft"]
+size = Vector2(9, 94)
+
 [node name="Enemytest" type="Node2D" unique_id=1579199891]
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_haks4")]
@@ -63,12 +69,29 @@ tile_set = SubResource("TileSet_ps7ft")
 position = Vector2(65, 28)
 scale = Vector2(0.7, 1)
 
+[node name="Spike" type="RigidBody2D" parent="." unique_id=653497353]
+position = Vector2(261, 74)
+script = ExtResource("6_pc5vb")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike" unique_id=244666785]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="Spike" unique_id=1714213809]
+texture = ExtResource("7_23275")
+
+[node name="Area2D" type="Area2D" parent="Spike" unique_id=1958405769]
+script = ExtResource("8_cepy0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Spike/Area2D" unique_id=1782776641]
+position = Vector2(0.5, 43)
+shape = SubResource("RectangleShape2D_ps7ft")
+
 [node name="PatrolPoint1" type="Node2D" parent="." unique_id=1479614142]
 position = Vector2(236, 157)
 
 [node name="PatrolPoint2" type="Node2D" parent="." unique_id=126970297]
 position = Vector2(290, 158)
 
-[node name="SpecialSkeleton" parent="." unique_id=883330609 node_paths=PackedStringArray("patrol") instance=ExtResource("9_23275")]
-position = Vector2(202, 149)
-patrol = [NodePath("../PatrolPoint2"), NodePath("../PatrolPoint1")]
+[node name="MeleeSkeleton" parent="." unique_id=1999367218 node_paths=PackedStringArray("patrol") instance=ExtResource("5_23275")]
+position = Vector2(200, 152)
+patrol = [NodePath("../PatrolPoint1"), NodePath("../PatrolPoint2")]

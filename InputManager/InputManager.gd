@@ -6,6 +6,10 @@ signal penny_became_slime
 # Sent when Penny goes from slime form to human form
 signal slime_became_penny
 
+
+# Sent when Penny attacks
+signal penny_attack
+
 # True if Penny is currently in human form
 var is_human = true
 
@@ -39,3 +43,30 @@ func _input(event):
 	
 	if event.is_action_pressed("reset") and (not get_tree().is_paused()):
 		SceneManager.resetScene()
+		
+	if event.is_action_pressed("attack") : 
+		if(is_human):
+			penny_attack.emit()
+			# If this is sucessful, Penny.gd will emit an attack hitbox
+
+# Stop slime from listening to player input - this can be for many reasons such as cutscenes,
+# dialogue, etc, user pausing is just one of the reasons
+func haltPlayerMovement():
+	# Remove actions after extracting and saving their information to restore the actions later
+	for action in PLAYER_ACTIONS:
+		# This is very important, keys held before pausing remain held without this, breaking control
+		Input.action_release(action)
+		
+		player_keybinds.append(InputMap.action_get_events(action))
+		player_deadzones.append(InputMap.action_get_deadzone(action))
+		InputMap.action_erase_events(action)
+
+# Do the inverse of haltPlayerMovement, return control to the player
+func resumePlayerMovement():
+	# Restore the movement actions one by one
+	for action_index in range(player_keybinds.size()):
+		for keybind in player_keybinds[action_index]:
+			InputMap.action_add_event(PLAYER_ACTIONS[action_index], keybind)
+			
+	player_keybinds.clear()
+	player_deadzones.clear()
