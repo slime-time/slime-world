@@ -68,6 +68,7 @@ func throw_water(target : Node2D):
 func combat_behavior():
 	if(stop_timer.is_stopped() and is_patroling):
 		velocity.x =  move_toward(velocity.x, walk_speed * ((combat_target.global_position.x - position.x ) / abs(combat_target.global_position.x - position.x)), 1)
+		move_and_slide()
 	
 
 func turnaround():

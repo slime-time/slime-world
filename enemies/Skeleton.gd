@@ -18,6 +18,7 @@ var combat_target: Node2D
 var combat_state: bool
 # 0:static  1:patrolling
 var is_patroling: bool	
+var is_static: bool
 var is_dead: bool
 
 var reanimation_time: float
@@ -25,8 +26,11 @@ var death_timer: Timer
 var stop_time: float
 var stop_timer: Timer
 
+var did_collide : bool
+
 func _ready():
-	combat_state= false
+	combat_state = false
+	combat_target = null
 	
 	hurtbox = get_node("SkeletonHurtbox")
 	los_area = get_node("SkeletonLoS")
@@ -48,6 +52,7 @@ func _ready():
 	
 	#establish if enemy will patrol or stay put until player is encountered
 	if (patrol.size() > 0):
+		is_static = false
 		is_patroling = true
 		patrol_index = 1
 		
@@ -55,21 +60,31 @@ func _ready():
 		var origin = Node2D.new()
 		origin.position = position
 		patrol.push_front(origin)
-	else: is_patroling = false
+	else: 
+		is_patroling = false
+		is_static = true
 
 func _physics_process(_delta : float):
 	if is_dead:
 		return
 	
-	if !stop_timer.is_stopped() and !combat_state:
-		velocity.x = 0
+	if !stop_timer.is_stopped() and combat_state:
+		return
+	elif !combat_state:
 		sprite.set_animation("idle")
-		return	
 
-	elif get_position_delta().x != 0:
+	if get_position_delta().x != 0:
 		sprite.set_animation("walk")
 		
-	move_and_slide()
+	if combat_state:
+		combat_behavior()
+		return
+		
+	did_collide = move_and_slide()
+	
+	if(did_collide):
+		await turnaround()
+		return
 	
 	if is_patroling:
 		var next = float(patrol[patrol_index].position.x)
@@ -84,10 +99,6 @@ func _physics_process(_delta : float):
 			patrol_index = (patrol_index + 1) % patrol.size()
 			#wait ? frames
 			stop_timer.start()
-			
-	elif combat_state:
-		combat_behavior()
-
 	return
 
 func reanimate():
@@ -111,32 +122,33 @@ func hit():
 	death_timer.start()
 	
 func detect(target : Node2D ):
-	if target is PlayerMovement:
-			combat_target = target
-			combat_state = true
-			is_patroling = false
+	if target is PlayerMovement and combat_target == null:
+		combat_target = target
+		combat_state = true
+		is_patroling = false
 	return
 	
 func deaggro(target : Node2D ):
-	if(sprite.is_playing()):
+	if(sprite.is_playing() and sprite.animation == "attack"):
+		print('hi')
 		await sprite.animation_finished
+		reset()
 	
-	if(!target):
-		combat_target = null
-		combat_state = false
-		is_patroling = true
-		return
+	if(target is PlayerMovement):
+		reset()
 	
-	if patrol.size() > 0 and target is PlayerMovement:
-		combat_target = null
-		combat_state = false
+func reset():
+	combat_target = null
+	combat_state = false
+	
+	if !is_static:
 		is_patroling = true
 		
 		#reorient sprite and hitbox if necessary
 		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
 			await turnaround()
 			
-	elif target is PlayerMovement:
+	else:
 		combat_target = null
 		combat_state = false
 		sprite.set_animation("idle")

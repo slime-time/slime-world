@@ -26,7 +26,7 @@ animation = &""
 offset = Vector2(0, 0.5)
 
 [node name="SkeletonLoS" type="Area2D" parent="." unique_id=2055972537]
-position = Vector2(-1, 1)
+position = Vector2(-1, 2)
 
 [node name="AttackTrigger" type="Area2D" parent="." unique_id=83768714]
 position = Vector2(19, 7)
