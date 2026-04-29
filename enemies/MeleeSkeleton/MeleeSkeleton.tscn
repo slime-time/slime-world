@@ -391,7 +391,7 @@ animation = &"idle"
 offset = Vector2(0, 0.5)
 
 [node name="SkeletonLoS" type="Area2D" parent="." unique_id=848074523]
-position = Vector2(1, 1)
+position = Vector2(3, 0)
 
 [node name="AttackTrigger" type="Area2D" parent="." unique_id=699947950]
 position = Vector2(13, 6)

@@ -153,7 +153,7 @@ func read_enemy_data(sectionName):
 func set_los_cone():
 	var cone = CollisionPolygon2D.new() 
 	cone.position = los_area.position
-	print_debug(cone.position, " ", position, " ", los_area.position)
+	
 	var origin : Vector2 = Vector2(self.los_area.position.x, self.los_area.position.y)
 	var y_offset : int = int(tan(los_cone_deg * (PI/180)) * los_distance)
 	cone.polygon= PackedVector2Array([origin, Vector2(origin.x + los_distance, origin.y + y_offset), 
