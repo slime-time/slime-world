@@ -121,7 +121,7 @@ func deaggro(target : Node2D ):
 	if(sprite.is_playing()):
 		await sprite.animation_finished
 	
-	if patrol.size() > 0 and target is PlayerMovement:
+	if patrol.size() > 0 and is_instance_valid(target) and target is PlayerMovement:
 		combat_target = null
 		combat_state = false
 		is_patroling = true
@@ -130,7 +130,7 @@ func deaggro(target : Node2D ):
 		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
 			await turnaround()
 			
-	elif target is PlayerMovement:
+	elif is_instance_valid(target) and target is PlayerMovement:
 		combat_target = null
 		combat_state = false
 		sprite.set_animation("idle")
