@@ -25,7 +25,7 @@ func resetScene():
 	tree.call_deferred("reload_current_scene")
 
 func transitionOutThenResetScene(because_of_death: bool = false):
-	if GameManager.current_state.cur_level == 0:
+	if GameManager.current_state.cur_level == 0 or TransitionManager.isClosing():
 		return
 
 	TransitionManager.transitionFinished.connect(resetScene, ConnectFlags.CONNECT_ONE_SHOT)
