@@ -13,7 +13,11 @@ func _ready():
 	super()
 	read_ranged_data("ranged_parameters")
 	set_los_cone()
+	
 	sprite = get_node("RangedSprite")
+	sprite.animation_changed.connect(sprite.play)
+	sprite.frame_changed.connect(shooting_handler)
+	
 	attack_timer = Timer.new()
 	attack_timer.timeout.connect(attack_timer.stop)
 	add_child(attack_timer)
@@ -22,21 +26,29 @@ func combat_behavior():
 	#attack on an interval
 	if attack_timer.is_stopped():
 		attack(combat_target)
-		attack_timer.start(attack_frequency)
+		
 
 func attack(target : Node2D):
 	if (target is PlayerMovement) and combat_state:
-		var offset
-		if facingRight: offset = 10
-		else: offset = -10
-		
-		var projectile = Arrow.instantiate()
-		projectile.target = target.global_position
-		projectile.speed = projectile_speed
-		projectile.global_position= Vector2(global_position.x + offset, global_position.y - 6)
-		get_parent().add_child(projectile)
+		combat_target = target	
+		sprite.set_animation("attack")
+		attack_timer.start(attack_frequency)
 		
 	return
+	
+func shoot(offset, target):
+	var projectile = Arrow.instantiate()
+	projectile.target = target.global_position
+	projectile.speed = projectile_speed
+	projectile.global_position= Vector2(global_position.x + offset, global_position.y + 6)
+	get_parent().add_child(projectile)
+	
+func shooting_handler():
+	var offset
+	if facingRight: offset = 10
+	else: offset = -10
+	if sprite.animation == "attack" and sprite.frame == 11:
+		shoot(offset, combat_target)
 	
 #override
 func _physics_process(_delta : float):
@@ -58,14 +70,18 @@ func turnaround():
 func set_los_cone():
 	#see if we need to raycast "infinitely" to the right or left
 	var queryTarget
+	var dynamicDistance
 	if facingRight: queryTarget = get_viewport_rect().size.x
 	else: queryTarget = 0
 	
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsRayQueryParameters2D.create(position, Vector2(queryTarget, position.y))
 	query.exclude = [self, los_area]
-	var dynamicDistance = space_state.intersect_ray(query).position.x
+	var result = space_state.intersect_ray(query)
 	
+	if(result): dynamicDistance = result.position.x
+	else: return
+		
 	var cone = CollisionPolygon2D.new() 
 	var origin : Vector2 = Vector2(position.x, position.y)
 	var y_offset : int = int(tan(los_cone_deg * (PI/180)) * dynamicDistance)
