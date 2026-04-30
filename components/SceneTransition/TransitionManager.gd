@@ -8,6 +8,7 @@ const TRANSITION_TIME_CLOSE_DELAY: float = 0.0
 
 var transition: ColorRect
 var transition_progress: float = 1.0
+var is_closing: bool = false
 var tween: Tween
 
 signal transitionFinished
@@ -55,6 +56,7 @@ func startTransitionFromBlack() -> void:
 
 	if tween: tween.kill()
 	tween = create_tween()
+	is_closing = false
 
 	# Resume from where we were
 	var time_left = TRANSITION_TIME_OPEN * (1.0 - transition_progress)
@@ -71,6 +73,7 @@ func startTransitionFromBlack() -> void:
 func startTransitionToBlack(do_delay: bool = false) -> void:
 	if tween: tween.kill()
 	tween = create_tween()
+	is_closing = true
 
 	var time_left = TRANSITION_TIME_CLOSE * transition_progress
 
@@ -88,3 +91,6 @@ func startTransitionToBlack(do_delay: bool = false) -> void:
 func setDeadEffect(value: bool) -> void:
 	ShaderTimeManager.setVisualPause(value)
 	transition.material.set_shader_parameter("apply_dead_effect", value)
+
+func isClosing() -> bool:
+	return tween and tween.is_running() and is_closing
