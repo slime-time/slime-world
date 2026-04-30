@@ -3,6 +3,8 @@ extends Node2D
 const FRAMERATE: float = 12.0
 var _time_offset: float = 0
 
+var visual_pause: bool = false
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
@@ -11,7 +13,7 @@ func _process(delta: float) -> void:
 
 	# If the game is paused, we don't update the frame time
 	# We do, however, update _time_offset so that when we resume the frame time will be correct
-	if SceneManager.is_paused:
+	if SceneManager.is_paused or visual_pause:
 		_time_offset += delta
 		return
 
@@ -20,3 +22,6 @@ func _process(delta: float) -> void:
 
 	var quantized_time = floor(effective_time * FRAMERATE) / FRAMERATE
 	RenderingServer.global_shader_parameter_set("QUANTIZED_TIME", quantized_time)
+
+func setVisualPause(value: bool) -> void:
+	visual_pause = value
