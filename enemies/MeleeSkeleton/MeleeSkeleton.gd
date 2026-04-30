@@ -32,8 +32,11 @@ func read_melee_data(sectionName):
 	return
 
 func combat_behavior():
-	if(stop_timer.is_stopped() and is_patroling):
+	if(stop_timer.is_stopped()):
 		velocity.x = move_toward(velocity.x, walk_speed * ((combat_target.global_position.x - position.x ) / abs(combat_target.global_position.x - position.x)), 1)
+		did_collide = move_and_slide()
+		if(did_collide):
+			turnaround()
 
 func turnaround():
 	if !sprite.flip_h:
@@ -50,10 +53,10 @@ func turnaround():
 func attack(target : Node2D):
 		#stop
 		velocity.x = 0
-		stop_timer.start()
-	
+		sprite.stop()
+		
 		#play animation and set hitboxes to active through animation_changed/frame_changed signals
-		if (target is PlayerMovement) and combat_state:
+		if (target is PlayerMovement):
 			sprite.set_animation("attack")
 		
 		#wait again so that the player can exploit a whiff or position enemies intentionally
@@ -64,6 +67,9 @@ func attack(target : Node2D):
 func deal_damage(target : Node2D):
 	if (target is PlayerMovement) and combat_state:
 		target.hit()
+		#force despawn of hitboxes so that slime is only split once
+		attack_hitbox.set_monitoring(false)
+		attack_hitbox.set_visible(false)
 	
 func set_hitbox_state():
 	if sprite.animation == "attack" and sprite.frame == 6:
