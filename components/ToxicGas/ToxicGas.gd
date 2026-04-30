@@ -12,9 +12,16 @@ extends Area2D
 func killPenny(candidate: Node):
 	if(candidate is Penny):
 		candidate.die()
+	elif candidate is Slime:
+		candidate.in_gas_volume = true
+
+func unkillPenny(candidate: Node):
+	if(candidate is Slime):
+		candidate.in_gas_volume = false
 
 func _ready():
 	body_entered.connect(killPenny)
+	body_exited.connect(unkillPenny)
 	_updateSizes()
 
 func _updateSizes():
