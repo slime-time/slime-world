@@ -74,7 +74,7 @@ func climb(direction: float, delta: float):
 	velocity.x = min(velocity.x, run_max_velocity)
 	if(abs(velocity.x) == 0):
 		velocity.x = direction
-	
+
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
 
@@ -109,6 +109,7 @@ func takeDamage(damage = 1):
 
 # This player character died, so the game needs to reset
 func die():
+	TransitionManager.setDeadEffect(true)	# this should probably go elsewhere but whatever man
 	penny_died.emit()
 
 
@@ -172,7 +173,7 @@ func _ready() -> void:
 	var error = config.load("res://settings.cfg")
 	# Assert that the data was read
 	assert(error == OK, "Failed to read movement settings from settings.cfg")
-	penny_died.connect(SceneManager.resetScene)
+	penny_died.connect(func() -> void: SceneManager.transitionOutThenResetScene(true))
 	# Read movement defaults
 	read_movement_data("movement_defaults")
 

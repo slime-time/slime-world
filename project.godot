@@ -27,6 +27,7 @@ GameManager="*uid://dms3mbn4e8xh7"
 ShaderTimeManager="*uid://cwk203l2hosxx"
 TarManager="*uid://bi4gn4y2dllxn"
 AudioManager="*uid://dcysu570vco8j"
+TransitionManager="*uid://dm4vkianhr8xu"
 
 [display]
 
