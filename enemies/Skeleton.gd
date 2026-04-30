@@ -134,31 +134,16 @@ func deaggro(target : Node2D ):
 		await sprite.animation_finished
 		reset()
 	
-<<<<<<< HEAD
 	if patrol.size() > 0 and is_instance_valid(target) and target is PlayerMovement:
 		combat_target = null
 		combat_state = false
-=======
-	if(target is PlayerMovement):
-		reset()
-	
-func reset():
-	combat_target = null
-	combat_state = false
-	
-	if !is_static:
->>>>>>> b02ec56655024cebe591c727c53c1225f213380c
 		is_patroling = true
 		
 		#reorient sprite and hitbox if necessary
 		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
 			await turnaround()
 			
-<<<<<<< HEAD
 	elif is_instance_valid(target) and target is PlayerMovement:
-=======
-	else:
->>>>>>> b02ec56655024cebe591c727c53c1225f213380c
 		combat_target = null
 		combat_state = false
 		sprite.set_animation("idle")

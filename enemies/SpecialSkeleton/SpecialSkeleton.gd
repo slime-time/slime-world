@@ -72,7 +72,7 @@ func combat_behavior():
 		velocity.x =  move_toward(velocity.x, walk_speed * ((combat_target.global_position.x - position.x ) / abs(combat_target.global_position.x - position.x)), 1)
 	elif(stop_timer.is_stopped()):
 		attack(combat_target)
-	move_and_slide()
+	 move_and_slide()
 	
 
 func turnaround():
@@ -92,7 +92,6 @@ func set_hitbox_state():
 	var chunk2 = get_node("AttackHitbox/Chunk2")
 	if sprite.animation == "attack" and sprite.frame == 7:
 		attack_hitbox.set_monitoring(true)
-<<<<<<< HEAD
 		attack_hitbox.set_visible(true)
 		chunk1.set_deferred("disabled", false)
 		chunk1.set_visible(true)
@@ -102,21 +101,8 @@ func set_hitbox_state():
 		chunk2.set_deferred("visible", true)
 		chunk1.set_deferred("disabled", true)
 		chunk2.set_deferred("disabled", false)
-=======
-		chunk1.set_visible(true)
-		chunk1.set_disabled(false)
-	elif sprite.animation == "attack" and sprite.frame == 10:
-		chunk1.set_visible(false)
-		chunk1.set_disabled(true)
-		chunk2.set_visible(true)
-		chunk2.set_disabled(false)
->>>>>>> b02ec56655024cebe591c727c53c1225f213380c
 	elif sprite.animation == "attack" and sprite.frame == 12:
 		attack_hitbox.set_monitoring(false)
 		chunk2.set_visible(false)
-<<<<<<< HEAD
 		return
 	get_tree().process_frame.connect(set_hitbox_state, CONNECT_ONE_SHOT)
-=======
-		chunk2.set_disabled(true)
->>>>>>> b02ec56655024cebe591c727c53c1225f213380c

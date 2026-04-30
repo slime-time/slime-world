@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://03pabi44vpfc"]
 
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_haks4"]
-[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_12p0m"]
+[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/tiles/ground-tile.png" id="2_12p0m"]
 [ext_resource type="PackedScene" uid="uid://cuvwsherd1opx" path="res://components/Background/Background.tscn" id="3_6at2k"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="4_pc5vb"]
 [ext_resource type="PackedScene" uid="uid://t53w0nou0jxp" path="res://enemies/SpecialSkeleton/SpecialSkeleton.tscn" id="9_23275"]
@@ -71,5 +71,4 @@ position = Vector2(290, 158)
 
 [node name="SpecialSkeleton" parent="." unique_id=883330609 node_paths=PackedStringArray("patrol") instance=ExtResource("9_23275")]
 position = Vector2(202, 149)
-fluid_type = 2
 patrol = [NodePath("../PatrolPoint2"), NodePath("../PatrolPoint1")]
