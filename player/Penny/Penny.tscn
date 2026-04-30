@@ -5,6 +5,8 @@
 [ext_resource type="Shape2D" uid="uid://c1grtdr31u6qe" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Body-8.tres" id="3_yo5c4"]
 [ext_resource type="Shape2D" uid="uid://dn3wb4tshmdya" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Base-8.tres" id="4_4b0bj"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_yucds"]
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1fj7d"]
 load_path = "res://.godot/imported/penny.png-4ce839b4e2ee4333b648ed97a2dfa336.ctex"
 
@@ -17,7 +19,15 @@ texture_filter = 1
 position = Vector2(0.5, 0.5)
 shape = ExtResource("2_yucds")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=25029721]
+[node name="AttackArea" type="Area2D" parent="." unique_id=326706524]
+collision_layer = 2
+
+[node name="AttackHitbox" type="CollisionShape2D" parent="AttackArea" unique_id=2135257963]
+position = Vector2(12, 1.0000001)
+scale = Vector2(0.4, 0.8)
+shape = SubResource("CircleShape2D_yucds")
+
+[node name="PennySprite" type="Sprite2D" parent="." unique_id=25029721]
 z_index = -2
 texture_filter = 1
 texture = SubResource("CompressedTexture2D_1fj7d")

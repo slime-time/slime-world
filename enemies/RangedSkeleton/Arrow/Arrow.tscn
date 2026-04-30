@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cy816b085ednk"]
+
+[ext_resource type="Script" uid="uid://d32jfntuvtq2u" path="res://enemies/RangedSkeleton/Arrow/Arrow.gd" id="1_733ra"]
+[ext_resource type="Texture2D" uid="uid://3e51eumu63ft" path="res://assets/icon.svg" id="2_py8v3"]
+
+[node name="Arrow" type="RigidBody2D" unique_id=1697300432]
+collision_layer = 2
+script = ExtResource("1_733ra")
+
+[node name="Hitbox" type="CollisionPolygon2D" parent="." unique_id=1802362018]
+polygon = PackedVector2Array(0, 0, -9, -9, -9, 9, 9, 9, 9, -9, -9, -9)
+
+[node name="ArrowSprite" type="Sprite2D" parent="." unique_id=1683975223]
+texture = ExtResource("2_py8v3")
