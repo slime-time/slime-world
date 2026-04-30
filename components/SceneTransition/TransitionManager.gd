@@ -2,8 +2,8 @@ extends CanvasLayer
 
 const TRANSITION_SCENE = preload("res://components/SceneTransition/SceneTransition.tscn")
 const TRANSITION_TIME_WAIT: float = 0.2
-const TRANSITION_TIME_OPEN: float = 0.6
-const TRANSITION_TIME_CLOSE: float = 0.6
+const TRANSITION_TIME_OPEN: float = 0.5
+const TRANSITION_TIME_CLOSE: float = 0.5
 const TRANSITION_TIME_CLOSE_DELAY: float = 0.0
 
 var transition: ColorRect
