@@ -122,6 +122,8 @@ func makePennyIntoSlime():
 	# Make a slime at Penny's position
 	makeSlime(penny.position, Vector2.ZERO, 8, Slime.Type.GREEN_SLIME)
 	penny.set_process_mode(Node.PROCESS_MODE_DISABLED)
+	penny.sprite.set_animation("walk")
+	penny.sprite.stop()
 	slimes[0].velocity = old_velocity
 	InputManager.is_human = false
 

@@ -17,7 +17,7 @@ func _ready():
 	InputManager.penny_attack.connect(attack)
 
 func _process(delta: float) -> void:
-	if !is_on_floor():
+	if !is_on_floor() or sprite.animation == "walk" and velocity.x == 0:
 		sprite.stop()
 	else:
 		sprite.play()
