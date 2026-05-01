@@ -6,11 +6,10 @@ signal penny_became_slime
 # Sent when Penny goes from slime form to human form
 signal slime_became_penny
 
-
 # Sent when Penny attacks
 signal penny_attack
 
-# True if Penny is currently in human form
+# True iff Penny is currently in human form
 var is_human = true
 
 # The input manager should never stop listening for events

@@ -77,6 +77,7 @@ func hit():
 func turnaround():
 	if !sprite.flip_h:
 		sprite.flip_h = true
+		los_area.scale.x = -1
 	else:
 		sprite.flip_h = false
 		
