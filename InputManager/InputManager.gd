@@ -31,20 +31,21 @@ func _input(event):
 		# a signal to pause
 		elif get_tree().is_paused():
 			SceneManager.unpauseGame()
-			
+
 	# If the player didn't pause and is pressing a transform button, then send the appropriate signal
-	if event.is_action_pressed("transform") and (not get_tree().is_paused()) : 
+	if event.is_action_pressed("transform") and (not get_tree().is_paused()) :
 		if(is_human):
 			penny_became_slime.emit()
 			# If this is successful, Player.gd will set is_human to false
 		else:
 			slime_became_penny.emit()
 			# If this is successful, Slime.gd will set is_human to true
-	
+
 	if event.is_action_pressed("reset") and (not get_tree().is_paused()):
-		SceneManager.resetScene()
+		SceneManager.transitionOutThenResetScene()
 		
 	if event.is_action_pressed("attack") : 
 		if(is_human):
 			penny_attack.emit()
 			# If this is sucessful, Penny.gd will emit an attack hitbox
+		
