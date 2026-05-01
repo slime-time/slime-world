@@ -49,6 +49,7 @@ func _ready():
 	stop_timer.timeout.connect(stop_timer.stop)
 	add_child(stop_timer)
 	
+	
 	#establish if enemy will patrol or stay put until player is encountered
 	if (patrol.size() > 0):
 		is_patroling = true
@@ -72,9 +73,11 @@ func _physics_process(delta : float):
 		move_and_slide()
 		return
 	
-	if !stop_timer.is_stopped() and !combat_state:
+	if (patrol.size() == 0 or !stop_timer.is_stopped()) and !combat_state:
 		velocity.x = 0
 		sprite.set_animation("idle")
+		if(not sprite.is_playing()):
+			sprite.play()
 
 	elif get_position_delta().x != 0 and !combat_state:
 		sprite.set_animation("walk")
