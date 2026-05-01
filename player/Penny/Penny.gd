@@ -45,6 +45,7 @@ func attack():
 func set_hitbox_state():
 	if(sprite.animation == "attack"):
 		if(sprite.frame == 3):
+			AudioManager.play_sfx("swordswing", 1, -0.5, 1.5)
 			attack_hitbox.set_monitoring(true)
 		if(sprite.frame == 6):
 			attack_hitbox.set_monitoring(false)
