@@ -5,57 +5,51 @@ extends Skeleton
 var fluid_type : FluidFlow.Type
 #set in editor
 
-var attack_trigger : Area2D
-var attack_hitbox: Area2D
-
-var sprite_sheets : Array[Resource] = [
-	preload("res://enemies/SpecialSkeleton/SpecialSkeletonSpriteSheets/water.tres"),
-	preload("res://enemies/SpecialSkeleton/SpecialSkeletonSpriteSheets/ice.tres"),
-	preload("res://enemies/SpecialSkeleton/SpecialSkeletonSpriteSheets/tar.tres"),
-	preload("res://enemies/SpecialSkeleton/SpecialSkeletonSpriteSheets/woke.tres")
-]
+var attack_hitbox : Area2D
 
 func _ready():
 	super()
-	sprite = get_node("SpecialSprite")
-	
-	attack_trigger = get_node("AttackTrigger")
-	attack_hitbox = get_node("AttackHitbox")
-	attack_trigger.body_entered.connect(attack)
-	attack_hitbox.body_entered.connect(throw_water)
-	
-	match fluid_type:
-		FluidFlow.Type.WATER:
-			sprite.set_sprite_frames(sprite_sheets[0])
-		FluidFlow.Type.ICE_WATER:
-			sprite.set_sprite_frames(sprite_sheets[1])
-		FluidFlow.Type.TAR:
-			sprite.set_sprite_frames(sprite_sheets[2])
-		FluidFlow.Type.ENERGIZED:
-			sprite.set_sprite_frames(sprite_sheets[3])
-	
-	sprite.animation_changed.connect(sprite.play)
-	sprite.frame_changed.connect(set_hitbox_state)
-	sprite.set_animation("idle")
 	set_los_cone()
+	sprite = get_node("SpecialSprite")
+	match fluid_type:
+		#add more types
+		FluidFlow.Type.WATER:
+			#load water bucket sprite
+			print("placeholder")
+		FluidFlow.Type.ICE_WATER:
+			#load ice water bucket sprite
+			print("placeholder")
+		FluidFlow.Type.TAR:
+			#load ice water bucket sprite
+			print("placeholder")
+
+	attack_hitbox = get_node("AttackHitbox")
+	attack_hitbox.body_entered.connect(attack)
 
 func attack(target : Node2D):
-	#stop 
-	velocity.x = 0
-	stop_timer.start()
-	
-	var bodies = attack_trigger.get_overlapping_bodies()
-	for body in bodies:
-		if body is Slime and body.slime_type == fluid_type:
-			return
-	
-	#play animation and set hitboxes to active through animation_changed/frame_changed signals
+	#play animation and confirm hit
 	if (target is PlayerMovement) and combat_state:
-		sprite.set_animation("attack")
-	
-	#wait again so that the player can exploit a whiff or position enemies intentionally
-	stop_timer.start()	
+		var bodies = attack_hitbox.get_overlapping_bodies()
+		for body in bodies:
+			if body.has_method("onFluidHit"):
+				body.onFluidHit(fluid_type)
 		
+	return
+	
+
+func combat_behavior():
+	position.x = move_toward(position.x, combat_target.global_position.x, walk_speed)
+	
+
+func turnaround():
+	if !sprite.flip_h:
+		sprite.flip_h = true
+		los_area.scale.x = -1
+	else:
+		sprite.flip_h = false
+		los_area.scale.x = 1
+	attack_hitbox.position.x = -attack_hitbox.position.x
+	
 	return
 	
 func throw_water(target : Node2D):

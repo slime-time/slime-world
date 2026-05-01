@@ -4,6 +4,9 @@ extends CharacterBody2D
 # Sent to Scene Manager whenever a player character dies, to reset the scene
 signal penny_died
 
+#sent to penny.gd to flip sprite and hitboxes
+signal penny_flip
+
 var health: int
 # While at present no character class has use for the amount of time since the past physics frame, when more interesting
 # game behavior is added later, it's likely to be useful, so I'm putting it as an optional parameter for all movement functions.
@@ -71,7 +74,7 @@ func climb(direction: float, delta: float):
 	velocity.x = min(velocity.x, run_max_velocity)
 	if(abs(velocity.x) == 0):
 		velocity.x = direction
-	
+
 func setInteractionTarget(target: InteractionTarget) -> void:
 	interaction_target = target
 
@@ -106,6 +109,7 @@ func takeDamage(damage = 1):
 
 # This player character died, so the game needs to reset
 func die():
+	TransitionManager.setDeadEffect(true)	# this should probably go elsewhere but whatever man
 	penny_died.emit()
 
 
@@ -116,12 +120,17 @@ func onFluidHit(_fluid_type: FluidFlow.Type) -> void:
 
 # Move along the ground or in the air
 func move(direction: float, delta: float) -> void:
+	var currDirection = sign(get_last_motion().x)
+	var newDirection = sign(direction)
+	if(newDirection != currDirection):
+		penny_flip.emit(newDirection)
+	
 	if(canClimb(direction)):
 		climb(direction, delta)
 	else:
 		var run_velocity = direction * run_max_velocity
 		# If we're moving with the fluid, dampen max velocity so it doesn't get effectively doubled
-		if wetness > 0 and sign(direction) == sign(effective_fluid_velocity.x):
+		if wetness > 0 and newDirection == sign(effective_fluid_velocity.x):
 			run_velocity *= (1 - wetness)
 
 		# Move towards the target velocity (plus net fluid flows)
@@ -159,7 +168,7 @@ func _ready() -> void:
 	var error = config.load("res://settings.cfg")
 	# Assert that the data was read
 	assert(error == OK, "Failed to read movement settings from settings.cfg")
-	penny_died.connect(SceneManager.resetScene)
+	penny_died.connect(func() -> void: SceneManager.transitionOutThenResetScene(true))
 	# Read movement defaults
 	read_movement_data("movement_defaults")
 

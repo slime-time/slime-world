@@ -54,6 +54,8 @@ var split_confirm
 # From this slime
 var to_transform = false
 
+var in_gas_volume: bool = false
+
 # Returns a boolean value, true iff the slime can become Penny (i.e. is size 8 and not blue slime)
 func canBecomePenny():
 	return false
@@ -111,7 +113,7 @@ func onFluidHit(fluid_type: FluidFlow.Type) -> void:
 
 # Attempt to change from slime form to human form
 func becomePenny():
-	if canBecomePenny() and not to_transform:
+	if canBecomePenny() and not to_transform and not in_gas_volume:
 		# Disable this node, it will be deleted later but first its data must be used to setup human form properties
 		set_process_mode(Node.PROCESS_MODE_DISABLED)
 

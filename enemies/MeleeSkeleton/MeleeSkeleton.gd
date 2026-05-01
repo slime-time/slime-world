@@ -7,19 +7,12 @@ var attack_hitbox: Area2D
 
 func _ready():
 	super()
-	
+	set_los_cone()
 	sprite = get_node("MeleeSprite")
-	sprite.animation_changed.connect(sprite.play)
-	sprite.frame_changed.connect(set_hitbox_state)
-	sprite.set_animation("idle")
-	
-	attack_trigger = get_node("AttackTrigger")
 	attack_hitbox = get_node("AttackHitbox")
-	attack_trigger.body_entered.connect(attack)
-	attack_hitbox.body_entered.connect(deal_damage)
+	attack_hitbox.body_entered.connect(attack)
 	read_melee_data("melee_parameters")
 	
-	set_los_cone()
 
 
 func read_melee_data(sectionName):
@@ -32,28 +25,23 @@ func read_melee_data(sectionName):
 	return
 
 func combat_behavior():
-	if(stop_timer.is_stopped()):
-		velocity.x = move_toward(velocity.x, walk_speed * ((combat_target.global_position.x - position.x ) / abs(combat_target.global_position.x - position.x)), 1)
-		did_collide = move_and_slide()
-		if(did_collide):
-			turnaround()
+	position.x = move_toward(position.x, combat_target.global_position.x, walk_speed)
 
 func turnaround():
 	if !sprite.flip_h:
 		sprite.flip_h = true
+		los_area.scale.x = -1
 	else:
 		sprite.flip_h = false
-	los_area.scale.x = -los_area.scale.x
-	attack_trigger.position.x = -attack_trigger.position.x
+		los_area.scale.x = 1
 	attack_hitbox.position.x = -attack_hitbox.position.x
-	attack_hitbox.scale.x = -attack_hitbox.scale.x
 	
 	return
 
 func attack(target : Node2D):
-		#stop
-		velocity.x = 0
-		sprite.stop()
+	if (target is PlayerMovement) and combat_state:
+		#play animation and confirm hit
+		target.hit()
 		
 		#play animation and set hitboxes to active through animation_changed/frame_changed signals
 		if (target is PlayerMovement):

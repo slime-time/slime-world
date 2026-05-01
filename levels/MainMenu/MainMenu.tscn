@@ -14,6 +14,20 @@ shader = ExtResource("1_pr6oe")
 shader_parameter/darkness = 0.730000034675
 shader_parameter/edge_softness = 3.30200015358512
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pdm73"]
+content_margin_left = 1.0
+content_margin_right = 0.0
+bg_color = Color(0.5882353, 0.40784314, 0.53333336, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvenc"]
+content_margin_left = 1.0
+content_margin_right = 0.0
+bg_color = Color(0.67520833, 0.6618661, 0.7812135, 1)
+
+[sub_resource type="Theme" id="Theme_6appf"]
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_pdm73")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_dvenc")
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dvenc"]
 content_margin_left = 10.0
 content_margin_bottom = 2.0
@@ -70,6 +84,8 @@ custom_minimum_size = Vector2(160, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
+theme = SubResource("Theme_6appf")
+horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/ScrollContainer" unique_id=857197836]
 layout_mode = 2
@@ -106,6 +122,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("3_da0pr")
 theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxTexture_dvenc")
+theme_override_styles/focus = SubResource("StyleBoxTexture_dvenc")
 placeholder_text = "Enter your name..."
 virtual_keyboard_enabled = false
 
@@ -122,6 +139,7 @@ text = "Back"
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/NewGame" to="." method="_onNewGamePressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/LoadGame" to="." method="_onLoadGamePressed"]
+[connection signal="text_changed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/PlayerNameEdit" to="." method="_onPlayerNameEntered"]
 [connection signal="text_submitted" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/PlayerNameEdit" to="." method="_onPlayerNameEntered"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/ContinueButton" to="." method="_onContinueButtonPressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/BackButton" to="." method="_onBackButtonPressed"]

@@ -21,6 +21,7 @@ func _process(delta: float) -> void:
 		sprite.stop()
 	else:
 		sprite.play()
+	penny_flip.connect(flip)
 
 # If Penny is hit, she takes 1 damage
 func hit():
@@ -40,3 +41,14 @@ func set_hitbox_state():
 func deal_damage(target : Node2D):
 	if (target is MeleeSkeleton) or (target is RangedSkeleton) or (target is SpecialSkeleton):
 		target.hit()
+	
+func flip(direction : float):
+	print(direction)
+	if (direction < 0 and sprite.flip_h) or (direction > 0 and !sprite.flip_h):
+		return
+	else: 
+		sprite.flip_h = !sprite.flip_h
+		attack_hitbox.position.x = -attack_hitbox.position.x
+		attack_hitbox.scale = -attack_hitbox.scale
+	
+	

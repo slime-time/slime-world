@@ -17,17 +17,26 @@ var last_death
 # Reset the scene
 func resetScene():
 	var tree = get_tree()
-	if(tree.get_frame() != last_death and GameManager.current_state.cur_level != 0):
-		last_death = tree.get_frame()
-		TarManager.resetTar()
-		tree.call_deferred("reload_current_scene")
-	
+	if get_tree().get_frame() == last_death:
+		return
+
+	last_death = tree.get_frame()
+	TarManager.resetTar()
+	tree.call_deferred("reload_current_scene")
+
+func transitionOutThenResetScene(because_of_death: bool = false):
+	if GameManager.current_state.cur_level == 0 or TransitionManager.isClosing():
+		return
+
+	TransitionManager.transitionFinished.connect(resetScene, ConnectFlags.CONNECT_ONE_SHOT)
+	TransitionManager.startTransitionToBlack(because_of_death)
+
 # Pause the game, and stop the player from moving. The player can unpause from this position
 func pauseGame():
 	# ToDo: show settings / pause menu UI
 	get_tree().paused = true
 	is_paused = true
-	
+
 func unpauseGame():
 	# ToDo: hide settings / pause menu UI
 	get_tree().paused = false
