@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c13hn8cfrn5hk"]
+
+[ext_resource type="Material" uid="uid://dyq1egsv3dfxg" path="res://assets/materials/scene_transition.tres" id="1_ben71"]
+
+[node name="ColorRect" type="ColorRect" unique_id=340288665]
+z_index = 50
+material = ExtResource("1_ben71")
+offset_right = 512.0
+offset_bottom = 288.0
+mouse_filter = 2
