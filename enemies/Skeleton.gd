@@ -19,7 +19,6 @@ var combat_target: Node2D
 var combat_state: bool
 # 0:static  1:patrolling
 var is_patroling: bool
-var is_patroling: bool	
 var is_static: bool
 var is_dead: bool
 
