@@ -42,7 +42,7 @@ func _ready():
 			sprite.set_sprite_frames(SPRITE_SHEET[0])
 		FluidFlow.Type.TAR:
 			#load ice water bucket sprite
-			sprite.set_sprite_frmaes(SPRITE_SHEET[1])
+			sprite.set_sprite_frames(SPRITE_SHEET[1])
 		FluidFlow.Type.ENERGIZED:
 			sprite.set_sprite_frames(SPRITE_SHEET[3])
 	
