@@ -54,7 +54,7 @@ func on_scene_change():
 			if (child is FluidFlow):
 				play_sfx("looping_waterfall", 0)
 
-func play_sfx(sfxName : String, mode : int):
+func play_sfx(sfxName : String, mode : int, volume : float = 0.0):
 	var streams
 	var busName
 	#(mode = 1) -> oneshot (mode = 0) -> continuous
@@ -81,6 +81,7 @@ func play_sfx(sfxName : String, mode : int):
 			newStream.finished.connect(newStream.play)
 			#looping
 			continuous_sfx_streams.add_child(newStream)
+		newStream.volume_db = volume
 		newStream.play()
 		
 		
