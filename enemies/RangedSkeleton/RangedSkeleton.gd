@@ -25,11 +25,11 @@ func _ready():
 func combat_behavior():
 	#attack on an interval
 	if attack_timer.is_stopped():
-		attack(combat_target)
+		attack()
 		
 
-func attack(target : Node2D):
-	if (target is PlayerMovement) and combat_state:
+func attack(target : Node2D = null):
+	if combat_state:
 		combat_target = target	
 		sprite.set_animation("attack")
 		attack_timer.start(attack_frequency)
@@ -38,7 +38,10 @@ func attack(target : Node2D):
 	
 func shoot(offset, target):
 	var projectile = Arrow.instantiate()
-	projectile.target = target.global_position
+	if(not sprite.flip_h):
+		projectile.target = Vector2(global_position.x + 1000, global_position.y)
+	else:
+		projectile.target = Vector2(global_position.x - 1000, global_position.y)
 	projectile.speed = projectile_speed
 	projectile.global_position= Vector2(global_position.x + offset, global_position.y + 6)
 	AudioManager.play_sfx("bowshot", 1 , -10.5)
@@ -80,7 +83,7 @@ func set_los_cone():
 	query.exclude = [self, los_area]
 	var result = space_state.intersect_ray(query)
 	
-	if(result): dynamicDistance = result.position.x
+	if(result and  los_area.get_child_count() == 0): dynamicDistance = result.position.x
 	else: return
 		
 	var cone = CollisionPolygon2D.new() 

@@ -271,7 +271,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yebc0")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 5.0
 }, {
@@ -332,7 +332,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k37tj")
 }],
-"loop": true,
+"loop": false,
 "name": &"reanimation",
 "speed": 5.0
 }, {
@@ -370,7 +370,7 @@ shape = SubResource("CapsuleShape2D_822so")
 z_index = -2
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_hyxjp")
-animation = &"attack"
+animation = &"death"
 offset = Vector2(0, 0.5)
 
 [node name="SkeletonLoS" type="Area2D" parent="." unique_id=883142025]
