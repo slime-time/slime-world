@@ -7,6 +7,7 @@ var patrol_index: int
 var walk_speed: float
 var sprite : AnimatedSprite2D
 
+
 var hurtbox : CollisionShape2D
 
 var los_area : Area2D
@@ -17,9 +18,10 @@ var combat_target: Node2D
 # 0:neutral  1:combat
 var combat_state: bool
 # 0:static  1:patrolling
-var is_patroling: bool	
-var is_static: bool
+var is_patroling: bool
 var is_dead: bool
+
+var noticed_players: Array[Node2D]
 
 var reanimation_time: float
 var death_timer: Timer
@@ -64,8 +66,16 @@ func _ready():
 		is_patroling = false
 		is_static = true
 
-func _physics_process(_delta : float):
+func _physics_process(delta : float):
+	if(not is_on_floor()):
+		velocity.y += get_gravity().y * delta
+		
+	if(not sprite.flip_h and velocity.x < 0):
+		turnaround()
+	elif(sprite.flip_h and velocity.x > 0):
+		turnaround()
 	if is_dead:
+		move_and_slide()
 		return
 	
 	if !stop_timer.is_stopped() and combat_state:
@@ -73,32 +83,31 @@ func _physics_process(_delta : float):
 	elif !combat_state:
 		sprite.set_animation("idle")
 
-	if get_position_delta().x != 0:
+	elif get_position_delta().x != 0 and !combat_state:
 		sprite.set_animation("walk")
 		
-	if combat_state:
-		combat_behavior()
-		return
-		
-	did_collide = move_and_slide()
-	
-	if(did_collide):
-		await turnaround()
-		return
-	
+	move_and_slide()
+
 	if is_patroling:
-		var next = float(patrol[patrol_index].position.x)
-		
+		var next = float(patrol[patrol_index].global_position.x)
+
 		#reorient sprite and hitbox if necessary
 		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
 			await turnaround()
-		velocity.x = move_toward(velocity.x, walk_speed * ((next - position.x ) / abs(next - position.x)), 1)
-		
+		if(next < global_position.x):
+			velocity.x = move_toward(velocity.x, -walk_speed, (1000 * delta) / 16)
+		else:
+			velocity.x = move_toward(velocity.x, walk_speed, (1000 * delta) / 16)
+		 
 		if ceil(position.x + get_position_delta().x) == next:
 			velocity.x = 0
 			patrol_index = (patrol_index + 1) % patrol.size()
 			#wait ? frames
 			stop_timer.start()
+		 	
+	elif combat_state:
+		combat_behavior()
+
 	return
 
 func reanimate():
@@ -116,43 +125,43 @@ func hit():
 	#effectively forces enemy to freeze
 	is_dead = true
 	los_area.monitoring = false
-	hurtbox.disabled = true
+	hurtbox.set_deferred("disabled", true)
 	
 	sprite.set_animation("death")
 	death_timer.start()
 	
 func detect(target : Node2D ):
-	if target is PlayerMovement and combat_target == null:
+	if target is PlayerMovement:
 		combat_target = target
 		combat_state = true
 		is_patroling = false
-	return
+		noticed_players.append(target)
+		return true
+	return false
 	
 func deaggro(target : Node2D ):
-	if(sprite.is_playing() and sprite.animation == "attack"):
-		print('hi')
-		await sprite.animation_finished
-		reset()
-	
-	if(target is PlayerMovement):
-		reset()
-	
-func reset():
-	combat_target = null
-	combat_state = false
-	
-	if !is_static:
-		is_patroling = true
-		
-		#reorient sprite and hitbox if necessary
-		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
-			await turnaround()
+	if (is_instance_valid(target) and target in noticed_players):
+		noticed_players.erase(target)
+		if(noticed_players.size() > 0):
+			combat_target = noticed_players[0]
 			
-	else:
-		combat_target = null
-		combat_state = false
-		sprite.set_animation("idle")
-	return
+	if(sprite.is_playing() and sprite.animation != "walk"):
+		await sprite.animation_finished
+		
+	if(noticed_players.size() == 0):
+		if patrol.size() > 0:
+			combat_target = null
+			combat_state = false
+			is_patroling = true
+		
+			#reorient sprite and hitbox if necessary
+			if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
+				await turnaround()
+				
+		else:
+			combat_target = null
+			combat_state = false
+			sprite.set_animation("idle")
 	
 func read_enemy_data(sectionName):
 	var config = ConfigFile.new()

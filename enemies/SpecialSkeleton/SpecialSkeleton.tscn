@@ -10,6 +10,8 @@ height = 22.222223
 radius = 9.166667
 
 [node name="SpecialSkeleton" type="CharacterBody2D" unique_id=883330609]
+floor_stop_on_slope = false
+floor_constant_speed = true
 platform_floor_layers = 4294967042
 script = ExtResource("1_mcp4o")
 fluid_type = 1

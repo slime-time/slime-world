@@ -7,12 +7,18 @@ const levels: Array[String] = [
 	"res://levels/Level2.tscn"
 ]
 
+signal level_changed
+
 var current_state : GameState = GameState.new()
 
 func loadLevel(x : int):
 	assert(0 <= x && x <= current_state.highest_level_unlocked)
 	current_state.cur_level = x
+	#avoid playing level themes on title
+	if x != 0:
+		level_changed.emit()
 	get_tree().call_deferred("change_scene_to_file", levels[x])
+	
 
 ## Completes the current level we're on and loads next level if one was just unlocked
 func completeLevel():
