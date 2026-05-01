@@ -61,8 +61,6 @@ func attack(_target = null):
 		#stop 
 		velocity.x = 0
 		
-		#TODO: tweak volume when testing
-		AudioManager.play_sfx("waterdump", 1)
 		sprite.set_animation("attack")
 		#sprite.frame = 0
 		set_hitbox_state()

@@ -57,8 +57,6 @@ func attack(target : Node2D):
 		
 		#play animation and set hitboxes to active through animation_changed/frame_changed signals
 		if (target is PlayerMovement):
-			#TODO: tweak volume when testing
-			AudioManager.play_sfx("swordswing", 1)
 			sprite.set_animation("attack")
 		
 		#wait again so that the player can exploit a whiff or position enemies intentionally
@@ -75,7 +73,7 @@ func deal_damage(target : Node2D):
 	
 func set_hitbox_state():
 	if sprite.animation == "attack" and sprite.frame == 6:
-		AudioManager.play_sfx("swordswing", 1)
+		AudioManager.play_sfx("swordswing", 1, -0.2)
 		attack_hitbox.set_monitoring(true)
 		attack_hitbox.set_visible(true)
 	elif sprite.animation == "attack" and sprite.frame == 10:
