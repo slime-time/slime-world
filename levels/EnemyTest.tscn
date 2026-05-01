@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_12p0m"]
 [ext_resource type="PackedScene" uid="uid://cuvwsherd1opx" path="res://components/Background/Background.tscn" id="3_6at2k"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="4_pc5vb"]
+[ext_resource type="PackedScene" uid="uid://c5x7akkuwxm75" path="res://enemies/MeleeSkeleton/MeleeSkeleton.tscn" id="5_23275"]
 [ext_resource type="PackedScene" uid="uid://c76osvgo4hqkn" path="res://enemies/RangedSkeleton/RangedSkeleton.tscn" id="5_haks4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cepy0"]
@@ -71,3 +72,7 @@ position = Vector2(290, 158)
 
 [node name="RangedSkeleton" parent="." unique_id=1779289937 instance=ExtResource("5_haks4")]
 position = Vector2(159, 118)
+
+[node name="MeleeSkeleton" parent="." unique_id=1999367218 node_paths=PackedStringArray("patrol") instance=ExtResource("5_23275")]
+position = Vector2(199, 151)
+patrol = [NodePath("../PatrolPoint1"), NodePath("../PatrolPoint2")]
