@@ -73,7 +73,8 @@ func attack(_target = null):
 		sprite.animation_finished.connect(func():
 			stop_timer.set_paused(false)
 			velocity.x = 0
-			sprite.set_animation("idle")
+			if(sprite.animation == "attack"):
+				sprite.set_animation("idle")
 		, CONNECT_ONE_SHOT)
 	
 	#wait again so that the player can exploit a whiff or position enemies intentionally

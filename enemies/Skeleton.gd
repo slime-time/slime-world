@@ -114,7 +114,6 @@ func _physics_process(delta : float):
 	return
 
 func reanimate():
-	print_debug("reanimating")
 	death_timer.stop()
 	#play reanimation animation
 	sprite.set_animation("reanimation")

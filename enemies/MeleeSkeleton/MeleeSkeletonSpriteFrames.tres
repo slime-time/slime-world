@@ -94,10 +94,6 @@ region = Rect2(200, 61, 50, 29)
 atlas = ExtResource("1_bf1m5")
 region = Rect2(250, 61, 50, 29)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8s54y"]
-atlas = ExtResource("1_bf1m5")
-region = Rect2(400, 61, 50, 29)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_mwre1"]
 atlas = ExtResource("1_bf1m5")
 region = Rect2(300, 61, 50, 29)
@@ -105,6 +101,10 @@ region = Rect2(300, 61, 50, 29)
 [sub_resource type="AtlasTexture" id="AtlasTexture_e07yc"]
 atlas = ExtResource("1_bf1m5")
 region = Rect2(350, 61, 50, 29)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8s54y"]
+atlas = ExtResource("1_bf1m5")
+region = Rect2(400, 61, 50, 29)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l5r8t"]
 atlas = ExtResource("1_bf1m5")
@@ -272,13 +272,13 @@ animations = [{
 "texture": SubResource("AtlasTexture_a3tj1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8s54y")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_mwre1")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e07yc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8s54y")
 }],
 "loop": false,
 "name": &"death",
