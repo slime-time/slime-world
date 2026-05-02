@@ -8,15 +8,16 @@ const levels: Array[String] = [
 	"res://levels/2-1.tscn",
 	"res://levels/3-1.tscn",
 	"res://levels/3-2.tscn",
-	"res://levels/3-3.tscn",
 	"res://levels/3-4.tscn",
+	"res://levels/3-3.tscn",
 	"res://levels/3-5.tscn",
 	"res://levels/4-1.tscn",
 	"res://levels/4-2.tscn",
 	"res://levels/4-3.tscn",
 	"res://levels/4-4.tscn",
 	"res://levels/5-1.tscn",
-	"res://levels/5-2.tscn"
+	"res://levels/5-2.tscn",
+	"res://levels/5-3.tscn"
 ]
 
 signal level_changed
