@@ -33,11 +33,13 @@ func transitionOutThenResetScene(because_of_death: bool = false):
 
 # Pause the game, and stop the player from moving. The player can unpause from this position
 func pauseGame():
-	# ToDo: show settings / pause menu UI
+	# ToDo: show settings / pause menu UI, update audio manager method call for pause theme
 	get_tree().paused = true
 	is_paused = true
+	AudioManager.call_deferred("set_current_track", "sgsw_pause_theme.wav")
 
 func unpauseGame():
-	# ToDo: hide settings / pause menu UI
+	# ToDo: hide settings / pause menu UI, update audio manager method call for level theme
 	get_tree().paused = false
 	is_paused = false
+	AudioManager.call_deferred("set_current_track", "sgsw_theme1.wav")

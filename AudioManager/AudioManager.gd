@@ -1,6 +1,7 @@
 extends Node
 
 var current_track : Resource
+var level_theme_playback_position : float
 
 var songs : PackedStringArray
 var sfx : PackedStringArray
@@ -33,7 +34,7 @@ func _ready() -> void:
 	#can refactor to change theme based on level later
 	GameManager.level_changed.connect(on_scene_change)
 
-func set_current_track(songName : String):
+func set_current_track(songName : String):	
 	for song in songs:
 		if(song.contains(songName) and !song.contains(".import")):
 			current_track = load("res://assets/music/" + song)
@@ -91,11 +92,22 @@ func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float 
 		newStream.pitch_scale = pitch
 		newStream.play()
 		
-	
 	return
 			
 
 func change_track_playback(song):
+	
 	music_stream.stop()
+	
+	if(song.resource_name.contains("sgsw_pause_theme.wav")):
+		level_theme_playback_position = music_stream.get_playback_position()
+	else:
+		level_theme_playback_position = 0.0
+	
 	music_stream.set_stream(song)
-	music_stream.play()
+	if(song.resource_name.contains("sgsw_pause_theme.wav")):
+		music_stream.play()
+	else:
+		music_stream.play(level_theme_playback_position)
+	
+	
