@@ -79,13 +79,23 @@ func split(child_slime_type: Slime.Type = slime_type):
 		var child_size = floor(size / 2)
 		size = ceili(size / 2.0)
 
-		var child_pos = position
-		var child_vel = velocity
-
 		move_and_collide(Vector2(0, -4))
 
-		velocity += Vector2(-150, 0)
-		child_vel += Vector2(150, -50)
+		var child_pos = position + Vector2(0, -randf_range(3, 5))
+		var child_vel = velocity
+
+		position += Vector2(0, -randf_range(3, 5))
+
+		var random_x = randf_range(1.0, 3.0)
+		if randi() % 2 == 0:
+			position.x -= random_x
+			child_pos.x += random_x
+		else:
+			position.x += random_x
+			child_pos.x -= random_x
+
+		velocity += Vector2(-50, 0)
+		child_vel += Vector2(50, 0)
 
 		has_split.emit(child_pos, child_vel, child_size, child_slime_type)
 		getMovementAbility()
