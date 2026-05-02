@@ -66,6 +66,12 @@ func hit():
 	else:
 		die()
 
+func getActualFluidVelocity(fluid_velocity_low: Vector2, fluid_velocity_high: Vector2, min_slime_size: int) -> Vector2:
+	if size < min_slime_size:
+		return fluid_velocity_high * run_max_velocity
+
+	return fluid_velocity_low * run_max_velocity
+
 # Turn into two slimes
 func split(child_slime_type: Slime.Type = slime_type):
 	AudioManager.call_deferred("play_sfx", "slime_footstep", 1, 1.0, -10.5)
@@ -169,6 +175,8 @@ func updateHitbox():
 	).call_deferred()
 
 	my_body.position.y = BODY_OFFSETS[size]
+
+	recomputeNetFluidVelocity()
 
 # Update the sprite representing this slime after it changes size
 func updateSprite():

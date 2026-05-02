@@ -40,7 +40,7 @@ var hover_timer: Timer = null
 
 # Net effects of fluid volumes we're currently in, applied in physics_process
 var wetness: float = 0
-var num_fluid_volumes: int = 0
+var fluid_volumes: Array = []
 var net_fluid_velocity: Vector2 = Vector2.ZERO
 var effective_fluid_velocity: Vector2 = Vector2.ZERO  # Cached fluid velocity for use while we're drying
 
@@ -88,17 +88,26 @@ func clearInteractionTarget(target: InteractionTarget) -> void:
 func getMass() -> float:
 	return mass
 
-func enterFluidVolume(fluid_velocity: Vector2) -> void:
-	num_fluid_volumes += 1
-	net_fluid_velocity += fluid_velocity
+func enterFluidVolume(fluid_velocity_low: Vector2, fluid_velocity_high: Vector2, min_slime_size: int) -> void:
+	fluid_volumes.append([fluid_velocity_low, fluid_velocity_high, min_slime_size])
+	recomputeNetFluidVelocity()
 
 	# Dampen the incoming velocity if we are entering a volume
-	if num_fluid_volumes == 1:
+	if fluid_volumes.size() == 1:
 		velocity *= fluid_entry_dampening
 
-func exitFluidVolume(fluid_velocity: Vector2) -> void:
-	num_fluid_volumes -= 1
-	net_fluid_velocity -= fluid_velocity
+func exitFluidVolume(fluid_velocity_low: Vector2, fluid_velocity_high: Vector2, min_slime_size: int) -> void:
+	fluid_volumes.remove_at(fluid_volumes.find([fluid_velocity_low, fluid_velocity_high, min_slime_size]))
+	recomputeNetFluidVelocity()
+
+func getActualFluidVelocity(fluid_velocity_low: Vector2, fluid_velocity_high: Vector2, min_slime_size: int) -> Vector2:
+	return fluid_velocity_low * run_max_velocity
+
+func recomputeNetFluidVelocity() -> void:
+	net_fluid_velocity = Vector2.ZERO
+	for fluid in fluid_volumes:
+		var effective_velocity = getActualFluidVelocity(fluid[0], fluid[1], fluid[2])
+		net_fluid_velocity += effective_velocity
 
 # Take an arbitrary amount of damage
 func takeDamage(damage = 1):
@@ -123,15 +132,15 @@ func move(direction: float, delta: float) -> void:
 	var desired_step_sfx : String
 	var currDirection = sign(get_last_motion().x)
 	var newDirection = sign(direction)
-	
+
 	if(newDirection != currDirection):
 		penny_flip.emit(newDirection)
-	
+
 	if(InputManager.get_is_human()):
 		desired_step_sfx = "footstep"
 	else:
 		desired_step_sfx = "slime_footstep"
-	
+
 	if(canClimb(direction)):
 		climb(direction, delta)
 	else:
@@ -144,7 +153,7 @@ func move(direction: float, delta: float) -> void:
 		# Move towards the target velocity (plus net fluid flows)
 		var target_velocity = run_velocity + effective_fluid_velocity.x * wetness
 		velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
-		
+
 		AudioManager.call_deferred("play_sfx", desired_step_sfx, 1, 0.1)
 
 # To implement sliding later, we likely want to pass a delta to this function
@@ -241,7 +250,7 @@ func _physics_process(delta: float) -> void:
 		interaction_target.interact(self)
 
 	# Apply fluid forces
-	if num_fluid_volumes > 0:
+	if net_fluid_velocity != Vector2.ZERO:
 		wetness = 1.0
 		effective_fluid_velocity = net_fluid_velocity
 	else:
