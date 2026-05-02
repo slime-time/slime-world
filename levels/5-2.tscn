@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://c3qniulm6f8lq"]
+[gd_scene format=4 uid="uid://dfgjgwyemdo0p"]
 
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_phkcy"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_3suob"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" uid="uid://dw23x5pynkluq" path="res://components/FluidFlow/FluidFlow.gd" id="8_ykiqw"]
 [ext_resource type="Texture2D" uid="uid://kfehjyrcrjdi" path="res://assets/components/wide-vent.png" id="9_m3fgg"]
 [ext_resource type="Material" uid="uid://d2rxla01f7bnr" path="res://assets/materials/water_flow.tres" id="10_4smar"]
-[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="12_4smar"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
 texture = ExtResource("2_3suob")
@@ -139,26 +138,6 @@ position = Vector2(331, 209)
 rotation = 1.5707964
 scale = Vector2(0.6, 1)
 is_flow_enabled = false
-
-[node name="ControlCheatSheet" type="Label" parent="." unique_id=1214947499]
-offset_left = 10.0
-offset_top = 11.0
-offset_right = 492.0
-offset_bottom = 128.0
-theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
-theme_override_fonts/font = ExtResource("12_4smar")
-theme_override_font_sizes/font_size = 8
-text = "controls
-WASD/arrow keys/space: move and jump
-v:	  transform/Merge slimes
-e/c:	  Interact with levers
-q/esc:	  pause
-r:	  reset
-x: attack
-
-Reach the Yellow Light in 
-human form to win!"
-horizontal_alignment = 2
 
 [node name="WokeFlow" parent="." unique_id=373670226 instance=ExtResource("7_s7kfx")]
 position = Vector2(299, 86)
