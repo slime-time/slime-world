@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://eh3sietxnmx"]
+[gd_scene format=4 uid="uid://dj66rfgt744as"]
 
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="1_fmw8i"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="2_qbu7x"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://cl26q86oop334" path="res://assets/components/lever.png" id="13_8w3re"]
 [ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="14_34pdc"]
 [ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="15_y3gp1"]
+[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="16_2gshc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
 shader = ExtResource("1_fmw8i")
@@ -913,6 +914,18 @@ script = ExtResource("15_y3gp1")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Spike9/Area2D" unique_id=312434216]
 position = Vector2(0, 39)
 shape = SubResource("RectangleShape2D_6yh2b")
+
+[node name="ControlCheatSheet" type="Label" parent="." unique_id=983285297]
+z_index = 4096
+offset_left = 21.0
+offset_top = 5.0
+offset_right = 503.0
+offset_bottom = 142.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
+theme_override_fonts/font = ExtResource("16_2gshc")
+theme_override_font_sizes/font_size = 8
+text = "e/c:	  Interact with levers"
+horizontal_alignment = 2
 
 [connection signal="flip_off" from="Lever" to="WaterFlow2" method="enableFlow"]
 [connection signal="flip_off" from="Lever" to="WaterFlow5" method="disableFlow"]

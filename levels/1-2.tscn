@@ -7,6 +7,7 @@
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="4_l4i2t"]
 [ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="4_ulnvp"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="5_vdfkv"]
+[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="8_ulnvp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
 texture = ExtResource("2_pmfpg")
@@ -428,3 +429,16 @@ grow_vertical = 2
 texture = ExtResource("5_vdfkv")
 expand_mode = 1
 stretch_mode = 1
+
+[node name="ControlCheatSheet" type="Label" parent="." unique_id=580961174]
+z_index = 4096
+offset_left = 23.0
+offset_top = 4.0
+offset_right = 505.0
+offset_bottom = 141.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
+theme_override_fonts/font = ExtResource("8_ulnvp")
+theme_override_font_sizes/font_size = 8
+text = "v:	  transform/Merge slimes
+"
+horizontal_alignment = 2
