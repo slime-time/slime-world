@@ -19,7 +19,7 @@ func _ready():
 	penny_flip.connect(flip)
 
 func _process(delta: float) -> void:
-	if !is_on_floor():
+	if !is_on_floor() or (sprite.animation == "walk" and velocity.x == 0):
 		sprite.stop()
 	else:
 		sprite.play()
@@ -34,6 +34,8 @@ func flip(direction : float):
 		return
 	else: 
 		sprite.flip_h = !sprite.flip_h
+		sprite.position.x = -sprite.position.x
+		
 		attack_hitbox.position.x = -attack_hitbox.position.x
 		attack_hitbox.scale = -attack_hitbox.scale
 	

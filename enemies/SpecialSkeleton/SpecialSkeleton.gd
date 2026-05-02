@@ -42,9 +42,13 @@ func _ready():
 			sprite.set_sprite_frames(SPRITE_SHEET[0])
 		FluidFlow.Type.TAR:
 			#load ice water bucket sprite
-			sprite.set_sprite_frmaes(SPRITE_SHEET[1])
+			sprite.set_sprite_frames(SPRITE_SHEET[1])
 		FluidFlow.Type.ENERGIZED:
 			sprite.set_sprite_frames(SPRITE_SHEET[3])
+	
+	sprite.animation_changed.connect(sprite.play)
+	sprite.frame_changed.connect(set_hitbox_state)
+	sprite.set_animation("idle")
 	set_los_cone()
 
 func targetForAttack(target: Node2D):
@@ -69,7 +73,8 @@ func attack(_target = null):
 		sprite.animation_finished.connect(func():
 			stop_timer.set_paused(false)
 			velocity.x = 0
-			sprite.set_animation("idle")
+			if(sprite.animation == "attack"):
+				sprite.set_animation("idle")
 		, CONNECT_ONE_SHOT)
 	
 	#wait again so that the player can exploit a whiff or position enemies intentionally
@@ -81,12 +86,16 @@ func throw_water(target : Node2D):
 	if (target is PlayerMovement) and combat_state:
 		var bodies = attack_hitbox.get_overlapping_bodies()
 		for body in bodies:
-			if body.has_method("onFluidHit"):
+			if(body.is_queued_for_deletion()):
+				print_debug("changed")
+			if body.has_method("onFluidHit") and not body.is_queued_for_deletion():
 				body.onFluidHit(fluid_type)
 
 func combat_behavior():
 	if(stop_timer.is_stopped() and players_hittable.size() == 0):
 		sprite.set_animation("walk")
+		if(not is_instance_valid(combat_target)):
+			return
 		if(combat_target.global_position.x < global_position.x):
 			velocity.x = move_toward(velocity.x, -walk_speed, (physics_delta * 1000) / 16)
 		else:

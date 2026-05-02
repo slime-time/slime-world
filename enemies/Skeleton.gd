@@ -69,6 +69,9 @@ func _ready():
 		is_static = true
 
 func _physics_process(delta : float):
+	if is_dead:
+		return
+	
 	if(not is_on_floor()):
 		velocity.y += get_gravity().y * delta
 		
@@ -76,9 +79,6 @@ func _physics_process(delta : float):
 		turnaround()
 	elif(sprite.flip_h and velocity.x > 0):
 		turnaround()
-	if is_dead:
-		move_and_slide()
-		return
 	
 	if (patrol.size() == 0 or !stop_timer.is_stopped()) and !combat_state:
 		velocity.x = 0
@@ -121,8 +121,7 @@ func reanimate():
 	#reset to default
 	is_dead = false
 	los_area.monitoring = true
-	hurtbox.disabled = false
-	
+	hurtbox.set_deferred("disabled", false)
 
 func hit():
 	#effectively forces enemy to freeze
@@ -164,7 +163,6 @@ func deaggro(target : Node2D ):
 		else:
 			combat_target = null
 			combat_state = false
-			sprite.set_animation("idle")
 	
 func read_enemy_data(sectionName):
 	var config = ConfigFile.new()

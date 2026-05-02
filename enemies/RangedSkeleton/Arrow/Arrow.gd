@@ -2,17 +2,17 @@ extends RigidBody2D
 
 var target : Vector2
 var speed
+var mulitplier
 
 func entityEntered(_trigger: Node2D):
 	# Ensure the arrow only hits the player once
 	if not is_queued_for_deletion():
-		
 		for entity in get_colliding_bodies():
 			if(entity is PlayerMovement):
-				# After hitting anything, delete the arrow.
-				queue_free()
 				entity.hit()
-			
+				queue_free()
+			elif(entity is TileMapLayer):
+				queue_free()
 	
 
 func _ready():
@@ -22,11 +22,11 @@ func _ready():
 	set_collision_layer(0)
 	set_lock_rotation_enabled(true)
 	body_entered.connect(entityEntered)
-
-func _physics_process(delta: float):
-	var mulitplier
+	
 	if target.x > global_position.x:
 		mulitplier = 1
 	else:
 		mulitplier = -1
+
+func _physics_process(delta: float):
 	linear_velocity = Vector2(speed * mulitplier, 0)
