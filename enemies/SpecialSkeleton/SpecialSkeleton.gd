@@ -85,6 +85,7 @@ func throw_water(target : Node2D):
 				body.onFluidHit(fluid_type)
 
 func combat_behavior():
+<<<<<<< HEAD
 	if(stop_timer.is_stopped() and players_hittable.size() == 0):
 		sprite.set_animation("walk")
 		if(combat_target.global_position.x < global_position.x):
@@ -93,6 +94,15 @@ func combat_behavior():
 			velocity.x = move_toward(velocity.x, walk_speed, (1000 * physics_delta) / 16)
 	elif(stop_timer.is_stopped()):
 		attack()
+=======
+	print_debug("called combat")
+	if(stop_timer.is_stopped() and is_patroling):
+		velocity.x =  move_toward(velocity.x, walk_speed * ((combat_target.global_position.x - position.x ) / abs(combat_target.global_position.x - position.x)), 1)
+	elif(stop_timer.is_stopped()):
+		attack(combat_target)
+	 move_and_slide()
+	
+>>>>>>> 32bf628c50cf69974acf56763f21226508984420
 
 func turnaround():
 	if !sprite.flip_h:

@@ -141,6 +141,7 @@ func detect(target : Node2D ):
 	return false
 	
 func deaggro(target : Node2D ):
+<<<<<<< HEAD
 	if (is_instance_valid(target) and target in noticed_players):
 		noticed_players.erase(target)
 		if(noticed_players.size() > 0):
@@ -163,6 +164,27 @@ func deaggro(target : Node2D ):
 			combat_target = null
 			combat_state = false
 			sprite.set_animation("idle")
+=======
+	if(sprite.is_playing() and sprite.animation == "attack"):
+		print('hi')
+		await sprite.animation_finished
+		reset()
+	
+	if patrol.size() > 0 and is_instance_valid(target) and target is PlayerMovement:
+		combat_target = null
+		combat_state = false
+		is_patroling = true
+		
+		#reorient sprite and hitbox if necessary
+		if ((patrol[patrol_index].global_position.x - global_position.x) < 0 and !sprite.flip_h) or ((patrol[patrol_index].global_position.x - global_position.x) > 0 and sprite.flip_h):
+			await turnaround()
+			
+	elif is_instance_valid(target) and target is PlayerMovement:
+		combat_target = null
+		combat_state = false
+		sprite.set_animation("idle")
+	return
+>>>>>>> 32bf628c50cf69974acf56763f21226508984420
 	
 func read_enemy_data(sectionName):
 	var config = ConfigFile.new()

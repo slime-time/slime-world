@@ -15,10 +15,6 @@ run/main_scene="uid://ob27y2if7ueg"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="uid://3e51eumu63ft"
 
-[audio]
-
-buses/default_bus_layout="uid://cwy6nve4x8net"
-
 [autoload]
 
 SceneManager="*uid://clwcou0lvoqt0"
@@ -26,8 +22,8 @@ InputManager="*uid://bxqq0x5x18kd8"
 GameManager="*uid://dms3mbn4e8xh7"
 ShaderTimeManager="*uid://cwk203l2hosxx"
 TarManager="*uid://bi4gn4y2dllxn"
-TransitionManager="*uid://dm4vkianhr8xu"
 AudioManager="*uid://dcysu570vco8j"
+TransitionManager="*uid://dm4vkianhr8xu"
 
 [display]
 
