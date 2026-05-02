@@ -82,4 +82,3 @@ func _onSceneReady() -> void:
 	var pause_menu = PAUSE_MENU.instantiate()
 	get_tree().current_scene.add_child(pause_menu)
 	pause_menu.layer = 1000000007
->>>>>>> ff3845e70cd3100412343cac3da5529d802db9e3

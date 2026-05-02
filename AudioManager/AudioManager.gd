@@ -25,7 +25,9 @@ func _ready() -> void:
 	
 	song_changed.connect(change_track_playback)
 	#looping behavior
-	music_stream.finished.connect(music_stream.play)
+	music_stream.finished.connect(func(): 
+		print("ended")
+		music_stream.play)
 	var tree = get_tree()
 	tree.root.add_child.call_deferred(music_stream)
 	tree.root.add_child.call_deferred(continuous_sfx_streams)
