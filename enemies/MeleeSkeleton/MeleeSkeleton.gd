@@ -117,5 +117,5 @@ func set_hitbox_state():
 		attack_hitbox.set_monitoring(false)
 		attack_hitbox.set_visible(false)
 		return
-	if (not get_tree().process_frame.is_connected(set_hitbox_state) and sprite.animation == "attack"):
+	if (get_tree() != null and not get_tree().process_frame.is_connected(set_hitbox_state) and sprite.animation == "attack"):
 		get_tree().process_frame.connect(set_hitbox_state, CONNECT_ONE_SHOT)
