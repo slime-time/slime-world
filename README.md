@@ -1,5 +1,5 @@
 # Instructions 
-None (running the executable should just work).
+Extract files from zip and run the executable!
 
 # Known Issues
 Some occasional weird behavoir with splitting energized slimes i.e. some slimes dissapearing. If this happens, just reset the level!
