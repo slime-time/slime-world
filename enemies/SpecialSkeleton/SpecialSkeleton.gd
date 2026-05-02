@@ -86,12 +86,16 @@ func throw_water(target : Node2D):
 	if (target is PlayerMovement) and combat_state:
 		var bodies = attack_hitbox.get_overlapping_bodies()
 		for body in bodies:
-			if body.has_method("onFluidHit"):
+			if(body.is_queued_for_deletion()):
+				print_debug("changed")
+			if body.has_method("onFluidHit") and not body.is_queued_for_deletion():
 				body.onFluidHit(fluid_type)
 
 func combat_behavior():
 	if(stop_timer.is_stopped() and players_hittable.size() == 0):
 		sprite.set_animation("walk")
+		if(not is_instance_valid(combat_target)):
+			return
 		if(combat_target.global_position.x < global_position.x):
 			velocity.x = move_toward(velocity.x, -walk_speed, (physics_delta * 1000) / 16)
 		else:
