@@ -63,22 +63,13 @@ func _onBodyEntered(body: Node2D) -> void:
 	if not (body is PlayerMovement):
 		return
 
-	var size = body.size if (body is Slime) else 8
-	var velocity_factor = fluid_velocity_factor_low if size >= fluid_min_slime_size else fluid_velocity_factor_high
-	var velocity = body.run_max_velocity * velocity_factor
-
-	body.enterFluidVolume(Vector2(velocity, 0))
+	body.enterFluidVolume(Vector2(fluid_velocity_factor_low, 0), Vector2(fluid_velocity_factor_high, 0), fluid_min_slime_size)
 
 func _onBodyExited(body: Node2D) -> void:
 	if not (body is PlayerMovement):
 		return
 
-
-	var size = body.size if (body is Slime) else 8
-	var velocity_factor = fluid_velocity_factor_low if size >= fluid_min_slime_size else fluid_velocity_factor_high
-	var velocity = body.run_max_velocity * velocity_factor
-
-	body.exitFluidVolume(Vector2(velocity, 0))
+	body.exitFluidVolume(Vector2(fluid_velocity_factor_low, 0), Vector2(fluid_velocity_factor_high, 0), fluid_min_slime_size)
 
 func _updateFluidExtents() -> void:
 	_origin = global_position.floor()
