@@ -1,9 +1,11 @@
-[gd_scene format=4 uid="uid://dq84knn1483vi"]
+[gd_scene format=4 uid="uid://mjf6c8vsvyv4"]
 
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_l6tmu"]
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_pmfpg"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="3_63w1q"]
+[ext_resource type="Script" uid="uid://hxpbhcpajr12" path="res://components/RedSpike/RedSpike.gd" id="3_dfjv5"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="4_l4i2t"]
+[ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="4_ulnvp"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="5_vdfkv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1mo47"]
@@ -53,24 +55,365 @@ shader_parameter/edge_softness = 3.30200015358512
 [node name="Node2D2" type="Node2D" unique_id=730916531]
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_l6tmu")]
-position = Vector2(20, 222)
+position = Vector2(33, 215)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
 z_index = 2
 texture_filter = 1
-position = Vector2(250, 150)
-tile_map_data = PackedByteArray("AADw/wUAAAABAAAAAADw/wYAAAABAAEAAADw/wcAAAABAAEAAADw/wgAAAABAAEAAADx/wgAAAABAAEAAADy/wgAAAABAAEAAADz/wgAAAABAAEAAAD0/wgAAAABAAEAAAD1/wgAAAABAAEAAAD2/wgAAAABAAEAAAD3/wgAAAABAAEAAAD4/wgAAAABAAEAAAD5/wgAAAABAAEAAAD6/wgAAAABAAEAAAD7/wgAAAABAAEAAAD8/wgAAAABAAEAAAD9/wgAAAABAAEAAAD+/wgAAAABAAEAAAD//wgAAAABAAEAAAAAAAgAAAABAAEAAAABAAgAAAABAAEAAAACAAgAAAABAAEAAAADAAgAAAABAAEAAAAEAAgAAAABAAEAAAAFAAgAAAABAAEAAAAGAAgAAAABAAEAAAAHAAgAAAABAAEAAAAIAAgAAAABAAEAAAAJAAgAAAABAAEAAAAKAAgAAAABAAEAAAALAAgAAAABAAEAAAAMAAgAAAABAAEAAAANAAgAAAABAAEAAAAOAAgAAAABAAEAAAAPAAgAAAABAAEAAAAQAAgAAAABAAEAAAAQAAcAAAABAAEAAAAQAAYAAAABAAEAAAAQAAUAAAABAAAAAAAPAAUAAAABAAAAAAAOAAUAAAABAAAAAAANAAUAAAAAAAAAAAABAAUAAAABAAAAAAAAAAUAAAABAAAAAAD//wUAAAABAAAAAAD+/wUAAAABAAAAAAD9/wUAAAABAAAAAAD8/wUAAAABAAAAAAD7/wUAAAABAAAAAAD6/wUAAAABAAAAAAD5/wUAAAABAAAAAAD3/wUAAAABAAAAAAD2/wUAAAABAAAAAAD1/wUAAAABAAAAAAD0/wUAAAABAAAAAADz/wUAAAABAAAAAADy/wUAAAABAAAAAADx/wUAAAABAAAAAADx/wYAAAABAAEAAADy/wYAAAABAAEAAADz/wYAAAABAAEAAAD0/wYAAAABAAEAAAD1/wYAAAABAAEAAAD2/wYAAAABAAEAAAD3/wYAAAABAAEAAAD4/wYAAAABAAEAAAD5/wYAAAABAAEAAAD6/wYAAAABAAEAAAD7/wYAAAABAAEAAAD8/wYAAAABAAEAAAD9/wYAAAABAAEAAAD+/wYAAAABAAEAAAD//wYAAAABAAEAAAAAAAYAAAABAAEAAAAJAAYAAAABAAAAAAAKAAYAAAABAAAAAAALAAYAAAABAAAAAAAMAAYAAAABAAAAAAANAAYAAAABAAEAAAAOAAYAAAABAAEAAAAPAAYAAAABAAEAAAABAAYAAAABAAEAAAACAAYAAAABAAEAAAAGAAYAAAABAAEAAAAHAAYAAAABAAEAAAAIAAYAAAABAAAAAAAOAAcAAAABAAEAAAAPAAcAAAABAAEAAAANAAcAAAABAAEAAAAMAAcAAAABAAEAAAALAAcAAAABAAEAAAAKAAcAAAABAAEAAAAJAAcAAAABAAEAAAAIAAcAAAABAAEAAAAHAAcAAAABAAEAAAAGAAcAAAABAAEAAAAFAAcAAAABAAEAAAAEAAcAAAABAAEAAAADAAcAAAABAAEAAAACAAcAAAABAAEAAAABAAcAAAABAAEAAAAAAAcAAAABAAEAAAD//wcAAAABAAEAAAD+/wcAAAABAAEAAAD9/wcAAAABAAEAAAD8/wcAAAABAAEAAAD7/wcAAAABAAEAAAD6/wcAAAABAAEAAAD5/wcAAAABAAEAAAD4/wcAAAABAAEAAAD3/wcAAAABAAEAAAD2/wcAAAABAAEAAAD1/wcAAAABAAEAAAD0/wcAAAABAAEAAADz/wcAAAABAAEAAADy/wcAAAABAAEAAADx/wcAAAABAAEAAAD4//v/AAACAAIAAAD3//v/AAABAAIAAAD2//v/AAABAAEAAAD2//r/AAABAAEAAAD2//n/AAABAAEAAAD2//j/AAABAAEAAAD2//f/AAABAAEAAAD2//b/AAABAAEAAAD3//r/AAABAAEAAAD3//n/AAABAAEAAAD3//j/AAABAAEAAAD3//f/AAABAAEAAAD3//b/AAABAAEAAAD4//b/AAABAAEAAAD5//b/AAABAAEAAAD6//b/AAABAAEAAAD7//b/AAABAAEAAAD4//f/AAABAAEAAAD5//f/AAABAAEAAAD6//f/AAABAAEAAAD7//f/AAABAAEAAAD8//b/AAABAAEAAAD9//b/AAABAAEAAAD+//b/AAABAAEAAAD///b/AAABAAEAAAAAAPb/AAABAAEAAAABAPb/AAABAAEAAAACAPb/AAABAAEAAAADAPb/AAABAAEAAAAEAPb/AAABAAEAAAAFAPb/AAABAAEAAAAGAPb/AAABAAEAAAAHAPb/AAABAAEAAAAIAPb/AAABAAEAAAAJAPb/AAABAAEAAAAJAPf/AAABAAEAAAAJAPj/AAABAAEAAAAJAPn/AAABAAEAAAD8//r/AAACAAIAAAD7//r/AAABAAIAAAD6//r/AAABAAIAAAD5//r/AAABAAIAAAD4//r/AAABAAEAAAD4//n/AAABAAEAAAD5//j/AAABAAEAAAD6//j/AAABAAEAAAD7//j/AAABAAEAAAD7//n/AAABAAEAAAD6//n/AAABAAEAAAD5//n/AAABAAEAAAD4//j/AAABAAEAAAD8//f/AAABAAEAAAD9//f/AAABAAEAAAD+//f/AAABAAEAAAD///f/AAABAAEAAAAAAPf/AAABAAEAAAD8//j/AAABAAEAAAD9//n/AAABAAIAAAD+//n/AAABAAIAAAD///n/AAABAAIAAAD8//n/AAABAAEAAAD9//j/AAABAAEAAAD+//j/AAABAAEAAAD///j/AAABAAEAAAAAAPj/AAABAAEAAAABAPj/AAABAAEAAAACAPj/AAABAAEAAAAAAPn/AAABAAIAAAAFAPj/AAABAAEAAAAGAPj/AAABAAEAAAAHAPj/AAABAAEAAAAIAPj/AAABAAEAAAAIAPn/AAABAAEAAAAHAPn/AAABAAEAAAAGAPn/AAABAAEAAAABAPf/AAABAAEAAAACAPf/AAABAAEAAAADAPf/AAABAAEAAAAEAPf/AAABAAEAAAAFAPf/AAABAAEAAAAGAPf/AAABAAEAAAAHAPf/AAABAAEAAAAIAPf/AAABAAEAAAALAPr/AAABAAEAAAAKAPn/AAABAAEAAAAKAPj/AAABAAEAAAAKAPf/AAABAAEAAAAKAPb/AAABAAEAAAALAPb/AAABAAEAAAALAPf/AAABAAEAAAALAPj/AAABAAEAAAALAPn/AAABAAEAAAAOAPv/AAABAAEAAAAPAPv/AAABAAEAAAAQAPv/AAABAAEAAAAMAPr/AAABAAEAAAAMAPn/AAABAAEAAAAMAPj/AAABAAEAAAAMAPf/AAABAAEAAAAMAPb/AAABAAEAAAANAPb/AAABAAEAAAAOAPb/AAABAAEAAAAPAPb/AAABAAEAAAAQAPb/AAABAAEAAAAQAPf/AAABAAEAAAAQAPj/AAABAAEAAAAQAPn/AAABAAEAAAAQAPr/AAABAAEAAAAPAPr/AAABAAEAAAAOAPr/AAABAAEAAAANAPn/AAABAAEAAAANAPj/AAABAAEAAAANAPf/AAABAAEAAAAOAPf/AAABAAEAAAAPAPf/AAABAAEAAAAPAPj/AAABAAEAAAAPAPn/AAABAAEAAAAOAPn/AAABAAEAAAAOAPj/AAABAAEAAAANAPr/AAABAAEAAAAMAPv/AAABAAEAAAD1//v/AAABAAEAAAD0//v/AAABAAEAAAD0//r/AAABAAEAAAD1//r/AAABAAEAAAD1//b/AAABAAEAAAD0//b/AAABAAEAAADz//b/AAABAAEAAADy//b/AAABAAEAAADx//b/AAABAAEAAADw//b/AAABAAEAAADw//f/AAABAAEAAADx//f/AAABAAEAAADy//f/AAABAAEAAADz//f/AAABAAEAAAD0//f/AAABAAEAAAD1//f/AAABAAEAAAD1//j/AAABAAEAAAD1//n/AAABAAEAAAD0//n/AAABAAEAAADz//n/AAABAAEAAADy//j/AAABAAEAAADx//j/AAABAAEAAADz//j/AAABAAEAAAD0//j/AAABAAEAAAANAPz/AAABAAIAAAAOAPz/AAABAAIAAAAPAPz/AAABAAIAAAAQAPz/AAABAAIAAADz//v/AAABAAEAAADy//v/AAABAAEAAADx//v/AAABAAEAAADw//v/AAABAAEAAADz//r/AAABAAEAAADy//r/AAABAAEAAADy//n/AAABAAEAAADx//n/AAABAAEAAADw//j/AAABAAEAAADw//n/AAABAAEAAADw//r/AAABAAEAAADx//r/AAABAAEAAADy//z/AAABAAEAAADx//z/AAABAAEAAADw//z/AAABAAEAAAD2//z/AAACAAEAAAD1//z/AAABAAEAAAD0//z/AAABAAEAAADz//z/AAABAAEAAAAIAPr/AAABAAEAAAANAPv/AAABAAEAAAACAAUAAAABAAAAAAADAAUAAAABAAAAAAADAAYAAAABAAEAAAAEAAYAAAABAAEAAAAFAAYAAAABAAEAAAAKAPz/AAAAAAIAAAALAPz/AAABAAIAAAAMAPz/AAABAAIAAAAJAPv/AAABAAIAAAAKAPv/AAABAAEAAAALAPv/AAABAAEAAAAJAPr/AAABAAEAAAAKAPr/AAABAAEAAAD4/wMAAAAAAAMAAAD4/wUAAAABAAAAAAD6/wEAAAAAAAAAAAD6/wIAAAAAAAEAAAD5/wMAAAABAAMAAAD3////AAACAAAAAADx//7/AAAAAAIAAADw//3/AAABAAIAAADy//3/AAABAAEAAADx//3/AAABAAEAAADz//3/AAABAAEAAAD0//3/AAABAAEAAAD1//3/AAABAAEAAAD2//3/AAACAAEAAAD2//7/AAACAAEAAAD7//7/AAAAAAAAAAD7////AAAAAAEAAAD7/wAAAAAAAAEAAAD6/wMAAAABAAIAAAD8//7/AAABAAAAAAD8////AAABAAEAAAD8/wEAAAACAAIAAAD7/wIAAAACAAEAAAD7/wMAAAACAAIAAAD7/wEAAAABAAEAAAD8/wAAAAACAAEAAAD9//7/AAACAAAAAAD9////AAACAAIAAAACAP7/AAAAAAAAAAACAP//AAAAAAEAAAACAAAAAAAAAAEAAAACAAEAAAAAAAIAAAADAAIAAAAAAAIAAAAEAAMAAAAAAAEAAAAEAAQAAAAAAAEAAAADAP7/AAABAAAAAAAEAP7/AAACAAAAAAAFAP//AAABAAAAAAAGAP//AAACAAAAAAAHAAAAAAACAAAAAAAIAAEAAAACAAAAAAAIAAIAAAACAAEAAAAIAAMAAAACAAIAAAAHAAQAAAACAAEAAAAHAAUAAAACAAEAAAADAP//AAABAAEAAAAEAP//AAABAAEAAAAEAAAAAAABAAEAAAADAAAAAAABAAEAAAAFAAAAAAABAAEAAAAGAAAAAAABAAEAAAAGAAEAAAABAAEAAAAFAAEAAAABAAEAAAAFAAIAAAABAAEAAAAEAAIAAAABAAEAAAAEAAEAAAABAAEAAAADAAEAAAABAAEAAAAHAAEAAAABAAEAAAAHAAIAAAABAAEAAAAGAAMAAAABAAEAAAAFAAMAAAABAAEAAAAFAAQAAAABAAEAAAAGAAIAAAABAAEAAAAHAAMAAAABAAEAAAAGAAQAAAABAAEAAAAGAAUAAAABAAEAAAAFAAUAAAABAAEAAAAEAAUAAAABAAEAAAAIAPv/AAABAAIAAAAHAPv/AAAAAAIAAAAGAPr/AAABAAIAAAAFAPr/AAAAAAIAAAAEAPn/AAABAAIAAAAEAPj/AAABAAEAAAADAPj/AAABAAEAAAADAPn/AAABAAIAAAACAPn/AAABAAIAAAABAPn/AAABAAIAAAAFAPn/AAABAAEAAAAHAPr/AAABAAEAAAD3/wAAAAACAAIAAAD1/wEAAAACAAIAAAD2/wAAAAABAAIAAAD0/wIAAAACAAEAAAD0/wMAAAADAAEAAADz/wIAAAAAAAIAAADz/wEAAAAAAAEAAADy/wAAAAAAAAIAAADy////AAAAAAEAAAD2////AAABAAEAAAD1////AAABAAEAAAD1//7/AAABAAEAAAD0//7/AAABAAEAAADz//7/AAABAAEAAADy//7/AAABAAEAAADz////AAABAAEAAAD0////AAABAAEAAAD0/wAAAAABAAEAAAD1/wAAAAABAAEAAAD0/wEAAAABAAEAAADz/wAAAAABAAEAAAA=")
+position = Vector2(240, 144)
+tile_map_data = PackedByteArray("AADx/wgAAAABAAEAAADy/wgAAAABAAEAAADz/wgAAAABAAEAAAD0/wgAAAABAAEAAAD1/wgAAAABAAEAAAD2/wgAAAABAAEAAAD3/wgAAAABAAEAAAD4/wgAAAABAAEAAAD5/wgAAAABAAEAAAD6/wgAAAABAAEAAAD7/wgAAAABAAEAAAD8/wgAAAABAAEAAAD9/wgAAAABAAEAAAD+/wgAAAABAAEAAAD//wgAAAABAAEAAAAAAAgAAAABAAEAAAABAAgAAAABAAEAAAACAAgAAAABAAEAAAADAAgAAAABAAEAAAAEAAgAAAABAAEAAAAFAAgAAAABAAEAAAAGAAgAAAABAAEAAAAHAAgAAAABAAEAAAAIAAgAAAABAAEAAAAJAAgAAAABAAEAAAAKAAgAAAABAAEAAAALAAgAAAABAAEAAAAMAAgAAAABAAEAAAANAAgAAAABAAEAAAAOAAgAAAABAAEAAAAPAAgAAAABAAEAAAAQAAgAAAABAAEAAAAQAAcAAAABAAEAAAAQAAYAAAABAAEAAAAQAAUAAAABAAAAAAAPAAUAAAABAAAAAAAOAAUAAAABAAAAAAANAAUAAAABAAAAAAAMAAUAAAABAAAAAAALAAUAAAABAAAAAAAKAAUAAAABAAAAAAAJAAUAAAABAAAAAAAIAAUAAAAAAAAAAAABAAUAAAACAAEAAAAAAAUAAAABAAEAAAD//wUAAAABAAEAAAD+/wUAAAABAAEAAAD9/wUAAAABAAEAAAD8/wUAAAABAAAAAAD7/wUAAAABAAAAAAD6/wUAAAABAAAAAAD5/wUAAAABAAAAAAD4/wUAAAABAAAAAAD3/wUAAAABAAAAAAD2/wUAAAABAAAAAAD1/wUAAAABAAAAAAD0/wUAAAABAAAAAADz/wUAAAABAAAAAADy/wUAAAABAAAAAADx/wUAAAABAAAAAADx/wYAAAABAAEAAADy/wYAAAABAAEAAADz/wYAAAABAAEAAAD0/wYAAAABAAEAAAD1/wYAAAABAAEAAAD2/wYAAAABAAEAAAD3/wYAAAABAAEAAAD4/wYAAAABAAEAAAD5/wYAAAABAAEAAAD6/wYAAAABAAEAAAD7/wYAAAABAAEAAAD8/wYAAAABAAEAAAD9/wYAAAABAAEAAAD+/wYAAAABAAEAAAD//wYAAAABAAEAAAAAAAYAAAABAAEAAAAJAAYAAAABAAEAAAAKAAYAAAABAAEAAAALAAYAAAABAAEAAAAMAAYAAAABAAEAAAANAAYAAAABAAEAAAAOAAYAAAABAAEAAAAPAAYAAAABAAEAAAABAAYAAAABAAEAAAACAAYAAAACAAAAAAAGAAYAAAAAAAAAAAAHAAYAAAABAAAAAAAIAAYAAAABAAEAAAAOAAcAAAABAAEAAAAPAAcAAAABAAEAAAANAAcAAAABAAEAAAAMAAcAAAABAAEAAAALAAcAAAABAAEAAAAKAAcAAAABAAEAAAAJAAcAAAABAAEAAAAIAAcAAAABAAEAAAAHAAcAAAABAAEAAAAGAAcAAAABAAEAAAAFAAcAAAABAAAAAAAEAAcAAAABAAAAAAADAAcAAAABAAAAAAACAAcAAAABAAEAAAABAAcAAAABAAEAAAAAAAcAAAABAAEAAAD//wcAAAABAAEAAAD+/wcAAAABAAEAAAD9/wcAAAABAAEAAAD8/wcAAAABAAEAAAD7/wcAAAABAAEAAAD6/wcAAAABAAEAAAD5/wcAAAABAAEAAAD4/wcAAAABAAEAAAD3/wcAAAABAAEAAAD2/wcAAAABAAEAAAD1/wcAAAABAAEAAAD0/wcAAAABAAEAAADz/wcAAAABAAEAAADy/wcAAAABAAEAAADx/wcAAAABAAEAAAD8//v/AAABAAIAAAD7//v/AAABAAIAAAD5//v/AAABAAEAAAD4//v/AAABAAEAAAD3//v/AAABAAEAAAD2//v/AAABAAEAAAD2//r/AAABAAEAAAD2//n/AAABAAEAAAD2//j/AAABAAEAAAD2//f/AAABAAEAAAD2//b/AAABAAEAAAD3//r/AAABAAEAAAD3//n/AAABAAEAAAD3//j/AAABAAEAAAD3//f/AAABAAEAAAD3//b/AAABAAEAAAD4//b/AAABAAEAAAD5//b/AAABAAEAAAD6//b/AAABAAEAAAD7//b/AAABAAEAAAD4//f/AAABAAEAAAD5//f/AAABAAEAAAD6//f/AAABAAEAAAD7//f/AAABAAEAAAD8//b/AAABAAEAAAD9//b/AAABAAEAAAD+//b/AAABAAEAAAD///b/AAABAAEAAAAAAPb/AAABAAEAAAABAPb/AAABAAEAAAACAPb/AAABAAEAAAADAPb/AAABAAEAAAAEAPb/AAABAAEAAAAFAPb/AAABAAEAAAAGAPb/AAABAAEAAAAHAPb/AAABAAEAAAAIAPb/AAABAAEAAAAJAPb/AAABAAEAAAAJAPf/AAABAAEAAAAJAPj/AAABAAEAAAAJAPn/AAABAAIAAAACAPr/AAACAAIAAAABAPr/AAABAAIAAAAAAPr/AAABAAIAAAD///r/AAABAAIAAAD+//r/AAABAAIAAAD9//r/AAABAAEAAAD8//r/AAABAAEAAAD7//r/AAABAAEAAAD6//r/AAABAAEAAAD5//r/AAABAAEAAAD4//r/AAABAAEAAAD4//n/AAABAAEAAAD5//j/AAABAAEAAAD6//j/AAABAAEAAAD7//j/AAABAAEAAAD7//n/AAABAAEAAAD6//n/AAABAAEAAAD5//n/AAABAAEAAAD4//j/AAABAAEAAAD8//f/AAABAAEAAAD9//f/AAABAAEAAAD+//f/AAABAAEAAAD///f/AAABAAEAAAAAAPf/AAABAAEAAAD8//j/AAABAAEAAAD9//n/AAABAAEAAAD+//n/AAABAAEAAAD///n/AAABAAEAAAD8//n/AAABAAEAAAD9//j/AAABAAEAAAD+//j/AAABAAEAAAD///j/AAABAAEAAAAAAPj/AAABAAEAAAABAPj/AAABAAEAAAACAPj/AAABAAEAAAADAPj/AAABAAEAAAAAAPn/AAABAAEAAAABAPn/AAABAAEAAAACAPn/AAABAAEAAAADAPn/AAABAAIAAAAEAPn/AAABAAIAAAAFAPn/AAABAAIAAAAFAPj/AAABAAEAAAAGAPj/AAABAAEAAAAHAPj/AAABAAEAAAAIAPj/AAABAAEAAAAIAPn/AAABAAIAAAAHAPn/AAABAAIAAAAGAPn/AAABAAIAAAAEAPj/AAABAAEAAAABAPf/AAABAAEAAAACAPf/AAABAAEAAAADAPf/AAABAAEAAAAEAPf/AAABAAEAAAAFAPf/AAABAAEAAAAGAPf/AAABAAEAAAAHAPf/AAABAAEAAAAIAPf/AAABAAEAAAALAPr/AAAAAAIAAAAKAPn/AAABAAIAAAAKAPj/AAABAAEAAAAKAPf/AAABAAEAAAAKAPb/AAABAAEAAAALAPb/AAABAAEAAAALAPf/AAABAAEAAAALAPj/AAABAAEAAAALAPn/AAABAAEAAAAOAPv/AAABAAEAAAAPAPv/AAABAAEAAAAQAPv/AAABAAEAAAAMAPr/AAABAAEAAAAMAPn/AAABAAEAAAAMAPj/AAABAAEAAAAMAPf/AAABAAEAAAAMAPb/AAABAAEAAAANAPb/AAABAAEAAAAOAPb/AAABAAEAAAAPAPb/AAABAAEAAAAQAPb/AAABAAEAAAAQAPf/AAABAAEAAAAQAPj/AAABAAEAAAAQAPn/AAABAAEAAAAQAPr/AAABAAEAAAAPAPr/AAABAAEAAAAOAPr/AAABAAEAAAANAPn/AAABAAEAAAANAPj/AAABAAEAAAANAPf/AAABAAEAAAAOAPf/AAABAAEAAAAPAPf/AAABAAEAAAAPAPj/AAABAAEAAAAPAPn/AAABAAEAAAAOAPn/AAABAAEAAAAOAPj/AAABAAEAAAANAPr/AAABAAEAAAAMAPv/AAAAAAIAAAANAP3/AAAAAAIAAAAOAP//AAAAAAIAAAAPAAAAAAAAAAIAAAAQAAAAAAABAAIAAAAOAP7/AAAAAAEAAAAOAP3/AAABAAEAAAAPAP3/AAABAAEAAAAQAP3/AAABAAEAAAAQAP7/AAABAAEAAAAQAP//AAABAAEAAAAPAP//AAABAAEAAAAPAP7/AAABAAEAAAD1//v/AAABAAEAAAD0//v/AAABAAEAAAD0//r/AAABAAEAAAD1//r/AAABAAEAAAD1//b/AAABAAEAAAD0//b/AAABAAEAAADz//b/AAABAAEAAADy//b/AAABAAEAAADx//b/AAABAAEAAADx//f/AAABAAEAAADy//f/AAABAAEAAADz//f/AAABAAEAAAD0//f/AAABAAEAAAD1//f/AAABAAEAAAD1//j/AAABAAEAAAD1//n/AAABAAEAAAD0//n/AAABAAEAAADz//n/AAABAAEAAADy//j/AAABAAEAAADx//j/AAABAAEAAADz//j/AAABAAEAAAD0//j/AAABAAEAAAANAPz/AAAAAAEAAAAOAPz/AAABAAEAAAAPAPz/AAABAAEAAAAQAPz/AAABAAEAAAD+/wIAAAAAAAEAAAD//wEAAAABAAEAAAAAAAAAAAABAAEAAAAAAP//AAABAAAAAADz//v/AAABAAEAAADy//v/AAABAAEAAADx//v/AAABAAEAAADz//r/AAABAAEAAADy//r/AAABAAEAAADy//n/AAABAAEAAADx//n/AAABAAEAAADx//r/AAABAAEAAAD6//v/AAABAAIAAAD3/wEAAAABAAIAAAD2/wEAAAABAAIAAAD1/wEAAAAAAAIAAAD0/wAAAAAAAAIAAADz////AAAAAAIAAADz//7/AAAAAAEAAADy//3/AAAAAAIAAADy//z/AAABAAEAAADx//z/AAABAAIAAAD2//z/AAABAAEAAAD1//z/AAABAAEAAAD0//z/AAABAAEAAADz//z/AAABAAEAAADz//3/AAABAAEAAAD0//3/AAABAAEAAAD0//7/AAABAAEAAAD0////AAABAAEAAAD1////AAABAAEAAAD1/wAAAAABAAEAAAD2/wAAAAABAAEAAAD2////AAABAAEAAAD2//7/AAABAAEAAAD2//3/AAABAAEAAAD3//3/AAABAAEAAAD3//7/AAACAAEAAAD1//7/AAABAAEAAAD1//3/AAABAAEAAAD3//z/AAABAAEAAAD4//z/AAABAAEAAAD4/wAAAAACAAAAAAD3/wAAAAABAAEAAAD3////AAACAAEAAAD4//3/AAACAAIAAAD4/wEAAAABAAEAAAD+/wQAAAABAAEAAAD//wQAAAABAAEAAAD//wMAAAABAAEAAAD//wIAAAABAAEAAAAAAAIAAAABAAEAAAAAAAEAAAABAAEAAAAAAAMAAAABAAEAAAAAAAQAAAABAAEAAAABAP//AAABAAAAAAACAP//AAABAAAAAAADAP//AAABAAAAAAAEAP//AAABAAAAAAAFAP//AAACAAMAAAANAPv/AAABAAEAAAAEAAAAAAACAAIAAAADAAEAAAACAAEAAAADAAIAAAACAAEAAAADAAMAAAACAAIAAAACAAQAAAACAAIAAAABAAQAAAABAAEAAAABAAMAAAABAAEAAAABAAIAAAABAAEAAAABAAEAAAABAAEAAAACAAEAAAABAAEAAAACAAAAAAABAAEAAAADAAAAAAABAAEAAAABAAAAAAABAAEAAAACAAIAAAABAAEAAAACAAMAAAABAAEAAAD+/wMAAAABAAEAAAD5/wEAAAACAAAAAAD9/wMAAAAAAAAAAAD+/wEAAAAAAAEAAAD9////AAAAAAAAAAD+////AAABAAAAAAD/////AAABAAAAAAD+/wAAAAABAAEAAAD//wAAAAABAAEAAAD9/wQAAAAAAAEAAAD5//z/AAACAAIAAAD9//v/AAACAAIAAADw//b/AAABAAEAAADw//f/AAABAAEAAADw//j/AAABAAEAAADw//n/AAABAAEAAADw//r/AAABAAEAAADw//v/AAABAAEAAADw//z/AAABAAEAAADw//3/AAABAAEAAADw//7/AAABAAEAAADw////AAABAAEAAADw/wAAAAABAAEAAADw/wEAAAABAAEAAADw/wIAAAABAAEAAADw/wMAAAABAAEAAADw/wQAAAABAAEAAADw/wUAAAABAAEAAADw/wYAAAABAAEAAADw/wcAAAABAAEAAADw/wgAAAABAAEAAAARAPb/AAABAAEAAAARAPf/AAABAAEAAAARAPj/AAABAAEAAAARAPn/AAABAAEAAAARAPr/AAABAAEAAAARAPv/AAABAAEAAAARAPz/AAABAAEAAAARAP3/AAABAAEAAAARAP7/AAABAAEAAAARAP//AAABAAEAAAARAAAAAAABAAEAAAARAAEAAAABAAEAAAARAAIAAAABAAEAAAARAAMAAAABAAEAAAARAAQAAAABAAEAAAARAAUAAAABAAEAAAARAAYAAAABAAEAAAARAAcAAAABAAEAAAARAAgAAAABAAEAAAD9/wAAAAAAAAIAAAD4/wIAAAAAAAIAAAD5/wIAAAACAAIAAAA=")
 tile_set = SubResource("TileSet_qehkn")
 
-[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=1195431095]
-z_index = 2
-texture_filter = 1
-position = Vector2(250, 154)
-tile_map_data = PackedByteArray("AAD0/wMAAAADAAIAAAA=")
-tile_set = SubResource("TileSet_qehkn")
+[node name="Spike21" type="RigidBody2D" parent="TileMapLayer" unique_id=598144181]
+position = Vector2(-18, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike21" unique_id=1522893824]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike21" unique_id=768931425]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike41" type="RigidBody2D" parent="TileMapLayer" unique_id=2084448230]
+position = Vector2(-26, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike41" unique_id=104684877]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike41" unique_id=2142136880]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike42" type="RigidBody2D" parent="TileMapLayer" unique_id=1602727748]
+position = Vector2(-10, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike42" unique_id=813737807]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike42" unique_id=1941100235]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike44" type="RigidBody2D" parent="TileMapLayer" unique_id=1446319199]
+position = Vector2(6, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike44" unique_id=2127684495]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike44" unique_id=1393350885]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike45" type="RigidBody2D" parent="TileMapLayer" unique_id=1185300179]
+position = Vector2(-2, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike45" unique_id=1989753719]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike45" unique_id=2088873918]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike22" type="RigidBody2D" parent="TileMapLayer" unique_id=184500476]
+position = Vector2(45, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike22" unique_id=1395748986]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike22" unique_id=1647135992]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike23" type="RigidBody2D" parent="TileMapLayer" unique_id=1495186941]
+position = Vector2(52, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike23" unique_id=1061677510]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike23" unique_id=1945768103]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike43" type="RigidBody2D" parent="TileMapLayer" unique_id=1679585090]
+position = Vector2(59, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike43" unique_id=2133805797]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike43" unique_id=478468238]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike47" type="RigidBody2D" parent="TileMapLayer" unique_id=687883775]
+position = Vector2(66, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike47" unique_id=1421277764]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike47" unique_id=312852389]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike48" type="RigidBody2D" parent="TileMapLayer" unique_id=1417280954]
+position = Vector2(73, -19)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike48" unique_id=52043846]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike48" unique_id=105022022]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike24" type="RigidBody2D" parent="TileMapLayer" unique_id=767725865]
+position = Vector2(132, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike24" unique_id=1312171895]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike24" unique_id=559038330]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike25" type="RigidBody2D" parent="TileMapLayer" unique_id=1109872649]
+position = Vector2(139, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike25" unique_id=1714573440]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike25" unique_id=1163158049]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike26" type="RigidBody2D" parent="TileMapLayer" unique_id=428054273]
+position = Vector2(146, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike26" unique_id=1379457893]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike26" unique_id=398866599]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike27" type="RigidBody2D" parent="TileMapLayer" unique_id=2077842191]
+position = Vector2(153, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike27" unique_id=1947138407]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike27" unique_id=71295210]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike28" type="RigidBody2D" parent="TileMapLayer" unique_id=1367352775]
+position = Vector2(160, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike28" unique_id=46418333]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike28" unique_id=1308629357]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike31" type="RigidBody2D" parent="TileMapLayer" unique_id=1835155623]
+position = Vector2(116, 93)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike31" unique_id=911148411]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike31" unique_id=1863510524]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike32" type="RigidBody2D" parent="TileMapLayer" unique_id=96836521]
+position = Vector2(123, 93)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike32" unique_id=807231059]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike32" unique_id=2114934911]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike33" type="RigidBody2D" parent="TileMapLayer" unique_id=1793612456]
+position = Vector2(102, 93)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike33" unique_id=1177148300]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike33" unique_id=283607095]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike34" type="RigidBody2D" parent="TileMapLayer" unique_id=415413265]
+position = Vector2(109, 93)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike34" unique_id=671782316]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike34" unique_id=1332101767]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike35" type="RigidBody2D" parent="TileMapLayer" unique_id=1840191004]
+position = Vector2(83, 109)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike35" unique_id=1301236297]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike35" unique_id=758871806]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike36" type="RigidBody2D" parent="TileMapLayer" unique_id=475373100]
+position = Vector2(90, 109)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike36" unique_id=1161380633]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike36" unique_id=1590967977]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike37" type="RigidBody2D" parent="TileMapLayer" unique_id=1308959100]
+position = Vector2(69, 109)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike37" unique_id=188507608]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike37" unique_id=764366387]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike38" type="RigidBody2D" parent="TileMapLayer" unique_id=200830668]
+position = Vector2(76, 109)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike38" unique_id=1031854645]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike38" unique_id=2070825246]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike39" type="RigidBody2D" parent="TileMapLayer" unique_id=186024024]
+position = Vector2(55, 109)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike39" unique_id=1018097154]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike39" unique_id=1666888676]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike40" type="RigidBody2D" parent="TileMapLayer" unique_id=290536061]
+position = Vector2(62, 109)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike40" unique_id=1201944207]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike40" unique_id=1122968204]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike29" type="RigidBody2D" parent="TileMapLayer" unique_id=972038340]
+position = Vector2(167, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike29" unique_id=92608077]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike29" unique_id=1574332405]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike30" type="RigidBody2D" parent="TileMapLayer" unique_id=1571896874]
+position = Vector2(174, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike30" unique_id=80949708]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike30" unique_id=1562787163]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike50" type="RigidBody2D" parent="TileMapLayer" unique_id=2142718027]
+position = Vector2(181, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike50" unique_id=887955776]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike50" unique_id=459605192]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
+
+[node name="Spike51" type="RigidBody2D" parent="TileMapLayer" unique_id=836024058]
+position = Vector2(188, 77)
+rotation = -3.1415925
+script = ExtResource("3_dfjv5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TileMapLayer/Spike51" unique_id=725278802]
+polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
+
+[node name="Sprite2D" type="Sprite2D" parent="TileMapLayer/Spike51" unique_id=1436026354]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("4_ulnvp")
 
 [node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("3_63w1q")]
-position = Vector2(501, 204)
+position = Vector2(491, 204)
 
 [node name="Background" type="CanvasLayer" parent="." unique_id=997475926]
 layer = -100
