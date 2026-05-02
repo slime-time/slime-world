@@ -62,7 +62,7 @@ func canBecomePenny():
 
 func hit():
 	if(size > 1):
-		split()
+		split(slime_type, true)
 	else:
 		die()
 
@@ -73,7 +73,7 @@ func getActualFluidVelocity(fluid_velocity_low: Vector2, fluid_velocity_high: Ve
 	return fluid_velocity_low * run_max_velocity
 
 # Turn into two slimes
-func split(child_slime_type: Slime.Type = slime_type):
+func split(child_slime_type: Slime.Type = slime_type, avoid_stacking: bool = false):
 	AudioManager.call_deferred("play_sfx", "slime_footstep", 1, 1.0, -10.5)
 	if(size >= 2):
 		var child_size = floor(size / 2)
@@ -93,6 +93,10 @@ func split(child_slime_type: Slime.Type = slime_type):
 		else:
 			position.x += random_x
 			child_pos.x -= random_x
+
+		if avoid_stacking:
+			position.x += 8
+			child_pos.x -= 8
 
 		velocity += Vector2(-50, 0)
 		child_vel += Vector2(50, 0)
