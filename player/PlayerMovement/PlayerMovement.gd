@@ -124,7 +124,7 @@ func move(direction: float, delta: float) -> void:
 	var newDirection = sign(direction)
 	if(newDirection != currDirection):
 		penny_flip.emit(newDirection)
-	
+
 	if(canClimb(direction)):
 		climb(direction, delta)
 	else:
@@ -181,6 +181,9 @@ func _ready() -> void:
 	hover_timer = Timer.new()
 	hover_timer.one_shot = true
 	add_child(hover_timer)
+
+	# aaaaaaaaaaaaaaa
+	set_collision_mask_value(Spike.SPIKE_COLLISION_LAYER, false)
 
 
 # Loads movement options
