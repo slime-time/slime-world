@@ -45,11 +45,13 @@ func pauseGame():
 	pause_state_changed.emit(true)
 	get_tree().paused = true
 	is_paused = true
+	TransitionManager.setCRTFilter(true)
 
 func unpauseGame():
 	pause_state_changed.emit(false)
 	get_tree().paused = false
 	is_paused = false
+	TransitionManager.setCRTFilter(false)
 
 # Runs when a direct child of the root node is added so we can detect when a new scene is loaded
 func _onRootChildAdded(node : Node2D) -> void:

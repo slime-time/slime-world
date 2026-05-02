@@ -1,14 +1,7 @@
 [gd_scene format=3 uid="uid://o3p3ondd7h1y"]
 
 [ext_resource type="Script" uid="uid://bq6ac1m6d5d43" path="res://components/PauseMenu/PauseMenu.gd" id="1_fwmp0"]
-[ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="2_igava"]
-[ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="3_3hlfw"]
 [ext_resource type="PackedScene" uid="uid://cm8t0j6b8neg1" path="res://components/MainMenuButton/MainMenuButton.tscn" id="7_5xq0f"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0bmyu"]
-shader = ExtResource("2_igava")
-shader_parameter/darkness = 0.730000034675
-shader_parameter/edge_softness = 3.30200015358512
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pdm73"]
 content_margin_left = 1.0
@@ -25,20 +18,9 @@ VScrollBar/styles/grabber = SubResource("StyleBoxFlat_pdm73")
 VScrollBar/styles/scroll = SubResource("StyleBoxFlat_dvenc")
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1747510423]
+process_mode = 3
 layer = -100
 script = ExtResource("1_fwmp0")
-
-[node name="BackgroundTexture" type="TextureRect" parent="." unique_id=1823849411]
-material = SubResource("ShaderMaterial_0bmyu")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("3_3hlfw")
-expand_mode = 1
-stretch_mode = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1235894768]
 anchors_preset = 15
@@ -58,11 +40,13 @@ custom_minimum_size = Vector2(160, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
+mouse_filter = 2
 theme = SubResource("Theme_6appf")
 horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/ScrollContainer" unique_id=857197836]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Resume" parent="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=926866542 instance=ExtResource("7_5xq0f")]
 layout_mode = 2
@@ -81,7 +65,6 @@ process_mode = 3
 layout_mode = 2
 text = "Back to menu"
 
-[connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/Resume" to="." method="_onResumePressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/Resume" to="." method="onResumePressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/Reset" to="." method="onResetPressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ScrollContainer/VBoxContainer/SkipLevel" to="." method="onSkipLevelPressed"]

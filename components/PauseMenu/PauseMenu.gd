@@ -28,5 +28,6 @@ func onSkipLevelPressed() -> void:
 
 ## Goes back to main menu
 func onBackToMenuPressed() -> void:
+	print("going back to main menu...")
 	SceneManager.unpauseGame()
 	GameManager.loadLevel(0)
