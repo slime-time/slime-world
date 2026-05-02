@@ -1,4 +1,4 @@
-
+class_name IceSlime
 extends Slime
 
 func _ready():
@@ -8,6 +8,9 @@ func _ready():
 	slime_type = Slime.Type.ICE_SLIME
 	super()
 	health = config.get_value("slime_health", "ice_slime")
+
+	# its like fine we can just do this aaaa
+	set_collision_mask_value(Spike.SPIKE_COLLISION_LAYER, true)
 
 # Get the movement ability of this specific slime (including size in calculation)
 func getMovementAbility():
