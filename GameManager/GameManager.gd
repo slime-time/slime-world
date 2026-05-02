@@ -2,9 +2,17 @@ extends Node
 
 const levels: Array[String] = [
 	"res://levels/MainMenu/MainMenu.tscn",
-	"res://levels/Tutorial1.tscn",
-	"res://levels/Level1.tscn",
-	"res://levels/Level2.tscn"
+	"res://levels/1-1.tscn",
+	"res://levels/1-2.tscn",
+	"res://levels/1-4.tscn",
+	"res://levels/2-1.tscn",
+	"res://levels/3-2.tscn",
+	"res://levels/3-3.tscn",
+	"res://levels/3-4.tscn",
+	"res://levels/4-1.tscn",
+	"res://levels/4-2.tscn",
+	"res://levels/4-3.tscn",
+	"res://levels/5-1.tscn"
 ]
 
 signal level_changed

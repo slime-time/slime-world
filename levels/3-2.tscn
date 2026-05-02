@@ -76,7 +76,7 @@ expand_mode = 1
 stretch_mode = 1
 
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("3_82k14")]
-position = Vector2(32, 44.99)
+position = Vector2(32, 44.999996)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
 z_index = 2
@@ -151,7 +151,7 @@ position = Vector2(463, 134)
 flow_type = 2
 
 [node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("8_251tn")]
-position = Vector2(501, 156)
+position = Vector2(508, 154)
 
 [connection signal="flip_off" from="Lever1" to="WaterFlow1" method="disableFlow"]
 [connection signal="flip_off" from="Lever1" to="WaterFlow2" method="enableFlow"]
