@@ -68,7 +68,7 @@ void fragment() {
     vec4 screen_color = vec4(0.0);
     if (apply_dead_effect) {
         // Apply fisheye (offset our UVs so its like tv bulge)
-        vec2 centered_uv = screen_uv - vec2(0.5);
+        vec2 centered_uv = (screen_uv - vec2(0.5)) * 0.95;
         float radius = length(centered_uv);
         float max_radius = length(vec2(0.5, 0.5));
         float distortion = 0.05;   // How strong the fisheye effect is

@@ -88,10 +88,13 @@ func startTransitionToBlack(do_delay: bool = false) -> void:
 
 	tween.tween_callback(transitionFinished.emit)
 
+func setCRTFilter(value: bool) -> void:
+	transition.material.set_shader_parameter("apply_dead_effect", value)
+
 func setDeadEffect(value: bool) -> void:
 	SceneManager.physics_applies = not value
 	ShaderTimeManager.setVisualPause(value)
-	transition.material.set_shader_parameter("apply_dead_effect", value)
+	setCRTFilter(value)
 
 func isClosing() -> bool:
 	return tween and tween.is_running() and is_closing
