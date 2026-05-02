@@ -201,6 +201,9 @@ func _ready() -> void:
 	hover_timer.one_shot = true
 	add_child(hover_timer)
 
+	# aaaaaaaaaaaaaaa
+	set_collision_mask_value(Spike.SPIKE_COLLISION_LAYER, false)
+
 
 # Loads movement options
 func read_movement_data(my_name):
