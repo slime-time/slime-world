@@ -28,8 +28,6 @@ func move(direction: float, delta: float):
 			# Also useful information about whether or not the tar slime is actually touching a wall or
 			# something else
 			var tarGlobLocationRaw = get_world_2d().direct_space_state.intersect_ray(wallFinder)
-			if(not tarGlobLocationRaw.size() == 0):
-				print_debug(tarGlobLocationRaw.collider)
 			if(not tarGlobLocationRaw.size() == 0 and tarGlobLocationRaw.collider is TileMapLayer):
 				# round slime globs away from the colliding wall to maximize collision with other slimes
 				if(wall_direction.x > 0):
