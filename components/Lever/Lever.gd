@@ -53,6 +53,7 @@ func onBodyExited(_body: Node) -> void:
 			active_sprite.visible = false
 
 func interact(interactor: PlayerMovement) -> void:
+	AudioManager.call_deferred("play_sfx", "switch_click", 1)
 	if !timer.is_stopped() or (interactor is Slime and interactor.slime_type == Slime.Type.ICE_SLIME):
 		# Already in the middle of an interaction, ignore
 		return

@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://b66l712alrhw8"]
 
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_35rce"]
-[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/tiles/ground-tile.png" id="2_lmn64"]
+[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_lmn64"]
 [ext_resource type="Texture2D" uid="uid://gw153t6ynh2i" path="res://assets/tiles/rock-tile.png" id="3_ge628"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="4_3waww"]
 [ext_resource type="Texture2D" uid="uid://cli48bht5nvi0" path="res://assets/tiles/pipes-rusty-tile.png" id="4_o1t2q"]

@@ -2,11 +2,11 @@ extends Node2D
 class_name FluidFlow
 
 enum Type {
-	UNSET,
-	WATER,
-	ICE_WATER,
-	TAR,
-	ENERGIZED,
+	UNSET = 0,
+	WATER = 1,
+	ICE_WATER = 2,
+	TAR = 3,
+	ENERGIZED = 4,
 }
 
 const FLUID_BLOCKING_COLLISION_LAYER = 8;

@@ -1,14 +1,13 @@
 [gd_scene format=4 uid="uid://03pabi44vpfc"]
 
 [ext_resource type="PackedScene" uid="uid://cuv0lsyon5bl" path="res://player/Player/Player.tscn" id="1_haks4"]
-[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_12p0m"]
+[ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/tiles/ground-tile.png" id="2_12p0m"]
 [ext_resource type="PackedScene" uid="uid://cuvwsherd1opx" path="res://components/Background/Background.tscn" id="3_6at2k"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="4_pc5vb"]
 [ext_resource type="PackedScene" uid="uid://c5x7akkuwxm75" path="res://enemies/MeleeSkeleton/MeleeSkeleton.tscn" id="5_23275"]
 [ext_resource type="Script" uid="uid://c0ddx2m0mmo38" path="res://components/Spike/Spike.gd" id="6_pc5vb"]
 [ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="7_23275"]
 [ext_resource type="Script" uid="uid://bqfrci4605dyb" path="res://components/Spike/SpikeCollider/SpikeCollider.gd" id="8_cepy0"]
-[ext_resource type="PackedScene" uid="uid://c76osvgo4hqkn" path="res://enemies/RangedSkeleton/RangedSkeleton.tscn" id="9_23275"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cepy0"]
 texture = ExtResource("2_12p0m")
@@ -87,15 +86,12 @@ script = ExtResource("8_cepy0")
 position = Vector2(0.5, 43)
 shape = SubResource("RectangleShape2D_ps7ft")
 
-[node name="MeleeSkeleton" parent="." unique_id=1999367218 node_paths=PackedStringArray("patrol") instance=ExtResource("5_23275")]
-position = Vector2(204, 155)
-patrol = [NodePath("../PatrolPoint1"), NodePath("../PatrolPoint2")]
-
 [node name="PatrolPoint1" type="Node2D" parent="." unique_id=1479614142]
 position = Vector2(236, 157)
 
 [node name="PatrolPoint2" type="Node2D" parent="." unique_id=126970297]
 position = Vector2(290, 158)
 
-[node name="RangedSkeleton" parent="." unique_id=1779289937 instance=ExtResource("9_23275")]
-position = Vector2(160, 125)
+[node name="MeleeSkeleton" parent="." unique_id=1999367218 node_paths=PackedStringArray("patrol") instance=ExtResource("5_23275")]
+position = Vector2(200, 152)
+patrol = [NodePath("../PatrolPoint1"), NodePath("../PatrolPoint2")]

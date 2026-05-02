@@ -120,10 +120,17 @@ func onFluidHit(_fluid_type: FluidFlow.Type) -> void:
 
 # Move along the ground or in the air
 func move(direction: float, delta: float) -> void:
+	var desired_step_sfx : String
 	var currDirection = sign(get_last_motion().x)
 	var newDirection = sign(direction)
+	
 	if(newDirection != currDirection):
 		penny_flip.emit(newDirection)
+	
+	if(InputManager.get_is_human()):
+		desired_step_sfx = "footstep"
+	else:
+		desired_step_sfx = "slime_footstep"
 	
 	if(canClimb(direction)):
 		climb(direction, delta)
@@ -132,10 +139,13 @@ func move(direction: float, delta: float) -> void:
 		# If we're moving with the fluid, dampen max velocity so it doesn't get effectively doubled
 		if wetness > 0 and newDirection == sign(effective_fluid_velocity.x):
 			run_velocity *= (1 - wetness)
+			desired_step_sfx = "fluid_footstep"
 
 		# Move towards the target velocity (plus net fluid flows)
 		var target_velocity = run_velocity + effective_fluid_velocity.x * wetness
 		velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
+		
+		AudioManager.call_deferred("play_sfx", desired_step_sfx, 1, 0.1)
 
 # To implement sliding later, we likely want to pass a delta to this function
 func stop(delta: float) -> void:

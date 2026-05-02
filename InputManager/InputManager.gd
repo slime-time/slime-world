@@ -6,17 +6,19 @@ signal penny_became_slime
 # Sent when Penny goes from slime form to human form
 signal slime_became_penny
 
+
 # Sent when Penny attacks
 signal penny_attack
 
-# True iff Penny is currently in human form
+# True if Penny is currently in human form
 var is_human = true
 
 # The input manager should never stop listening for events
 func _ready():
 	set_process_mode(PROCESS_MODE_ALWAYS)
 
-
+func get_is_human():
+	return is_human
 
 func _input(event):
 	# If the player has just started pressing down on the pause button then:
@@ -41,3 +43,9 @@ func _input(event):
 
 	if event.is_action_pressed("reset") and (not get_tree().is_paused()):
 		SceneManager.transitionOutThenResetScene()
+		
+	if event.is_action_pressed("attack") : 
+		if(is_human):
+			penny_attack.emit()
+			# If this is sucessful, Penny.gd will emit an attack hitbox
+		
