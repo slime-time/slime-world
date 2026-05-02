@@ -244,7 +244,7 @@ fluid_level = 3
 fluid_extent_left = 80
 fluid_extent_right = 0
 fluid_velocity_factor_low = -0.8
-fluid_velocity_factor_high = -2.0
+fluid_velocity_factor_high = -3.0
 visual_fluid_velocity = 3.0
 
 [node name="Lever" parent="." unique_id=1864762079 instance=ExtResource("12_j40bm")]
