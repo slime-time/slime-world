@@ -129,11 +129,11 @@ func set_hitbox_state():
 	var chunk1 = get_node("AttackHitbox/Chunk1")
 	var chunk2 = get_node("AttackHitbox/Chunk2")
 	if sprite.animation == "attack" and sprite.frame == 7:
+		AudioManager.call_deferred("play_sfx", "waterdump", 1)
 		attack_hitbox.set_monitoring(true)
 		attack_hitbox.set_visible(true)
 		chunk1.set_deferred("disabled", false)
 		chunk1.set_visible(true)
-		AudioManager.play_sfx("waterdump", 1)
 	elif sprite.animation == "attack" and sprite.frame == 10:
 		chunk1.set_deferred("visible", false)
 		chunk2.set_deferred("visible", true)

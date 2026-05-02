@@ -3,11 +3,25 @@ extends GridContainer
 const MainMenuButton = preload("res://components/MainMenuButton/MainMenuButton.tscn")
 
 func _ready() -> void:
+	reload()
+
+func reload() -> void:
+	for child in get_children():
+		child.queue_free()
+	
 	var all_save_slots : Array = GameState.loadAllSaveSlots()
 
 	if (all_save_slots.size() == 0):
 		var label = Label.new()
-		label.text = "No save slots found, please create a new game to start playing!"
+		label.text = "No save slots found,\nplease create a new\ngame to start playing!"
+
+		# Make look good
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var label_settings = LabelSettings.new()
+		label_settings.font = load("res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf")
+		label_settings.font_size = 12
+		label.label_settings = label_settings
+
 		add_child(label)
 		return
 

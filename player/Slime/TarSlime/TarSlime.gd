@@ -23,7 +23,7 @@ func move(direction: float, delta: float):
 		if(wall_direction.x * direction < 0):
 			var feet_position = global_position + Vector2(0, getHalfHeight())
 			var wallFinder = PhysicsRayQueryParameters2D.create(feet_position, feet_position - 20 * wall_direction)
-
+			wallFinder.exclude = [self]
 			# The location the tar glob wants to go, without any coordinate smushing for the tar grid
 			# Also useful information about whether or not the tar slime is actually touching a wall or
 			# something else

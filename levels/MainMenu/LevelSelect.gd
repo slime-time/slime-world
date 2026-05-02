@@ -3,6 +3,13 @@ extends GridContainer
 const MainMenuButton = preload("res://components/MainMenuButton/MainMenuButton.tscn")
 
 func _ready() -> void:
+	reload()
+
+func reload() -> void:
+	for child in get_children():
+		child.queue_free()
+
+
 	# Add level buttons
 	for level_idx in range(1, GameManager.levels.size()):
 		var button = MainMenuButton.instantiate()
