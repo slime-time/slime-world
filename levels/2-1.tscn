@@ -448,30 +448,6 @@ polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
 modulate = Color(1, 0, 0, 1)
 texture = ExtResource("7_8yiqi")
 
-[node name="Spike25" type="RigidBody2D" parent="." unique_id=723489795]
-position = Vector2(421, 205)
-rotation = -3.1415925
-script = ExtResource("11_5d7dp")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike25" unique_id=1383413865]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike25" unique_id=918439806]
-modulate = Color(1, 0, 0, 1)
-texture = ExtResource("7_8yiqi")
-
-[node name="Spike26" type="RigidBody2D" parent="." unique_id=197113287]
-position = Vector2(429, 205)
-rotation = -3.1415925
-script = ExtResource("11_5d7dp")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spike26" unique_id=1656197451]
-polygon = PackedVector2Array(-4, -3, 4, -3, 0, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="Spike26" unique_id=1132146540]
-modulate = Color(1, 0, 0, 1)
-texture = ExtResource("7_8yiqi")
-
 [node name="Spike9" type="RigidBody2D" parent="." unique_id=5456496]
 position = Vector2(213, 205)
 rotation = -3.1415925
