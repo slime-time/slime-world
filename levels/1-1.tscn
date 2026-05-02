@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://t6ur05s1g4pw" path="res://assets/ground-tile.png" id="2_x3ugg"]
 [ext_resource type="Script" uid="uid://hxpbhcpajr12" path="res://components/RedSpike/RedSpike.gd" id="3_bvtcs"]
 [ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="4_t4rme"]
+[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="8_yxke2"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="9_niraj"]
 [ext_resource type="Shader" uid="uid://i6opn5gum5pf" path="res://assets/shaders/BackgroundShader.gdshader" id="10_3lv7o"]
 [ext_resource type="Texture2D" uid="uid://dr3tqpr6dkrhu" path="res://assets/background.png" id="11_hm8hl"]
@@ -356,3 +357,34 @@ grow_vertical = 2
 texture = ExtResource("11_hm8hl")
 expand_mode = 1
 stretch_mode = 1
+
+[node name="ControlCheatSheet" type="Label" parent="." unique_id=1930420887]
+z_index = 4096
+offset_left = 22.0
+offset_top = 5.0
+offset_right = 504.0
+offset_bottom = 282.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
+theme_override_fonts/font = ExtResource("8_yxke2")
+theme_override_font_sizes/font_size = 8
+text = "WASD/arrow keys/space: move and jump
+q/esc:	  pause
+r:	  reset
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+reach the yellow light to win!"
+horizontal_alignment = 2
