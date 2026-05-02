@@ -6,6 +6,7 @@ const levels: Array[String] = [
 	"res://levels/1-2.tscn",
 	"res://levels/1-4.tscn",
 	"res://levels/2-1.tscn",
+	"res://levels/3-1.tscn",
 	"res://levels/3-2.tscn",
 	"res://levels/3-3.tscn",
 	"res://levels/3-4.tscn",
