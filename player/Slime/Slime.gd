@@ -68,6 +68,7 @@ func hit():
 
 # Turn into two slimes
 func split(child_slime_type: Slime.Type = slime_type):
+	AudioManager.call_deferred("play_sfx", "slime_footstep", 1, 1.0, -10.5)
 	if(size >= 2):
 		var child_size = floor(size / 2)
 		size = ceili(size / 2.0)

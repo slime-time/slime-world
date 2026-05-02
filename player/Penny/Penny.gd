@@ -30,7 +30,6 @@ func hit():
 	
 	
 func flip(direction : float):
-	print(direction)
 	if (direction < 0 and sprite.flip_h) or (direction > 0 and !sprite.flip_h):
 		return
 	else: 
@@ -45,7 +44,7 @@ func attack():
 func set_hitbox_state():
 	if(sprite.animation == "attack"):
 		if(sprite.frame == 3):
-			AudioManager.play_sfx("swordswing", 1, -0.5, 1.5)
+			AudioManager.call_deferred("play_sfx", "swordswing", 1, -0.5, 2.5)
 			attack_hitbox.set_monitoring(true)
 		if(sprite.frame == 6):
 			attack_hitbox.set_monitoring(false)

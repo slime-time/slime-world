@@ -72,6 +72,11 @@ func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float 
 		var sound = load("res://assets/sfx/" + sfxName +".wav")
 		newStream.set_stream(sound)
 		
+		for stream in streams:
+			#make sure we dont have sound effects from the same source cutting themself off 
+			if stream.name == sfxName and !stream.playing:
+				stream.play()
+		
 		if mode: 
 			newStream.finished.connect(newStream.queue_free)
 			#when the audio is done playing deallocate player for it
@@ -86,11 +91,6 @@ func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float 
 		newStream.pitch_scale = pitch
 		newStream.play()
 		
-		
-	for stream in streams:
-		#make sure we dont have sound effects from the same source cutting themself off 
-		if stream.name == sfxName and !stream.playing:
-			stream.play()
 	
 	return
 			
