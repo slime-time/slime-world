@@ -24,7 +24,7 @@ shape = SubResource("CapsuleShape2D_oju2m")
 z_index = -2
 texture_filter = 1
 sprite_frames = ExtResource("2_oju2m")
-animation = &"idle"
+animation = &"walk"
 offset = Vector2(0, 0.5)
 
 [node name="SkeletonLoS" type="Area2D" parent="." unique_id=848074523]
