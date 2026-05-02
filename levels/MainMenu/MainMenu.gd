@@ -28,8 +28,12 @@ func _switchToMenuState(newState: MainMenuState):
 	back_button.visible = (newState != MainMenuState.MAIN_MENU_HOME) 
 	
 	level_select.visible = (newState == MainMenuState.LEVEL_SELECT)
+	if (level_select.visible): 
+		level_select.reload()
 	
 	save_slot_select.visible = (newState == MainMenuState.SAVE_SLOT_SELECT)
+	if (save_slot_select.visible): 
+		save_slot_select.reload()
 
 	player_name_edit.visible = (newState == MainMenuState.NAME_INPUT)
 	continue_button.visible = (newState == MainMenuState.NAME_INPUT)
@@ -72,7 +76,12 @@ func _onContinueButtonPressed() -> void:
 		return
 
 	# Now we actually create the save file and set the player name in the save data
+	GameManager.current_state = GameState.new() # Reset GameState to default values
 	GameManager.current_state.loadSaveSlot(-1)
+
+	# Debug!!!
+	print("Highest_level_unlocked " + str(GameManager.current_state.highest_level_unlocked))
+
 	GameManager.current_state.player_name = player_name # Set the player name in the current game state
 	GameManager.current_state.saveKeys(["player_name"]) # Save to file
 	_switchToMenuState(MainMenuState.LEVEL_SELECT)
