@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://gw153t6ynh2i" path="res://assets/tiles/rock-tile.png" id="7_sncfx"]
 [ext_resource type="Texture2D" uid="uid://cli48bht5nvi0" path="res://assets/tiles/pipes-rusty-tile.png" id="8_nvsjp"]
 [ext_resource type="Texture2D" uid="uid://b57otv1g765va" path="res://assets/tiles/pipes-tile.png" id="9_8o5ex"]
+[ext_resource type="FontFile" uid="uid://d26ob82qembic" path="res://assets/fonts/Silkscreen/Silkscreen-Regular.ttf" id="10_pxkv2"]
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="10_yu3km"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="11_6j1xq"]
 
@@ -215,3 +216,15 @@ flow_type = 4
 
 [node name="WokeFlow2" parent="." unique_id=776993270 instance=ExtResource("11_6j1xq")]
 position = Vector2(422, 112)
+
+[node name="ControlCheatSheet" type="Label" parent="." unique_id=1786436106]
+z_index = 4096
+offset_left = 21.0
+offset_top = 5.0
+offset_right = 503.0
+offset_bottom = 142.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
+theme_override_fonts/font = ExtResource("10_pxkv2")
+theme_override_font_sizes/font_size = 8
+text = "x: attack/split"
+horizontal_alignment = 2
