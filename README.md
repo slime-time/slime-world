@@ -6,9 +6,7 @@ Some occasional weird behavoir with splitting energized slimes i.e. some slimes 
 
 # Third Party Resources Used
 
-Fonts:
-
-Silkscreen
+Fonts: Silkscreen
 
   Copyright 2001 The Silkscreen Project Authors (https://github.com/googlefonts/silkscreen)
 
