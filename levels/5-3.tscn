@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="10_yu3km"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="11_6j1xq"]
 [ext_resource type="PackedScene" uid="uid://dlqrks40kpbah" path="res://components/FluidVolume/FluidVolume.tscn" id="11_g0ryf"]
+[ext_resource type="PackedScene" uid="uid://yca8b2k8wq6x" path="res://components/ToxicGas/ToxicGas.tscn" id="12_7bp06"]
 [ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="12_j40bm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qehkn"]
@@ -262,6 +263,10 @@ can_slimes_interact = true
 [node name="Lever4" parent="." unique_id=1427669243 instance=ExtResource("12_j40bm")]
 position = Vector2(297, 163)
 can_slimes_interact = true
+
+[node name="ToxicGas" parent="." unique_id=1311772067 instance=ExtResource("12_7bp06")]
+position = Vector2(432, 215)
+area_size = Vector2i(54, 48)
 
 [connection signal="flip_off" from="Lever" to="IceFlow" method="enableFlow"]
 [connection signal="flip_on" from="Lever" to="IceFlow" method="disableFlow"]

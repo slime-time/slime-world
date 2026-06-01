@@ -76,6 +76,7 @@ func mergeSlimes(requester_id: int):
 					
 					relevant_merge_confirmer.set_transform(Transform2D(0.0, local_slimes[start_slime].global_position - merge_checker.global_position))
 					relevant_merge_confirmer.move_and_slide()
+					relevant_merge_confirmer.move_and_slide()
 					var growth_collision = relevant_merge_confirmer.get_last_slide_collision()
 					
 					if(growth_collision == null or growth_collision.get_depth() < relevant_merge_confirmer.get_safe_margin()):
@@ -149,7 +150,7 @@ func makePennyIntoSlime():
 	var old_velocity = penny.velocity;
 	penny.set_visible(false)
 	# Make a slime at Penny's position
-	makeSlime(penny.position, Vector2.ZERO, 3, Slime.Type.GREEN_SLIME)
+	makeSlime(penny.position, Vector2.ZERO, 8, Slime.Type.GREEN_SLIME)
 	penny.set_process_mode(Node.PROCESS_MODE_DISABLED)
 	penny.sprite.set_animation("walk")
 	penny.sprite.stop()
