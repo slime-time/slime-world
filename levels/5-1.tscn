@@ -226,5 +226,5 @@ offset_bottom = 142.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
 theme_override_fonts/font = ExtResource("10_pxkv2")
 theme_override_font_sizes/font_size = 8
-text = "x: attack/split"
+text = "x/j: attack/split"
 horizontal_alignment = 2

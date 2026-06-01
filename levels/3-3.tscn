@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c1ef0aj0ah215" path="res://components/ExitZone/ExitZone.tscn" id="8_251tn"]
 [ext_resource type="PackedScene" uid="uid://3x0bcsdao3da" path="res://components/Lever/Lever.tscn" id="8_rq50y"]
 [ext_resource type="PackedScene" uid="uid://db8y3ikhdn1r8" path="res://components/FluidFlow/FluidFlow.tscn" id="9_qgmc3"]
+[ext_resource type="PackedScene" uid="uid://yca8b2k8wq6x" path="res://components/ToxicGas/ToxicGas.tscn" id="11_fmw8i"]
 [ext_resource type="Texture2D" uid="uid://lersso2vpm10" path="res://assets/components/spike.png" id="11_rq50y"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vry63"]
@@ -152,6 +153,14 @@ flow_type = 2
 
 [node name="ExitZone" parent="." unique_id=1439884645 instance=ExtResource("8_251tn")]
 position = Vector2(508, 154)
+
+[node name="ToxicGas2" parent="." unique_id=1311772067 instance=ExtResource("11_fmw8i")]
+position = Vector2(435, 166)
+area_size = Vector2i(37, 32)
+
+[node name="ToxicGas" parent="." unique_id=1699181939 instance=ExtResource("11_fmw8i")]
+position = Vector2(289, 81)
+area_size = Vector2i(59, 46)
 
 [connection signal="flip_off" from="Lever1" to="WaterFlow1" method="disableFlow"]
 [connection signal="flip_off" from="Lever1" to="WaterFlow2" method="enableFlow"]

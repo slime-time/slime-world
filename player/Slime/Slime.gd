@@ -44,9 +44,6 @@ signal slime_type_changed
 # Size of this slime in 1/8ths of the largest slime
 var size
 
-# Hitboxes used for checking if this slime can merge
-var merge_confirm
-
 # Hitbox used for checking if this slime can split
 var split_confirm
 
@@ -78,21 +75,14 @@ func split(child_slime_type: Slime.Type = slime_type, avoid_stacking: bool = fal
 	if(size >= 2):
 		var child_size = floor(size / 2)
 		size = ceili(size / 2.0)
-
-		move_and_collide(Vector2(0, -4))
-
-		var child_pos = position + Vector2(0, -randf_range(3, 5))
+		var random_x = randf_range(4.0, 6.0)
+		move_and_collide(Vector2(-random_x, 0))
+		
+		
+		var child_pos = position + Vector2(random_x, -randf_range(3, 5))
 		var child_vel = velocity
 
 		position += Vector2(0, -randf_range(3, 5))
-
-		var random_x = randf_range(1.0, 3.0)
-		if randi() % 2 == 0:
-			position.x -= random_x
-			child_pos.x += random_x
-		else:
-			position.x += random_x
-			child_pos.x -= random_x
 
 		if avoid_stacking:
 			position.x += 8
@@ -108,13 +98,6 @@ func split(child_slime_type: Slime.Type = slime_type, avoid_stacking: bool = fal
 	else:
 		takeDamage(1)
 
-# Returns true iff this slime can change size to become a "merged_size" slime, false otherwise.
-func testMerge(merged_size: int, merging_with: Node) -> bool:
-	var relevant_hitbox = merge_confirm.get_node("Size" + str(merged_size) + "Confirm")
-	for overlap in relevant_hitbox.get_overlapping_bodies():
-		if(overlap != self and overlap != merging_with and not overlap.is_queued_for_deletion()):
-			return false
-	return true
 
 # I was merged with another slime, increase my size
 func merge(merged_size: int):
@@ -161,7 +144,6 @@ func _ready():
 	base_jump_velocity = jump_velocity
 	base_climb_max_speed = climb_max_speed
 	base_mass = mass
-	merge_confirm = get_node("MergeConfirm")
 	split_confirm = get_node("SplitConfirm")
 	updateHitbox()
 	updateSprite()

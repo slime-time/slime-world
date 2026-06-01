@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://dnk8wtom04aol" path="res://assets/slime/slime-8.png" id="2_ttqac"]
 [ext_resource type="Shape2D" uid="uid://dn3wb4tshmdya" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Base-8.tres" id="2_vablb"]
 [ext_resource type="Shape2D" uid="uid://c1grtdr31u6qe" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-8/GreenSlime-Body-8.tres" id="3_2wi0r"]
-[ext_resource type="PackedScene" uid="uid://ck71hvloai78m" path="res://player/Slime/TransformConfirmers/MergeConfirm.tscn" id="5_po2r2"]
 [ext_resource type="PackedScene" uid="uid://6g8tm78kme6l" path="res://player/Slime/TransformConfirmers/SplitConfirm.tscn" id="6_po2r2"]
 [ext_resource type="Shape2D" uid="uid://c0a4xjya8dw6g" path="res://player/Penny/Hitboxes/PennyHitbox.tres" id="7_05kq7"]
 
@@ -68,12 +67,6 @@ hframes = 4
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1811255284]
 libraries/ = SubResource("AnimationLibrary_2wi0r")
 
-[node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_po2r2")]
-position = Vector2(0, -1)
-
-[node name="Size8Body" parent="MergeConfirm/Size8Confirm" parent_id_path=PackedInt32Array(488681826, 1131443470) index="0" unique_id=1742504448]
-rotation = 1.5707964
-
 [node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_po2r2")]
 visible = false
 
@@ -82,5 +75,3 @@ visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TransformChecker" unique_id=90655620]
 shape = ExtResource("7_05kq7")
-
-[editable path="MergeConfirm"]

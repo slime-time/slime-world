@@ -16,9 +16,10 @@
 [ext_resource type="Shape2D" uid="uid://byw20a8tfqk4y" path="res://player/Slime/GreenSlime/Hitboxes/GreenSlime-7/GreenSlime-Base-7.tres" id="14_gqfnc"]
 
 [node name="MergeConfirm" type="Node2D" unique_id=488681826]
-position = Vector2(0, -0.5)
+position = Vector2(253, 90)
 
-[node name="Size8Confirm" type="Area2D" parent="." unique_id=1131443470]
+[node name="Size8Confirm" type="CharacterBody2D" parent="." unique_id=1181041063]
+position = Vector2(-20, 0)
 
 [node name="Size8Body" type="CollisionShape2D" parent="Size8Confirm" unique_id=1742504448]
 rotation = 1.5707964
@@ -28,7 +29,8 @@ shape = ExtResource("1_k11mb")
 position = Vector2(0, 7.5)
 shape = ExtResource("2_nrmvf")
 
-[node name="Size4Confirm" type="Area2D" parent="." unique_id=758554775]
+[node name="Size4Confirm" type="CharacterBody2D" parent="." unique_id=292444487]
+position = Vector2(-40, 0)
 
 [node name="Size4Body" type="CollisionShape2D" parent="Size4Confirm" unique_id=1917931899]
 position = Vector2(0, 3)
@@ -39,7 +41,7 @@ shape = ExtResource("3_8ceyb")
 position = Vector2(0, 7.5)
 shape = ExtResource("4_ga0ja")
 
-[node name="Size2Confirm" type="Area2D" parent="." unique_id=1458689163]
+[node name="Size2Confirm" type="CharacterBody2D" parent="." unique_id=1130173528]
 
 [node name="Size2Body" type="CollisionShape2D" parent="Size2Confirm" unique_id=1991315873]
 position = Vector2(0, 5)
@@ -47,9 +49,11 @@ rotation = 1.5707964
 shape = ExtResource("5_73t7p")
 
 [node name="Size2Base" type="CollisionShape2D" parent="Size2Confirm" unique_id=1736811059]
+position = Vector2(0, 7.5)
 shape = ExtResource("6_6o4rp")
 
-[node name="Size3Confirm" type="Area2D" parent="." unique_id=1442749728]
+[node name="Size3Confirm" type="CharacterBody2D" parent="." unique_id=1312929196]
+position = Vector2(-60, 0)
 
 [node name="Size3Body" type="CollisionShape2D" parent="Size3Confirm" unique_id=1564048145]
 position = Vector2(0, 4)
@@ -57,9 +61,11 @@ rotation = 1.5707964
 shape = ExtResource("7_xowx6")
 
 [node name="Size3Base" type="CollisionShape2D" parent="Size3Confirm" unique_id=2100796935]
+position = Vector2(0, 7.5)
 shape = ExtResource("8_6tvma")
 
-[node name="Size5Confirm" type="Area2D" parent="." unique_id=1922838429]
+[node name="Size5Confirm" type="CharacterBody2D" parent="." unique_id=803041886]
+position = Vector2(-80, 0)
 
 [node name="Size5Body" type="CollisionShape2D" parent="Size5Confirm" unique_id=2056479069]
 position = Vector2(0, 2)
@@ -70,7 +76,8 @@ shape = ExtResource("9_s3lmb")
 position = Vector2(0, 7.5)
 shape = ExtResource("10_fmxqe")
 
-[node name="Size6Confirm" type="Area2D" parent="." unique_id=922884613]
+[node name="Size6Confirm" type="CharacterBody2D" parent="." unique_id=226375516]
+position = Vector2(-100, 0)
 
 [node name="Size6Body" type="CollisionShape2D" parent="Size6Confirm" unique_id=1759095385]
 position = Vector2(0, 2)
@@ -81,7 +88,8 @@ shape = ExtResource("11_s3lmb")
 position = Vector2(0, 7.5)
 shape = ExtResource("12_fmxqe")
 
-[node name="Size7Confirm" type="Area2D" parent="." unique_id=992432178]
+[node name="Size7Confirm" type="CharacterBody2D" parent="." unique_id=1241742952]
+position = Vector2(-120, 0)
 
 [node name="Size7Body" type="CollisionShape2D" parent="Size7Confirm" unique_id=972098816]
 position = Vector2(0, 0.5)

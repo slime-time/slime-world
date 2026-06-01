@@ -2,8 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dwbimd0swbias" path="res://player/Player/Player.gd" id="1_r260a"]
 [ext_resource type="PackedScene" uid="uid://c8x3lrxliw24h" path="res://player/Penny/Penny.tscn" id="1_y5fwy"]
+[ext_resource type="PackedScene" uid="uid://ck71hvloai78m" path="res://player/Slime/TransformConfirmers/MergeConfirm.tscn" id="3_tdgpv"]
 
 [node name="Player" type="Node2D" unique_id=1162088554]
 script = ExtResource("1_r260a")
 
 [node name="Penny" parent="." unique_id=520020568 instance=ExtResource("1_y5fwy")]
+
+[node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("3_tdgpv")]
+position = Vector2(-10000, -10000)
+
+[editable path="MergeConfirm"]

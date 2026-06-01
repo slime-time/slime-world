@@ -4,7 +4,6 @@
 [ext_resource type="Shape2D" uid="uid://8426i0bh3yoj" path="res://player/Slime/TarSlime/Hitboxes/TarSlime-8/TarSlime-Base-8.tres" id="2_ts53f"]
 [ext_resource type="Shape2D" uid="uid://cigf4hhwoujm6" path="res://player/Slime/TarSlime/Hitboxes/TarSlime-8/TarSlime-Body-8.tres" id="3_p6pge"]
 [ext_resource type="Texture2D" uid="uid://cj040xq44fy4k" path="res://assets/tar-slime/tar-slime-8.png" id="4_p6pge"]
-[ext_resource type="PackedScene" uid="uid://ck71hvloai78m" path="res://player/Slime/TransformConfirmers/MergeConfirm.tscn" id="5_oopj3"]
 [ext_resource type="PackedScene" uid="uid://6g8tm78kme6l" path="res://player/Slime/TransformConfirmers/SplitConfirm.tscn" id="6_72nuc"]
 [ext_resource type="Shape2D" uid="uid://c0a4xjya8dw6g" path="res://player/Penny/Hitboxes/PennyHitbox.tres" id="7_gketk"]
 
@@ -68,19 +67,6 @@ texture = ExtResource("4_p6pge")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1811255284]
 libraries/ = SubResource("AnimationLibrary_2wi0r")
 
-[node name="MergeConfirm" parent="." unique_id=488681826 instance=ExtResource("5_oopj3")]
-visible = false
-position = Vector2(0, -1)
-
-[node name="Size8Confirm" parent="MergeConfirm" index="0" unique_id=1131443470]
-visible = false
-
-[node name="Size4Confirm" parent="MergeConfirm" index="1" unique_id=758554775]
-visible = false
-
-[node name="Size2Confirm" parent="MergeConfirm" index="2" unique_id=1458689163]
-visible = false
-
 [node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_72nuc")]
 visible = false
 
@@ -89,5 +75,3 @@ visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TransformChecker" unique_id=90655620]
 shape = ExtResource("7_gketk")
-
-[editable path="MergeConfirm"]

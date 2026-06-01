@@ -172,6 +172,11 @@ func _physics_process(delta: float) -> void:
 			collider.onFluidHit(flow_type)
 
 
+func toggleFlow() -> void:
+	if(is_flow_enabled):
+		disableFlow()
+	else:
+		enableFlow()
 func enableFlow() -> void:
 	if is_flow_enabled: return
 	is_flow_enabled = true

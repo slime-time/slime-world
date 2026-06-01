@@ -462,6 +462,18 @@ flow_type = 2
 [node name="WaterFlow" parent="." unique_id=1447714039 instance=ExtResource("9_5n0a3")]
 position = Vector2(417, 112)
 
+[node name="ControlCheatSheet" type="Label" parent="WaterFlow" unique_id=1613239989]
+z_index = 4096
+offset_left = -399.0
+offset_top = -37.0
+offset_right = 83.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
+theme_override_fonts/font = ExtResource("16_2gshc")
+theme_override_font_sizes/font_size = 8
+text = "c/k:	  Interact with levers"
+horizontal_alignment = 2
+
 [node name="WaterFlow2" parent="." unique_id=1108428323 instance=ExtResource("9_5n0a3")]
 position = Vector2(215, 112)
 
@@ -915,23 +927,11 @@ script = ExtResource("15_y3gp1")
 position = Vector2(0, 39)
 shape = SubResource("RectangleShape2D_6yh2b")
 
-[node name="ControlCheatSheet" type="Label" parent="." unique_id=983285297]
-z_index = 4096
-offset_left = 21.0
-offset_top = 5.0
-offset_right = 503.0
-offset_bottom = 142.0
-theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
-theme_override_fonts/font = ExtResource("16_2gshc")
-theme_override_font_sizes/font_size = 8
-text = "e/c:	  Interact with levers"
-horizontal_alignment = 2
-
-[connection signal="flip_off" from="Lever" to="WaterFlow2" method="enableFlow"]
-[connection signal="flip_off" from="Lever" to="WaterFlow5" method="disableFlow"]
-[connection signal="flip_on" from="Lever" to="WaterFlow2" method="disableFlow"]
-[connection signal="flip_on" from="Lever" to="WaterFlow5" method="enableFlow"]
-[connection signal="flip_off" from="Lever2" to="WaterFlow2" method="enableFlow"]
-[connection signal="flip_off" from="Lever2" to="WaterFlow5" method="disableFlow"]
-[connection signal="flip_on" from="Lever2" to="WaterFlow2" method="disableFlow"]
-[connection signal="flip_on" from="Lever2" to="WaterFlow5" method="enableFlow"]
+[connection signal="flip_off" from="Lever" to="WaterFlow2" method="toggleFlow"]
+[connection signal="flip_off" from="Lever" to="WaterFlow5" method="toggleFlow"]
+[connection signal="flip_on" from="Lever" to="WaterFlow2" method="toggleFlow"]
+[connection signal="flip_on" from="Lever" to="WaterFlow5" method="toggleFlow"]
+[connection signal="flip_off" from="Lever2" to="WaterFlow2" method="toggleFlow"]
+[connection signal="flip_off" from="Lever2" to="WaterFlow5" method="toggleFlow"]
+[connection signal="flip_on" from="Lever2" to="WaterFlow2" method="toggleFlow"]
+[connection signal="flip_on" from="Lever2" to="WaterFlow5" method="toggleFlow"]

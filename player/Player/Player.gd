@@ -15,6 +15,9 @@ var slime_templates: Dictionary[Slime.Type, Resource] = {
 	Slime.Type.ENERGIZED_SLIME: preload("res://player/Slime/EnergizedSlime/EnergizedSlime.tscn")
 }
 
+# Hitboxes used to check if slimes can merge
+var merge_checker
+
 # Reference to all slimes that exist
 var slimes = []
 
@@ -51,26 +54,51 @@ func mergeSlimes(requester_id: int):
 				setup.add_collision_exception_with(slimes[exemption_index])
 				
 		for start_slime in range(len(local_slimes)):
-			for target_slime in range(len(local_slimes)):
+			for target_slime in range(start_slime, len(local_slimes)):
 				# Merge only if the slimes are the same type, not set to merge with any other slime, and
 				# within a set radius of each other, and there are no solid objects between them
 				if(start_slime != target_slime and my_merge[target_slime] == -1 and my_merge[start_slime] == -1 and
 				local_slimes[start_slime].slime_type == local_slimes[target_slime].slime_type and 
 				local_slimes[start_slime].slime_type != Slime.Type.ICE_SLIME and
-				local_slimes[start_slime].position.distance_to(local_slimes[target_slime].position) < merge_distance and
-				local_slimes[start_slime].testMerge(sizes[start_slime] + local_slimes[target_slime].size, local_slimes[target_slime])):
+				local_slimes[start_slime].position.distance_to(local_slimes[target_slime].position) < merge_distance):
+					# If preliminary tests are passed, make sure the larger slime size will fit
+					# by bringing in a fake version of the new hitbox and checking if it would be stuck after being
+					# brought in. This is still not perfect, as when many slimes are in a large clump near a wall merging is
+					# not possible when it should be. However, such a state is rare and the more frustrating situation to avoid
+					# is when the player would get stuck merging, which this consistently detects and prevents
 					
-					var obstacles: KinematicCollision2D = local_slimes[target_slime].move_and_collide(local_slimes[start_slime].position - local_slimes[target_slime].position, true)
+					var relevant_merge_confirmer = merge_checker.get_node("Size" + str(sizes[start_slime] + sizes[target_slime]) + "Confirm")
 					
-					if obstacles == null or obstacles.get_depth() < local_slimes[start_slime].get_safe_margin():
-						# Set the target slime to merge with the starting slime
-						my_merge[target_slime] = start_slime
-						# Add the target slime's size to the start slime's size
-						sizes[start_slime] += local_slimes[target_slime].size
-						# Queue the slime I matched with for deletion so that all slimes that are going
-						# to be deleted are deleted before merge calls are made
-						local_slimes[target_slime].queue_free()
+					relevant_merge_confirmer.add_collision_exception_with(local_slimes[start_slime])
+					relevant_merge_confirmer.add_collision_exception_with(local_slimes[target_slime])
+					
+					var old_merge_confirmer_transform = relevant_merge_confirmer.get_transform()
+					
+					relevant_merge_confirmer.set_transform(Transform2D(0.0, local_slimes[start_slime].global_position - merge_checker.global_position))
+					relevant_merge_confirmer.move_and_slide()
+					var growth_collision = relevant_merge_confirmer.get_last_slide_collision()
+					
+					if(growth_collision == null or growth_collision.get_depth() < relevant_merge_confirmer.get_safe_margin()):
+						# If the start slime could grow without getting stuck, check to make sure there is nothing between the slimes
+						var obstacles: KinematicCollision2D = local_slimes[target_slime].move_and_collide(local_slimes[start_slime].position - local_slimes[target_slime].position, true)
 						
+						# If going from the target to the start had obstacles, sometimes going from the start to the target does notv
+						if(not (obstacles == null or obstacles.get_depth() < local_slimes[start_slime].get_safe_margin())):
+							obstacles = local_slimes[start_slime].move_and_collide(local_slimes[target_slime].position - local_slimes[start_slime].position, true)
+						
+						if obstacles == null or obstacles.get_depth() < local_slimes[start_slime].get_safe_margin():
+							# Set the target slime to merge with the starting slime
+							my_merge[target_slime] = start_slime
+							# Add the target slime's size to the start slime's size
+							sizes[start_slime] += local_slimes[target_slime].size
+							# Queue the slime I matched with for deletion so that all slimes that are going
+							# to be deleted are deleted before merge calls are made
+							local_slimes[target_slime].queue_free()
+					
+					relevant_merge_confirmer.remove_collision_exception_with(local_slimes[start_slime])
+					relevant_merge_confirmer.remove_collision_exception_with(local_slimes[target_slime])
+					
+					relevant_merge_confirmer.set_transform(old_merge_confirmer_transform)
 		
 		# Take away the collision exceptions made for the purpose of testing for separation
 		for unsetup in local_slimes:
@@ -91,6 +119,7 @@ func _ready():
 	InputManager.is_human = true
 	am_penny = true
 	penny = get_node("Penny")
+	merge_checker = get_node("MergeConfirm")
 	InputManager.penny_became_slime.connect(makePennyIntoSlime)
 
 func changeSlimeType(slime: Slime, new_type: Slime.Type):
@@ -120,7 +149,7 @@ func makePennyIntoSlime():
 	var old_velocity = penny.velocity;
 	penny.set_visible(false)
 	# Make a slime at Penny's position
-	makeSlime(penny.position, Vector2.ZERO, 8, Slime.Type.GREEN_SLIME)
+	makeSlime(penny.position, Vector2.ZERO, 3, Slime.Type.GREEN_SLIME)
 	penny.set_process_mode(Node.PROCESS_MODE_DISABLED)
 	penny.sprite.set_animation("walk")
 	penny.sprite.stop()

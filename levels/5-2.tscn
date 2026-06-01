@@ -72,6 +72,9 @@ blocking_corner_radius = 2
 [node name="Player" parent="." unique_id=1162088554 instance=ExtResource("1_phkcy")]
 position = Vector2(44, 157)
 
+[node name="MergeConfirm" parent="Player" index="1" unique_id=488681826]
+position = Vector2(-2000, -10)
+
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=648304100]
 texture_filter = 1
 position = Vector2(250, 150)
@@ -142,3 +145,6 @@ is_flow_enabled = false
 [node name="WokeFlow" parent="." unique_id=373670226 instance=ExtResource("7_s7kfx")]
 position = Vector2(299, 86)
 flow_type = 4
+
+[editable path="Player"]
+[editable path="Player/MergeConfirm"]

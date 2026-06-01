@@ -206,7 +206,7 @@ position = Vector2(490, 176)
 
 [node name="MeleeSkeleton" parent="." unique_id=1999367218 node_paths=PackedStringArray("patrol") instance=ExtResource("9_dwtyw")]
 position = Vector2(144, 177)
-patrol = [NodePath("..")]
+patrol = [NodePath("../SwordPatrol")]
 
 [node name="RangedSkeleton" parent="." unique_id=1779289937 instance=ExtResource("10_5dxrk")]
 position = Vector2(173, 65)
@@ -220,5 +220,8 @@ offset_bottom = 142.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.6313726)
 theme_override_fonts/font = ExtResource("11_82k14")
 theme_override_font_sizes/font_size = 8
-text = "x: attack"
+text = "x/j: attack"
 horizontal_alignment = 2
+
+[node name="SwordPatrol" type="Node2D" parent="." unique_id=1966801669]
+position = Vector2(16, 177)

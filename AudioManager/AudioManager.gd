@@ -117,5 +117,3 @@ func change_track_playback(song):
 		music_stream.play()
 	else:
 		music_stream.play(level_theme_playback_position)
-
-
