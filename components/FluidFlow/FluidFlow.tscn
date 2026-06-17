@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dw23x5pynkluq" path="res://components/FluidFlow/FluidFlow.gd" id="1_vophg"]
 [ext_resource type="Texture2D" uid="uid://kfehjyrcrjdi" path="res://assets/components/wide-vent.png" id="3_jmkeb"]
 [ext_resource type="Material" uid="uid://d2rxla01f7bnr" path="res://assets/materials/water_flow.tres" id="3_k0oyp"]
+[ext_resource type="AudioStream" uid="uid://pwsid8qi8swg" path="res://assets/sfx/looping_waterfall.wav" id="4_k0oyp"]
 
 [node name="WaterFlow" type="Node2D" unique_id=21526138]
 script = ExtResource("1_vophg")
@@ -22,3 +23,6 @@ instance_shader_parameters/flow_distances_0 = Vector4i(256, 256, 256, 256)
 offset_left = -10.0
 offset_right = 10.0
 offset_bottom = 256.0
+
+[node name="WaterAudio" type="AudioStreamPlayer2D" parent="." unique_id=1031697155]
+stream = ExtResource("4_k0oyp")

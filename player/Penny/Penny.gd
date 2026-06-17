@@ -7,6 +7,9 @@ var sprite : AnimatedSprite2D
 	
 func _ready():
 	super()
+	
+	AudioManager.setupLocalAudioPlayer(audio_player, "footstep", false, 2)
+	
 	read_movement_data("penny_movement")
 	attack_hitbox = get_node("AttackHitbox")
 	sprite = get_node("PennySprite")

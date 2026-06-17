@@ -9,10 +9,21 @@ var music_stream : AudioStreamPlayer
 var continuous_sfx_streams : Node
 var oneshot_sfx_streams : Node
 
+var audio_config = ConfigFile.new()
+
+const DEFAULT_MUSIC_VOLUME: float = 0
+
+# Note that despite their similar name, this works differently than the
+# DEFAULT_MUSIC_VOLUME value
+var sfx_volume_multiplier: float = 0.5
+
 signal song_changed
 
 
 func _ready() -> void:
+	var audio_error = audio_config.load("res://settings.cfg")
+	if(audio_error != OK):
+		printerr("Could not load audio configuration")
 	set_process_mode(PROCESS_MODE_ALWAYS)
 	var song_directory = DirAccess.open("res://assets/music")
 	var sfx_directory = DirAccess.open("res://assets/sfx")
@@ -22,6 +33,7 @@ func _ready() -> void:
 			songs.append(filename.replace(".import", ""))
 	sfx = sfx_directory.get_files()
 	music_stream = AudioStreamPlayer.new()
+	music_stream.set_volume_linear(audio_config.get_value("audio_settings", "music_volume", DEFAULT_MUSIC_VOLUME))
 	music_stream.set_bus("ActiveMusic")
 	continuous_sfx_streams = Node.new()
 	oneshot_sfx_streams =  Node.new()
@@ -59,9 +71,6 @@ func on_scene_change():
 	var activeScene = get_tree().current_scene
 
 	set_current_track("sgsw_theme1")
-	for child in activeScene.get_children():
-			if (child is FluidFlow):
-				play_sfx("looping_waterfall", 0)
 
 func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float = 1.0):
 	var streams
@@ -96,12 +105,24 @@ func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float 
 			#looping
 			continuous_sfx_streams.add_child(newStream)
 
-		newStream.volume_db = volume
+		newStream.set_volume_linear(volume)
 		newStream.pitch_scale = pitch
 		newStream.play()
 
 	return
 
+# Set up the local_audio player by making it play the sound effect specified by "track_name"
+# with appropriate volume on appropriate bus, and possibly looping
+func setupLocalAudioPlayer(local_audio_player: AudioStreamPlayer2D, track_name: String, loop: bool, volume: float):
+	if(loop):
+		local_audio_player.finished.connect(local_audio_player.play)
+		local_audio_player.bus = "ContinuousSFX"
+	else:
+		local_audio_player.bus = "OneShotSFX"
+	
+	local_audio_player.set_volume_linear(volume * sfx_volume_multiplier)
+	var sound = load("res://assets/sfx/" + track_name + ".wav")
+	local_audio_player.set_stream(sound)
 
 func change_track_playback(song):
 

@@ -72,3 +72,5 @@ visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TransformChecker" unique_id=90655620]
 shape = ExtResource("7_7ge4n")
+
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1338474311]

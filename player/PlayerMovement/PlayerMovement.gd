@@ -35,6 +35,9 @@ var screen: Vector2
 # Target we will interact with when we press the interact button, if any
 var interaction_target: InteractionTarget = null
 
+# Player used to play sound effects related to this character
+var audio_player: AudioStreamPlayer2D
+
 var coyote_timer: Timer = null
 var hover_timer: Timer = null
 
@@ -181,6 +184,8 @@ func fall(delta: float) -> void:
 
 var config = ConfigFile.new()
 func _ready() -> void:
+	audio_player = get_node("AudioPlayer")
+	
 	tar_intersections = 0
 	screen = get_viewport_rect().size
 	# Attempt to read movement settings from an external file

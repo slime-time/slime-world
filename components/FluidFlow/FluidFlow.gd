@@ -39,12 +39,19 @@ var _flow_distances: PackedInt32Array = PackedInt32Array()       			# The actual
 var _flow_start_f: float = 0												# The current starting height of the flow, for animating flow enable/disable
 var _flow_start: int = 0													# The current starting height of the flow, as an integer for shader parameters
 
+# Store the base volume level that the water flow should play at, before multiplying
+# by the constant global sound effect volume (that may be player-set in a later version) 
+const SOUND_VOLUME: float = 8
+
+var audio_player: AudioStreamPlayer2D
 
 func _ready() -> void:
+	audio_player = get_node("WaterAudio")
+	AudioManager.setupLocalAudioPlayer(audio_player, "looping_waterfall", true, SOUND_VOLUME)
 	# Get reference position for raycasts and sprite rects
 	var pos = global_position.floor()
 	_ref_position = Vector2i(pos.x - 8, pos.y)
-
+	
 	# Set the shader material based on the flow type
 	flow_rect.material = FLOW_MATERIALS.get(flow_type, null)
 
@@ -178,9 +185,12 @@ func toggleFlow() -> void:
 	else:
 		enableFlow()
 func enableFlow() -> void:
+	if not (audio_player.playing):
+		audio_player.play()
 	if is_flow_enabled: return
 	is_flow_enabled = true
-
+	
+	
 	_flow_start_f = 0
 	_flow_start = 0
 	_flow_distance_targets.fill(flow_extent)
@@ -192,7 +202,9 @@ func enableFlow() -> void:
 func disableFlow() -> void:
 	if !is_flow_enabled: return
 	is_flow_enabled = false
-
+	
+	audio_player.stop()
+	
 	_flow_start_f = 0
 	_flow_start = 0
 	# We don't update the distance targets because we want flows to keep extending

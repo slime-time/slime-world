@@ -67,3 +67,5 @@ libraries/ = SubResource("AnimationLibrary_2wi0r")
 
 [node name="SplitConfirm" parent="." unique_id=770495669 instance=ExtResource("6_3so3y")]
 visible = false
+
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="." unique_id=428753826]

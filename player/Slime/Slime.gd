@@ -137,6 +137,9 @@ func becomePenny():
 
 func _ready():
 	super()
+	
+	AudioManager.setupLocalAudioPlayer(audio_player, "slime_footstep", false, 2)
+	
 	read_movement_data(movement_name)
 	base_run_max_velocity = run_max_velocity
 	base_run_acceleration = run_acceleration
