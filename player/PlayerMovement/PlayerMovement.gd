@@ -47,6 +47,23 @@ var fluid_volumes: Array = []
 var net_fluid_velocity: Vector2 = Vector2.ZERO
 var effective_fluid_velocity: Vector2 = Vector2.ZERO  # Cached fluid velocity for use while we're drying
 
+enum Footstep {
+	FOOTSTEP = 0,
+	SLIME_FOOTSTEP = 1,
+	WET_FOOTSTEP = 2
+}
+const STEP_SOUNDS = {
+	Footstep.FOOTSTEP: preload("res://assets/sfx/footstep.wav"),
+	Footstep.SLIME_FOOTSTEP: preload("res://assets/sfx/slime_footstep.wav"),
+	Footstep.WET_FOOTSTEP: preload("res://assets/sfx/fluid_footstep.wav")
+}
+
+# These can be overridden by inheritors of the PlayerMovement class
+var WET_FOOTSTEP_VOLUME: float = 0.24
+var DRY_FOOTSTEP_VOLUME: float = 5
+
+# true when the previous footstep was wet, false otherwise
+var played_step_sfx: Footstep = Footstep.FOOTSTEP
 # Whether this slime should have elastic collisions with static bodies (e.g. true for ice slime to bounce off walls)
 func isElastic() -> bool:
 	return false
@@ -132,7 +149,8 @@ func onFluidHit(_fluid_type: FluidFlow.Type) -> void:
 
 # Move along the ground or in the air
 func move(direction: float, delta: float) -> void:
-	var desired_step_sfx : String
+	var desired_step_sfx : Footstep
+	var desired_step_volume: float = DRY_FOOTSTEP_VOLUME
 	var currDirection = sign(get_last_motion().x)
 	var newDirection = sign(direction)
 
@@ -140,9 +158,9 @@ func move(direction: float, delta: float) -> void:
 		penny_flip.emit(newDirection)
 
 	if(InputManager.get_is_human()):
-		desired_step_sfx = "footstep"
+		desired_step_sfx = Footstep.FOOTSTEP
 	else:
-		desired_step_sfx = "slime_footstep"
+		desired_step_sfx = Footstep.SLIME_FOOTSTEP
 
 	if(canClimb(direction)):
 		climb(direction, delta)
@@ -151,13 +169,23 @@ func move(direction: float, delta: float) -> void:
 		# If we're moving with the fluid, dampen max velocity so it doesn't get effectively doubled
 		if wetness > 0 and newDirection == sign(effective_fluid_velocity.x):
 			run_velocity *= (1 - wetness)
-			desired_step_sfx = "fluid_footstep"
-
+		if wetness > 0.1:
+			desired_step_volume = WET_FOOTSTEP_VOLUME
+			desired_step_sfx = Footstep.WET_FOOTSTEP
+			
 		# Move towards the target velocity (plus net fluid flows)
 		var target_velocity = run_velocity + effective_fluid_velocity.x * wetness
 		velocity.x = move_toward(velocity.x, target_velocity, run_acceleration * delta)
 
-		AudioManager.call_deferred("play_sfx", desired_step_sfx, 1, 0.1)
+		if currDirection == 0 or (not is_on_floor()):
+			audio_player.stop()
+		elif (not audio_player.playing) or played_step_sfx != desired_step_sfx:
+			audio_player.stop()
+			played_step_sfx = desired_step_sfx
+			audio_player.set_volume_linear(AudioManager.sfx_volume_multiplier * desired_step_volume)
+			audio_player.set_stream(STEP_SOUNDS[desired_step_sfx])
+			print_debug(played_step_sfx )
+			audio_player.play()
 
 # To implement sliding later, we likely want to pass a delta to this function
 func stop(delta: float) -> void:
@@ -168,7 +196,8 @@ func stop(delta: float) -> void:
 	var deceleration = run_deceleration * (1.0 - wetness * fluid_drag.x)
 
 	velocity.x = move_toward(velocity.x, target_velocity, deceleration * delta)
-
+	if(get_last_motion().x == 0):
+		audio_player.stop()
 # Make this player-controlled character jump, if it can
 func jump(delta: float) -> void:
 	velocity.y = jump_velocity
@@ -237,6 +266,7 @@ func _physics_process(delta: float) -> void:
 
 	# Add the gravity.
 	if not is_on_floor():
+		audio_player.stop()
 		fall(delta)
 	else:
 		coyote_timer.start()

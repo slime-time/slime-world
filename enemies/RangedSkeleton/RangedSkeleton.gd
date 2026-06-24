@@ -44,7 +44,7 @@ func shoot(offset, target):
 		projectile.target = Vector2(global_position.x - 1000, global_position.y)
 	projectile.speed = projectile_speed
 	projectile.global_position= Vector2(global_position.x + offset, global_position.y + 6)
-	AudioManager.play_sfx("bowshot", 1 , -10.5)
+	AudioManager.play_sfx("bowshot", 1 , 0.5)
 	get_parent().add_child(projectile)
 	
 func shooting_handler():

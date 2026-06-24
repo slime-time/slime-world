@@ -41,13 +41,13 @@ var _flow_start: int = 0													# The current starting height of the flow, 
 
 # Store the base volume level that the water flow should play at, before multiplying
 # by the constant global sound effect volume (that may be player-set in a later version) 
-const SOUND_VOLUME: float = 8
+const SOUND_VOLUME: float = 0
 
 var audio_player: AudioStreamPlayer2D
 
 func _ready() -> void:
 	audio_player = get_node("WaterAudio")
-	AudioManager.setupLocalAudioPlayer(audio_player, "looping_waterfall", true, SOUND_VOLUME)
+	AudioManager.setupLocalAudioPlayer(audio_player, true, SOUND_VOLUME, true, "looping_waterfall")
 	# Get reference position for raycasts and sprite rects
 	var pos = global_position.floor()
 	_ref_position = Vector2i(pos.x - 8, pos.y)

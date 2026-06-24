@@ -17,6 +17,9 @@ const DEFAULT_MUSIC_VOLUME: float = 0
 # DEFAULT_MUSIC_VOLUME value
 var sfx_volume_multiplier: float = 0.5
 
+# Frame when the last split happened, to prevent energized slimes causing loud splitting noises
+var last_split_frame: int
+
 signal song_changed
 
 
@@ -72,7 +75,7 @@ func on_scene_change():
 
 	set_current_track("sgsw_theme1")
 
-func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float = 1.0):
+func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float = 1.0, start: float = 0.0):
 	var streams
 	var busName
 	#(mode = 1) -> oneshot (mode = 0) -> continuous
@@ -83,37 +86,38 @@ func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float 
 		streams = continuous_sfx_streams.get_children()
 		busName = "ContinuousSFX"
 
-	if streams.is_empty():
-		var newStream = AudioStreamPlayer.new()
-		newStream.name = sfxName
-		newStream.bus = busName
-		var sound = load("res://assets/sfx/" + sfxName +".wav")
-		newStream.set_stream(sound)
+	
+	var newStream = AudioStreamPlayer.new()
+	newStream.name = sfxName
+	newStream.bus = busName
+	var sound = load("res://assets/sfx/" + sfxName +".wav")
+	newStream.set_stream(sound)
 
-		for stream in streams:
-			#make sure we dont have sound effects from the same source cutting themself off
-			if stream.name == sfxName and !stream.playing:
-				stream.play()
+	for stream in streams:
+		#make sure we dont have sound effects from the same source cutting themself off
+		if stream.name == sfxName and !stream.playing:
+			stream.play(start)
 
-		if mode:
-			newStream.finished.connect(newStream.queue_free)
-			#when the audio is done playing deallocate player for it
-			oneshot_sfx_streams.add_child(newStream)
+	if mode:
+		newStream.finished.connect(newStream.queue_free)
+		#when the audio is done playing deallocate player for it
+		oneshot_sfx_streams.add_child(newStream)
 
-		else:
-			newStream.finished.connect(newStream.play)
-			#looping
-			continuous_sfx_streams.add_child(newStream)
+	else:
+		newStream.finished.connect(newStream.play)
+		#looping
+		continuous_sfx_streams.add_child(newStream)
 
-		newStream.set_volume_linear(volume)
-		newStream.pitch_scale = pitch
-		newStream.play()
+	newStream.set_volume_linear(volume)
+	newStream.pitch_scale = pitch
+	newStream.play(start)
 
 	return
 
 # Set up the local_audio player by making it play the sound effect specified by "track_name"
 # with appropriate volume on appropriate bus, and possibly looping
-func setupLocalAudioPlayer(local_audio_player: AudioStreamPlayer2D, track_name: String, loop: bool, volume: float):
+# If fixed_stream is set to false, the caller is responsible for setting up the track instead of this function
+func setupLocalAudioPlayer(local_audio_player: AudioStreamPlayer2D, loop: bool, volume: float, fixed_stream: bool = false, track_name: String = ""):
 	if(loop):
 		local_audio_player.finished.connect(local_audio_player.play)
 		local_audio_player.bus = "ContinuousSFX"
@@ -121,8 +125,9 @@ func setupLocalAudioPlayer(local_audio_player: AudioStreamPlayer2D, track_name: 
 		local_audio_player.bus = "OneShotSFX"
 	
 	local_audio_player.set_volume_linear(volume * sfx_volume_multiplier)
-	var sound = load("res://assets/sfx/" + track_name + ".wav")
-	local_audio_player.set_stream(sound)
+	if fixed_stream:
+		var sound = load("res://assets/sfx/" + track_name + ".wav")
+		local_audio_player.set_stream(sound)
 
 func change_track_playback(song):
 

@@ -4,11 +4,13 @@ extends "res://player/PlayerMovement/PlayerMovement.gd"
 
 var attack_hitbox : Area2D	
 var sprite : AnimatedSprite2D
-	
+
 func _ready():
 	super()
+
+	DRY_FOOTSTEP_VOLUME = 5
 	
-	AudioManager.setupLocalAudioPlayer(audio_player, "footstep", false, 2)
+	AudioManager.setupLocalAudioPlayer(audio_player, false, DRY_FOOTSTEP_VOLUME)
 	
 	read_movement_data("penny_movement")
 	attack_hitbox = get_node("AttackHitbox")
@@ -49,7 +51,7 @@ func attack():
 func set_hitbox_state():
 	if(sprite.animation == "attack"):
 		if(sprite.frame == 3):
-			AudioManager.call_deferred("play_sfx", "swordswing", 1, -0.5, 2.5)
+			AudioManager.call_deferred("play_sfx", "swordswing", 1, 2, 2.5)
 			attack_hitbox.set_monitoring(true)
 		if(sprite.frame == 6):
 			attack_hitbox.set_monitoring(false)

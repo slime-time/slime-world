@@ -71,7 +71,10 @@ func getActualFluidVelocity(fluid_velocity_low: Vector2, fluid_velocity_high: Ve
 
 # Turn into two slimes
 func split(child_slime_type: Slime.Type = slime_type, avoid_stacking: bool = false):
-	AudioManager.call_deferred("play_sfx", "slime_footstep", 1, 1.0, -10.5)
+	# Kinda hacky but with no dedicated slime split sound effect this is a temporary measure anyways
+	if(AudioManager.last_split_frame != get_tree().get_frame()):
+		AudioManager.call_deferred("play_sfx", "slime_footstep", 1, 10, 2.0, 1.22)
+		AudioManager.last_split_frame = get_tree().get_frame()
 	if(size >= 2):
 		var child_size = floor(size / 2)
 		size = ceili(size / 2.0)
@@ -138,7 +141,8 @@ func becomePenny():
 func _ready():
 	super()
 	
-	AudioManager.setupLocalAudioPlayer(audio_player, "slime_footstep", false, 2)
+	DRY_FOOTSTEP_VOLUME = 5
+	AudioManager.setupLocalAudioPlayer(audio_player, false, DRY_FOOTSTEP_VOLUME)
 	
 	read_movement_data(movement_name)
 	base_run_max_velocity = run_max_velocity

@@ -169,3 +169,5 @@ shape = ExtResource("3_yo5c4")
 [node name="SlimeBase" type="CollisionShape2D" parent="TransformChecker" unique_id=1036238156]
 position = Vector2(0, 7.5)
 shape = ExtResource("4_4b0bj")
+
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1577760066]

@@ -110,7 +110,8 @@ func throw_water(target : Node2D):
 
 func set_hitbox_state():
 	if sprite.animation == "attack" and sprite.frame == 6:
-		AudioManager.call_deferred("play_sfx", "swordswing", 1, -0.2)
+		if not attack_hitbox.is_monitoring():
+			AudioManager.call_deferred("play_sfx", "swordswing", 1, 2)
 		attack_hitbox.set_monitoring(true)
 		attack_hitbox.set_visible(true)
 	elif sprite.animation == "attack" and sprite.frame == 10:
