@@ -184,7 +184,6 @@ func move(direction: float, delta: float) -> void:
 			played_step_sfx = desired_step_sfx
 			audio_player.set_volume_linear(AudioManager.sfx_volume_multiplier * desired_step_volume)
 			audio_player.set_stream(STEP_SOUNDS[desired_step_sfx])
-			print_debug(played_step_sfx )
 			audio_player.play()
 
 # To implement sliding later, we likely want to pass a delta to this function

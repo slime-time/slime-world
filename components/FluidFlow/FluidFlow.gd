@@ -41,7 +41,7 @@ var _flow_start: int = 0													# The current starting height of the flow, 
 
 # Store the base volume level that the water flow should play at, before multiplying
 # by the constant global sound effect volume (that may be player-set in a later version) 
-const SOUND_VOLUME: float = 0
+const SOUND_VOLUME: float = 5
 
 var audio_player: AudioStreamPlayer2D
 
@@ -184,6 +184,7 @@ func toggleFlow() -> void:
 		disableFlow()
 	else:
 		enableFlow()
+
 func enableFlow() -> void:
 	if not (audio_player.playing):
 		audio_player.play()

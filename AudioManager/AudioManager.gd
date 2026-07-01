@@ -20,6 +20,9 @@ var sfx_volume_multiplier: float = 0.5
 # Frame when the last split happened, to prevent energized slimes causing loud splitting noises
 var last_split_frame: int
 
+# Store the filepath to the last song played, to avoid interrupting a song with itself
+var prev_song: String = ""
+
 signal song_changed
 
 
@@ -50,14 +53,15 @@ func _ready() -> void:
 	tree.root.add_child.call_deferred(music_stream)
 	tree.root.add_child.call_deferred(continuous_sfx_streams)
 	tree.root.add_child.call_deferred(oneshot_sfx_streams)
-
+	call_deferred("set_current_track", "sgsw_pause_theme")
 	#can refactor to change theme based on level later
 	GameManager.level_changed.connect(on_scene_change)
 
 func set_current_track(songName : String):
 	var any_found = false
 	for song in songs:
-		if(song.contains(songName)):
+		if(song.contains(songName) and song != prev_song):
+			prev_song = song
 			current_track = load("res://assets/music/" + song)
 			song_changed.emit(current_track)
 			any_found = true
@@ -70,10 +74,11 @@ func on_scene_change():
 	#ensure active scene is always the newly loaded one
 	var tree = get_tree()
 	await tree.scene_changed
-
-	var activeScene = get_tree().current_scene
-
-	set_current_track("sgsw_theme1")
+	print_debug("triggered")
+	if(GameManager.current_state.cur_level != 0):
+		set_current_track("sgsw_theme1")
+	else:
+		set_current_track("sgsw_pause_theme")
 
 func play_sfx(sfxName : String, mode : int, volume : float = 0.0, pitch : float = 1.0, start: float = 0.0):
 	var streams

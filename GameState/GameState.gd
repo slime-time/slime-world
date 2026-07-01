@@ -30,7 +30,7 @@ static func _getSaveFile() -> ConfigFile:
 	
 	# If the file doesn't exist, we want to create it with the default values and return it
 	elif err == ERR_FILE_NOT_FOUND:
-		print("Save file not found, creating new one with default values.")
+		print_debug("Save file not found, creating new one with default values.")
 
 		save_file.set_value("global", "count_save_slots", 0)
 
